@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [[ $PSAR_ENV_FLAG != "true" ]]; then
+    echo "Error : PSAR Env is not launched yet."
+    echo "You must source ./psar_env.sh before working on this project."
+    exit 1;
+fi
+
+TODO_NOTES=`cat $PSAR_PWD/local/TODO.txt | grep -ne "^\-.*"`
+TODO_COMMENTS=`find $PSAR_SRC_PWD -print | xargs grep -ni "@TODO" 2>/dev/null
+`
+
+
+if [[ $TODO_NOTES || $TODO_COMMENTS ]]; then
+    echo "================= TODO.TXT ===================
+$TODO_NOTES
+
+=============== COMMENTS ===================
+$TODO_COMMENTS"
+    exit 1
+else
+    echo "ALL DONE !!"
+    exit 0
+fi
