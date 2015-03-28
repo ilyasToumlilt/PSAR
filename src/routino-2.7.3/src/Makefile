@@ -41,7 +41,7 @@ SUBDIRS=$(foreach f,$(SUBFILES),$(dir $f))
 C=$(wildcard *.c)
 D=$(wildcard .deps/*.d)
 
-EXE=planetsplitter planetsplitter-slim router router-slim filedumperx filedumper filedumper-slim
+EXE=router
 
 ########
 
@@ -51,32 +51,6 @@ all: all-local
 	done
 
 all-local: $(EXE)
-
-########
-
-PLANETSPLITTER_OBJ=planetsplitter.o \
-	           nodesx.o segmentsx.o waysx.o relationsx.o superx.o prunex.o \
-	           ways.o types.o \
-	           files.o logging.o logerror.o errorlogx.o \
-	           results.o queue.o sorting.o \
-	           xmlparse.o tagging.o \
-	           uncompress.o osmxmlparse.o osmpbfparse.o osmo5mparse.o osmparser.o
-
-planetsplitter : $(PLANETSPLITTER_OBJ)
-	$(LD) $(PLANETSPLITTER_OBJ) -o $@ $(LDFLAGS)
-
-########
-
-PLANETSPLITTER_SLIM_OBJ=planetsplitter-slim.o \
-	                nodesx-slim.o segmentsx-slim.o waysx-slim.o relationsx-slim.o superx-slim.o prunex-slim.o \
-	                ways.o types.o \
-	                files.o logging.o logerror-slim.o errorlogx-slim.o \
-	                results.o queue.o sorting.o \
-	                xmlparse.o tagging.o \
-	                uncompress.o osmxmlparse.o osmpbfparse.o osmo5mparse.o osmparser.o
-
-planetsplitter-slim : $(PLANETSPLITTER_SLIM_OBJ)
-	$(LD) $(PLANETSPLITTER_SLIM_OBJ) -o $@ $(LDFLAGS)
 
 ########
 
@@ -91,52 +65,9 @@ router : $(ROUTER_OBJ)
 
 ########
 
-ROUTER_SLIM_OBJ=router-slim.o \
-	        nodes-slim.o segments-slim.o ways-slim.o relations-slim.o types.o fakes-slim.o \
-	        optimiser-slim.o output-slim.o \
-	        files.o logging.o profiles.o xmlparse.o \
-	        results.o queue.o translations.o
-
-router-slim : $(ROUTER_SLIM_OBJ)
-	$(LD) $(ROUTER_SLIM_OBJ) -o $@ $(LDFLAGS)
-
-########
-
-FILEDUMPERX_OBJ=filedumperx.o \
-	        files.o logging.o
-
-filedumperx : $(FILEDUMPERX_OBJ)
-	$(LD) $(FILEDUMPERX_OBJ) -o $@ $(LDFLAGS)
-
-########
-
-FILEDUMPER_OBJ=filedumper.o \
-	       nodes.o segments.o ways.o relations.o types.o fakes.o errorlog.o \
-               visualiser.o \
-	       files.o logging.o xmlparse.o
-
-filedumper : $(FILEDUMPER_OBJ)
-	$(LD) $(FILEDUMPER_OBJ) -o $@ $(LDFLAGS)
-
-########
-
-FILEDUMPER_SLIM_OBJ=filedumper-slim.o \
-	       nodes-slim.o segments-slim.o ways-slim.o relations-slim.o types.o fakes-slim.o errorlog-slim.o \
-               visualiser-slim.o \
-	       files.o logging.o xmlparse.o
-
-filedumper-slim : $(FILEDUMPER_SLIM_OBJ)
-	$(LD) $(FILEDUMPER_SLIM_OBJ) -o $@ $(LDFLAGS)
-
-########
-
 %.o : %.c
 	@[ -d .deps ] || mkdir .deps
 	$(CC) -c $(CFLAGS) -DSLIM=0 -DDATADIR=\"$(datadir)\" $< -o $@ -MMD -MP -MF $(addprefix .deps/,$(addsuffix .d,$(basename $@)))
-
-%-slim.o : %.c
-	@[ -d .deps ] || mkdir .deps
-	$(CC) -c $(CFLAGS) -DSLIM=1 -DDATADIR=\"$(datadir)\" $< -o $@ -MMD -MP -MF $(addprefix .deps/,$(addsuffix .d,$(basename $@)))
 
 ########
 
