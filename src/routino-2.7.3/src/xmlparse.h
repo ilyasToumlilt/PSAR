@@ -2,7 +2,7 @@
  A simple XML parser
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2010-2014 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 
 
 #ifndef XMLPARSE_H
-#define XMLPARSE_H    /*+ To stop multiple inclusions. +*/
+#define XMLPARSE_H		/*+ To stop multiple inclusions. + */
 
 #include <stdint.h>
 #include <inttypes.h>
@@ -43,33 +43,32 @@ typedef struct _xmltag xmltag;
 
 
 /*+ A structure to hold the definition of a tag. +*/
-struct _xmltag
-{
- char *name;                            /*+ The name of the tag - must be in lower case. +*/
+struct _xmltag {
+	char *name;		/*+ The name of the tag - must be in lower case. + */
 
- int  nattributes;                      /*+ The number of valid attributes for the tag. +*/
- char *attributes[XMLPARSE_MAX_ATTRS];  /*+ The valid attributes for the tag. +*/
+	int nattributes;	/*+ The number of valid attributes for the tag. + */
+	char *attributes[XMLPARSE_MAX_ATTRS];	/*+ The valid attributes for the tag. + */
 
- int  (*callback)();                    /*+ The callback function when the tag is seen. +*/
+	int (*callback) ();	/*+ The callback function when the tag is seen. + */
 
- xmltag *subtags[XMLPARSE_MAX_SUBTAGS]; /*+ The list of valid tags contained within this one (null terminated). +*/
+	xmltag *subtags[XMLPARSE_MAX_SUBTAGS];	/*+ The list of valid tags contained within this one (null terminated). + */
 };
 
 
 /* XML Parser options */
 
 #define XMLPARSE_UNKNOWN_ATTRIBUTES     0x0003
-#define XMLPARSE_UNKNOWN_ATTR_ERROR     0x0000 /* Flag an error and exit. */
-#define XMLPARSE_UNKNOWN_ATTR_ERRNONAME 0x0001 /* Flag an error and exit unless a namespace is specified. */
-#define XMLPARSE_UNKNOWN_ATTR_WARN      0x0002 /* Warn about the problem and continue. */
-#define XMLPARSE_UNKNOWN_ATTR_IGNORE    0x0003 /* Ignore the potential problem. */
+#define XMLPARSE_UNKNOWN_ATTR_ERROR     0x0000	/* Flag an error and exit. */
+#define XMLPARSE_UNKNOWN_ATTR_ERRNONAME 0x0001	/* Flag an error and exit unless a namespace is specified. */
+#define XMLPARSE_UNKNOWN_ATTR_WARN      0x0002	/* Warn about the problem and continue. */
+#define XMLPARSE_UNKNOWN_ATTR_IGNORE    0x0003	/* Ignore the potential problem. */
 
-#define XMLPARSE_RETURN_ATTR_ENCODED    0x0004 /* Return the XML attribute strings without decoding them. */
+#define XMLPARSE_RETURN_ATTR_ENCODED    0x0004	/* Return the XML attribute strings without decoding them. */
 
 
 /* XML parser functions */
 
-int ParseXML(int fd,xmltag **tags,int options);
+int ParseXML(int fd, xmltag ** tags, int options);
 
 uint64_t ParseXML_LineNumber(void);
 
@@ -132,4 +131,4 @@ int ParseXML_IsFloating(const char *string);
     while(0)
 
 
-#endif /* XMLPARSE_H */
+#endif				/* XMLPARSE_H */

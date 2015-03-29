@@ -2,7 +2,7 @@
  Functions to handle files.
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2008-2014 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -34,43 +34,41 @@
 
 
 /*+ A structure to contain the list of memory mapped files. +*/
-struct mmapinfo
-{
- const char  *filename;         /*+ The name of the file (the index of the list). +*/
-       int    fd;               /*+ The file descriptor used when it was opened. +*/
-       void  *address;          /*+ The address the file was mapped to. +*/
-       size_t length;           /*+ The length of the file. +*/
+struct mmapinfo {
+	const char *filename;	/*+ The name of the file (the index of the list). + */
+	int fd;			/*+ The file descriptor used when it was opened. + */
+	void *address;		/*+ The address the file was mapped to. + */
+	size_t length;		/*+ The length of the file. + */
 };
 
 /*+ The list of memory mapped files. +*/
 static struct mmapinfo *mappedfiles;
 
 /*+ The number of mapped files. +*/
-static int nmappedfiles=0;
+static int nmappedfiles = 0;
 
 
 #define BUFFLEN 4096
 
 /*+ A structure to contain the list of file buffers. +*/
-struct filebuffer
-{
- int    fd;                     /*+ The file descriptor used when it was opened. +*/
- char   buffer[BUFFLEN];        /*+ The data buffer. +*/
- size_t pointer;                /*+ The read/write pointer for the file buffer. +*/
- size_t length;                 /*+ The read pointer for the file buffer. +*/
- int    reading;                /*+ A flag to indicate if the file is for reading. +*/
+struct filebuffer {
+	int fd;			/*+ The file descriptor used when it was opened. + */
+	char buffer[BUFFLEN];	/*+ The data buffer. + */
+	size_t pointer;		/*+ The read/write pointer for the file buffer. + */
+	size_t length;		/*+ The read pointer for the file buffer. + */
+	int reading;		/*+ A flag to indicate if the file is for reading. + */
 };
 
 /*+ The list of file buffers. +*/
-static struct filebuffer **filebuffers=NULL;
+static struct filebuffer **filebuffers = NULL;
 
 /*+ The number of allocated file buffer pointers. +*/
-static int nfilebuffers=0;
+static int nfilebuffers = 0;
 
 
 /* Local functions */
 
-static void CreateFileBuffer(int fd,int read_write);
+static void CreateFileBuffer(int fd, int read_write);
 
 
 /*++++++++++++++++++++++++++++++++++++++
@@ -85,13 +83,18 @@ static void CreateFileBuffer(int fd,int read_write);
   const char *name The main part of the name.
   ++++++++++++++++++++++++++++++++++++++*/
 
-char *FileName(const char *dirname,const char *prefix, const char *name)
+char *FileName(const char *dirname, const char *prefix, const char *name)
 {
- char *filename=(char*)malloc((dirname?strlen(dirname):0)+1+(prefix?strlen(prefix):0)+1+strlen(name)+1);
+	char *filename =
+	    (char *) malloc((dirname ? strlen(dirname) : 0) + 1 +
+			    (prefix ? strlen(prefix) : 0) + 1 +
+			    strlen(name) + 1);
 
- sprintf(filename,"%s%s%s%s%s",dirname?dirname:"",dirname?"/":"",prefix?prefix:"",prefix?"-":"",name);
+	sprintf(filename, "%s%s%s%s%s", dirname ? dirname : "",
+		dirname ? "/" : "", prefix ? prefix : "",
+		prefix ? "-" : "", name);
 
- return(filename);
+	return (filename);
 }
 
 
@@ -105,57 +108,62 @@ char *FileName(const char *dirname,const char *prefix, const char *name)
 
 void *MapFile(const char *filename)
 {
- int fd;
- struct stat buf;
- off_t size;
- void *address;
+	int fd;
+	struct stat buf;
+	off_t size;
+	void *address;
 
- /* Open the file */
+	/* Open the file */
 
- fd=open(filename,O_RDONLY);
+	fd = open(filename, O_RDONLY);
 
- if(fd<0)
-   {
-    fprintf(stderr,"Cannot open file '%s' for reading [%s].\n",filename,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+	if (fd < 0) {
+		fprintf(stderr,
+			"Cannot open file '%s' for reading [%s].\n",
+			filename, strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- /* Get its size */
+	/* Get its size */
 
- if(stat(filename,&buf))
-   {
-    fprintf(stderr,"Cannot stat file '%s' [%s].\n",filename,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+	if (stat(filename, &buf)) {
+		fprintf(stderr, "Cannot stat file '%s' [%s].\n", filename,
+			strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- size=buf.st_size;
+	size = buf.st_size;
 
- /* Map the file */
+	/* Map the file */
 
- address=mmap(NULL,size,PROT_READ,MAP_SHARED,fd,0);
+	address = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
 
- if(address==MAP_FAILED)
-   {
-    close(fd);
+	if (address == MAP_FAILED) {
+		close(fd);
 
-    fprintf(stderr,"Cannot mmap file '%s' for reading [%s].\n",filename,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+		fprintf(stderr,
+			"Cannot mmap file '%s' for reading [%s].\n",
+			filename, strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- log_mmap(size);
+	log_mmap(size);
 
- /* Store the information about the mapped file */
+	/* Store the information about the mapped file */
 
- mappedfiles=(struct mmapinfo*)realloc((void*)mappedfiles,(nmappedfiles+1)*sizeof(struct mmapinfo));
+	mappedfiles =
+	    (struct mmapinfo *) realloc((void *) mappedfiles,
+					(nmappedfiles +
+					 1) * sizeof(struct mmapinfo));
 
- mappedfiles[nmappedfiles].filename=filename;
- mappedfiles[nmappedfiles].fd=fd;
- mappedfiles[nmappedfiles].address=address;
- mappedfiles[nmappedfiles].length=size;
+	mappedfiles[nmappedfiles].filename = filename;
+	mappedfiles[nmappedfiles].fd = fd;
+	mappedfiles[nmappedfiles].address = address;
+	mappedfiles[nmappedfiles].length = size;
 
- nmappedfiles++;
+	nmappedfiles++;
 
- return(address);
+	return (address);
 }
 
 
@@ -169,57 +177,63 @@ void *MapFile(const char *filename)
 
 void *MapFileWriteable(const char *filename)
 {
- int fd;
- struct stat buf;
- off_t size;
- void *address;
+	int fd;
+	struct stat buf;
+	off_t size;
+	void *address;
 
- /* Open the file */
+	/* Open the file */
 
- fd=open(filename,O_RDWR);
+	fd = open(filename, O_RDWR);
 
- if(fd<0)
-   {
-    fprintf(stderr,"Cannot open file '%s' for reading and writing [%s].\n",filename,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+	if (fd < 0) {
+		fprintf(stderr,
+			"Cannot open file '%s' for reading and writing [%s].\n",
+			filename, strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- /* Get its size */
+	/* Get its size */
 
- if(stat(filename,&buf))
-   {
-    fprintf(stderr,"Cannot stat file '%s' [%s].\n",filename,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+	if (stat(filename, &buf)) {
+		fprintf(stderr, "Cannot stat file '%s' [%s].\n", filename,
+			strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- size=buf.st_size;
+	size = buf.st_size;
 
- /* Map the file */
+	/* Map the file */
 
- address=mmap(NULL,size,PROT_READ|PROT_WRITE,MAP_SHARED,fd,0);
+	address =
+	    mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 
- if(address==MAP_FAILED)
-   {
-    close(fd);
+	if (address == MAP_FAILED) {
+		close(fd);
 
-    fprintf(stderr,"Cannot mmap file '%s' for reading and writing [%s].\n",filename,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+		fprintf(stderr,
+			"Cannot mmap file '%s' for reading and writing [%s].\n",
+			filename, strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- log_mmap(size);
+	log_mmap(size);
 
- /* Store the information about the mapped file */
+	/* Store the information about the mapped file */
 
- mappedfiles=(struct mmapinfo*)realloc((void*)mappedfiles,(nmappedfiles+1)*sizeof(struct mmapinfo));
+	mappedfiles =
+	    (struct mmapinfo *) realloc((void *) mappedfiles,
+					(nmappedfiles +
+					 1) * sizeof(struct mmapinfo));
 
- mappedfiles[nmappedfiles].filename=filename;
- mappedfiles[nmappedfiles].fd=fd;
- mappedfiles[nmappedfiles].address=address;
- mappedfiles[nmappedfiles].length=size;
+	mappedfiles[nmappedfiles].filename = filename;
+	mappedfiles[nmappedfiles].fd = fd;
+	mappedfiles[nmappedfiles].address = address;
+	mappedfiles[nmappedfiles].length = size;
 
- nmappedfiles++;
+	nmappedfiles++;
 
- return(address);
+	return (address);
 }
 
 
@@ -233,36 +247,38 @@ void *MapFileWriteable(const char *filename)
 
 void *UnmapFile(const void *address)
 {
- int i;
+	int i;
 
- for(i=0;i<nmappedfiles;i++)
-    if(mappedfiles[i].address==address)
-       break;
+	for (i = 0; i < nmappedfiles; i++)
+		if (mappedfiles[i].address == address)
+			break;
 
- if(i==nmappedfiles)
-   {
-    fprintf(stderr,"The data at address %p was not mapped using MapFile().\n",address);
-    exit(EXIT_FAILURE);
-   }
+	if (i == nmappedfiles) {
+		fprintf(stderr,
+			"The data at address %p was not mapped using MapFile().\n",
+			address);
+		exit(EXIT_FAILURE);
+	}
 
- /* Close the file */
+	/* Close the file */
 
- close(mappedfiles[i].fd);
+	close(mappedfiles[i].fd);
 
- /* Unmap the file */
+	/* Unmap the file */
 
- munmap(mappedfiles[i].address,mappedfiles[i].length);
+	munmap(mappedfiles[i].address, mappedfiles[i].length);
 
- log_munmap(mappedfiles[i].length);
+	log_munmap(mappedfiles[i].length);
 
- /* Shuffle the list of files */
+	/* Shuffle the list of files */
 
- nmappedfiles--;
+	nmappedfiles--;
 
- if(nmappedfiles>i)
-    memmove(&mappedfiles[i],&mappedfiles[i+1],(nmappedfiles-i)*sizeof(struct mmapinfo));
+	if (nmappedfiles > i)
+		memmove(&mappedfiles[i], &mappedfiles[i + 1],
+			(nmappedfiles - i) * sizeof(struct mmapinfo));
 
- return(NULL);
+	return (NULL);
 }
 
 
@@ -276,21 +292,22 @@ void *UnmapFile(const void *address)
 
 int SlimMapFile(const char *filename)
 {
- int fd;
+	int fd;
 
- /* Open the file */
+	/* Open the file */
 
- fd=open(filename,O_RDONLY);
+	fd = open(filename, O_RDONLY);
 
- if(fd<0)
-   {
-    fprintf(stderr,"Cannot open file '%s' for reading [%s].\n",filename,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+	if (fd < 0) {
+		fprintf(stderr,
+			"Cannot open file '%s' for reading [%s].\n",
+			filename, strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- CreateFileBuffer(fd,0);
+	CreateFileBuffer(fd, 0);
 
- return(fd);
+	return (fd);
 }
 
 
@@ -304,21 +321,22 @@ int SlimMapFile(const char *filename)
 
 int SlimMapFileWriteable(const char *filename)
 {
- int fd;
+	int fd;
 
- /* Open the file */
+	/* Open the file */
 
- fd=open(filename,O_RDWR);
+	fd = open(filename, O_RDWR);
 
- if(fd<0)
-   {
-    fprintf(stderr,"Cannot open file '%s' for reading and writing [%s].\n",filename,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+	if (fd < 0) {
+		fprintf(stderr,
+			"Cannot open file '%s' for reading and writing [%s].\n",
+			filename, strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- CreateFileBuffer(fd,0);
+	CreateFileBuffer(fd, 0);
 
- return(fd);
+	return (fd);
 }
 
 
@@ -332,9 +350,9 @@ int SlimMapFileWriteable(const char *filename)
 
 int SlimUnmapFile(int fd)
 {
- close(fd);
+	close(fd);
 
- return(-1);
+	return (-1);
 }
 
 
@@ -348,21 +366,23 @@ int SlimUnmapFile(int fd)
 
 int OpenFileBufferedNew(const char *filename)
 {
- int fd;
+	int fd;
 
- /* Open the file */
+	/* Open the file */
 
- fd=open(filename,O_WRONLY|O_CREAT|O_TRUNC,S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC,
+		  S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
- if(fd<0)
-   {
-    fprintf(stderr,"Cannot open file '%s' for writing [%s].\n",filename,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+	if (fd < 0) {
+		fprintf(stderr,
+			"Cannot open file '%s' for writing [%s].\n",
+			filename, strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- CreateFileBuffer(fd,-1);
+	CreateFileBuffer(fd, -1);
 
- return(fd);
+	return (fd);
 }
 
 
@@ -376,21 +396,23 @@ int OpenFileBufferedNew(const char *filename)
 
 int OpenFileBufferedAppend(const char *filename)
 {
- int fd;
+	int fd;
 
- /* Open the file */
+	/* Open the file */
 
- fd=open(filename,O_WRONLY|O_CREAT|O_APPEND,S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND,
+		  S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
- if(fd<0)
-   {
-    fprintf(stderr,"Cannot open file '%s' for appending [%s].\n",filename,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+	if (fd < 0) {
+		fprintf(stderr,
+			"Cannot open file '%s' for appending [%s].\n",
+			filename, strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- CreateFileBuffer(fd,-1);
+	CreateFileBuffer(fd, -1);
 
- return(fd);
+	return (fd);
 }
 
 
@@ -404,21 +426,22 @@ int OpenFileBufferedAppend(const char *filename)
 
 int ReOpenFileBuffered(const char *filename)
 {
- int fd;
+	int fd;
 
- /* Open the file */
+	/* Open the file */
 
- fd=open(filename,O_RDONLY);
+	fd = open(filename, O_RDONLY);
 
- if(fd<0)
-   {
-    fprintf(stderr,"Cannot open file '%s' for reading [%s].\n",filename,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+	if (fd < 0) {
+		fprintf(stderr,
+			"Cannot open file '%s' for reading [%s].\n",
+			filename, strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- CreateFileBuffer(fd,1);
+	CreateFileBuffer(fd, 1);
 
- return(fd);
+	return (fd);
 }
 
 
@@ -434,37 +457,42 @@ int ReOpenFileBuffered(const char *filename)
   size_t length The length of data to write.
   ++++++++++++++++++++++++++++++++++++++*/
 
-int WriteFileBuffered(int fd,const void *address,size_t length)
+int WriteFileBuffered(int fd, const void *address, size_t length)
 {
- logassert(fd!=-1,"File descriptor is in error - report a bug");
+	logassert(fd != -1, "File descriptor is in error - report a bug");
 
- logassert(fd<nfilebuffers && filebuffers[fd],"File descriptor has no buffer - report a bug");
+	logassert(fd < nfilebuffers
+		  && filebuffers[fd],
+		  "File descriptor has no buffer - report a bug");
 
- logassert(!filebuffers[fd]->reading,"File descriptor was not opened for writing - report a bug");
+	logassert(!filebuffers[fd]->reading,
+		  "File descriptor was not opened for writing - report a bug");
 
- /* Write the data */
+	/* Write the data */
 
- if((filebuffers[fd]->pointer+length)>BUFFLEN)
-   {
-    if(write(fd,filebuffers[fd]->buffer,filebuffers[fd]->pointer)!=(ssize_t)filebuffers[fd]->pointer)
-       return(-1);
+	if ((filebuffers[fd]->pointer + length) > BUFFLEN) {
+		if (write
+		    (fd, filebuffers[fd]->buffer,
+		     filebuffers[fd]->pointer) !=
+		    (ssize_t) filebuffers[fd]->pointer)
+			return (-1);
 
-    filebuffers[fd]->pointer=0;
-   }
+		filebuffers[fd]->pointer = 0;
+	}
 
- if(length>=BUFFLEN)
-   {
-    if(write(fd,address,length)!=(ssize_t)length)
-       return(-1);
+	if (length >= BUFFLEN) {
+		if (write(fd, address, length) != (ssize_t) length)
+			return (-1);
 
-    return(0);
-   }
+		return (0);
+	}
 
- memcpy(filebuffers[fd]->buffer+filebuffers[fd]->pointer,address,length);
+	memcpy(filebuffers[fd]->buffer + filebuffers[fd]->pointer, address,
+	       length);
 
- filebuffers[fd]->pointer+=length;
+	filebuffers[fd]->pointer += length;
 
- return(0);
+	return (0);
 }
 
 
@@ -480,56 +508,65 @@ int WriteFileBuffered(int fd,const void *address,size_t length)
   size_t length The length of data to read.
   ++++++++++++++++++++++++++++++++++++++*/
 
-int ReadFileBuffered(int fd,void *address,size_t length)
+int ReadFileBuffered(int fd, void *address, size_t length)
 {
- logassert(fd!=-1,"File descriptor is in error - report a bug");
+	logassert(fd != -1, "File descriptor is in error - report a bug");
 
- logassert(fd<nfilebuffers && filebuffers[fd],"File descriptor has no buffer - report a bug");
+	logassert(fd < nfilebuffers
+		  && filebuffers[fd],
+		  "File descriptor has no buffer - report a bug");
 
- logassert(filebuffers[fd]->reading,"File descriptor was not opened for reading - report a bug");
+	logassert(filebuffers[fd]->reading,
+		  "File descriptor was not opened for reading - report a bug");
 
- /* Read the data */
+	/* Read the data */
 
- if((filebuffers[fd]->pointer+length)>filebuffers[fd]->length)
-    if(filebuffers[fd]->pointer<filebuffers[fd]->length)
-      {
-       memcpy(address,filebuffers[fd]->buffer+filebuffers[fd]->pointer,filebuffers[fd]->length-filebuffers[fd]->pointer);
+	if ((filebuffers[fd]->pointer + length) > filebuffers[fd]->length)
+		if (filebuffers[fd]->pointer < filebuffers[fd]->length) {
+			memcpy(address,
+			       filebuffers[fd]->buffer +
+			       filebuffers[fd]->pointer,
+			       filebuffers[fd]->length -
+			       filebuffers[fd]->pointer);
 
-       address+=filebuffers[fd]->length-filebuffers[fd]->pointer;
-       length-=filebuffers[fd]->length-filebuffers[fd]->pointer;
+			address +=
+			    filebuffers[fd]->length -
+			    filebuffers[fd]->pointer;
+			length -=
+			    filebuffers[fd]->length -
+			    filebuffers[fd]->pointer;
 
-       filebuffers[fd]->pointer=0;
-       filebuffers[fd]->length=0;
-      }
+			filebuffers[fd]->pointer = 0;
+			filebuffers[fd]->length = 0;
+		}
 
- if(length>=BUFFLEN)
-   {
-    if(read(fd,address,length)!=(ssize_t)length)
-       return(-1);
+	if (length >= BUFFLEN) {
+		if (read(fd, address, length) != (ssize_t) length)
+			return (-1);
 
-    return(0);
-   }
+		return (0);
+	}
 
- if(filebuffers[fd]->pointer==filebuffers[fd]->length)
-   {
-    ssize_t len=read(fd,filebuffers[fd]->buffer,BUFFLEN);
+	if (filebuffers[fd]->pointer == filebuffers[fd]->length) {
+		ssize_t len = read(fd, filebuffers[fd]->buffer, BUFFLEN);
 
-    if(len<=0)
-       return(-1);
+		if (len <= 0)
+			return (-1);
 
 
-    filebuffers[fd]->length=len;
-    filebuffers[fd]->pointer=0;
-   }
+		filebuffers[fd]->length = len;
+		filebuffers[fd]->pointer = 0;
+	}
 
- if(filebuffers[fd]->length==0)
-    return(-1);
+	if (filebuffers[fd]->length == 0)
+		return (-1);
 
- memcpy(address,filebuffers[fd]->buffer+filebuffers[fd]->pointer,length);
+	memcpy(address, filebuffers[fd]->buffer + filebuffers[fd]->pointer,
+	       length);
 
- filebuffers[fd]->pointer+=length;
+	filebuffers[fd]->pointer += length;
 
- return(0);
+	return (0);
 }
 
 
@@ -543,25 +580,30 @@ int ReadFileBuffered(int fd,void *address,size_t length)
   off_t position The position to seek to.
   ++++++++++++++++++++++++++++++++++++++*/
 
-int SeekFileBuffered(int fd,off_t position)
+int SeekFileBuffered(int fd, off_t position)
 {
- logassert(fd!=-1,"File descriptor is in error - report a bug");
+	logassert(fd != -1, "File descriptor is in error - report a bug");
 
- logassert(fd<nfilebuffers && filebuffers[fd],"File descriptor has no buffer - report a bug");
+	logassert(fd < nfilebuffers
+		  && filebuffers[fd],
+		  "File descriptor has no buffer - report a bug");
 
- /* Seek the data - doesn't need to be highly optimised */
+	/* Seek the data - doesn't need to be highly optimised */
 
- if(!filebuffers[fd]->reading)
-    if(write(fd,filebuffers[fd]->buffer,filebuffers[fd]->pointer)!=(ssize_t)filebuffers[fd]->pointer)
-       return(-1);
+	if (!filebuffers[fd]->reading)
+		if (write
+		    (fd, filebuffers[fd]->buffer,
+		     filebuffers[fd]->pointer) !=
+		    (ssize_t) filebuffers[fd]->pointer)
+			return (-1);
 
- filebuffers[fd]->pointer=0;
- filebuffers[fd]->length=0;
+	filebuffers[fd]->pointer = 0;
+	filebuffers[fd]->length = 0;
 
- if(lseek(fd,position,SEEK_SET)!=position)
-    return(-1);
+	if (lseek(fd, position, SEEK_SET) != position)
+		return (-1);
 
- return(0);
+	return (0);
 }
 
 
@@ -575,30 +617,31 @@ int SeekFileBuffered(int fd,off_t position)
   off_t skip The amount to skip forward.
   ++++++++++++++++++++++++++++++++++++++*/
 
-int SkipFileBuffered(int fd,off_t skip)
+int SkipFileBuffered(int fd, off_t skip)
 {
- logassert(fd!=-1,"File descriptor is in error - report a bug");
+	logassert(fd != -1, "File descriptor is in error - report a bug");
 
- logassert(fd<nfilebuffers && filebuffers[fd],"File descriptor has no buffer - report a bug");
+	logassert(fd < nfilebuffers
+		  && filebuffers[fd],
+		  "File descriptor has no buffer - report a bug");
 
- logassert(filebuffers[fd]->reading,"File descriptor was not opened for reading - report a bug");
+	logassert(filebuffers[fd]->reading,
+		  "File descriptor was not opened for reading - report a bug");
 
- /* Skip the data - needs to be optimised */
+	/* Skip the data - needs to be optimised */
 
- if((filebuffers[fd]->pointer+skip)>filebuffers[fd]->length)
-   {
-    skip-=filebuffers[fd]->length-filebuffers[fd]->pointer;
+	if ((filebuffers[fd]->pointer + skip) > filebuffers[fd]->length) {
+		skip -= filebuffers[fd]->length - filebuffers[fd]->pointer;
 
-    filebuffers[fd]->pointer=0;
-    filebuffers[fd]->length=0;
+		filebuffers[fd]->pointer = 0;
+		filebuffers[fd]->length = 0;
 
-    if(lseek(fd,skip,SEEK_CUR)==-1)
-       return(-1);
-   }
- else
-    filebuffers[fd]->pointer+=skip;
+		if (lseek(fd, skip, SEEK_CUR) == -1)
+			return (-1);
+	} else
+		filebuffers[fd]->pointer += skip;
 
- return(0);
+	return (0);
 }
 
 
@@ -612,15 +655,15 @@ int SkipFileBuffered(int fd,off_t skip)
 
 off_t SizeFile(const char *filename)
 {
- struct stat buf;
+	struct stat buf;
 
- if(stat(filename,&buf))
-   {
-    fprintf(stderr,"Cannot stat file '%s' [%s].\n",filename,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+	if (stat(filename, &buf)) {
+		fprintf(stderr, "Cannot stat file '%s' [%s].\n", filename,
+			strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- return(buf.st_size);
+	return (buf.st_size);
 }
 
 
@@ -634,15 +677,15 @@ off_t SizeFile(const char *filename)
 
 off_t SizeFileFD(int fd)
 {
- struct stat buf;
+	struct stat buf;
 
- if(fstat(fd,&buf))
-   {
-    fprintf(stderr,"Cannot stat file descriptor '%d' [%s].\n",fd,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+	if (fstat(fd, &buf)) {
+		fprintf(stderr, "Cannot stat file descriptor '%d' [%s].\n",
+			fd, strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- return(buf.st_size);
+	return (buf.st_size);
 }
 
 
@@ -656,12 +699,12 @@ off_t SizeFileFD(int fd)
 
 int ExistsFile(const char *filename)
 {
- struct stat buf;
+	struct stat buf;
 
- if(stat(filename,&buf))
-    return(0);
- else
-    return(1);
+	if (stat(filename, &buf))
+		return (0);
+	else
+		return (1);
 }
 
 
@@ -675,19 +718,24 @@ int ExistsFile(const char *filename)
 
 int CloseFileBuffered(int fd)
 {
- logassert(fd<nfilebuffers && filebuffers[fd],"File descriptor has no buffer - report a bug");
+	logassert(fd < nfilebuffers
+		  && filebuffers[fd],
+		  "File descriptor has no buffer - report a bug");
 
- if(!filebuffers[fd]->reading)
-    if(write(fd,filebuffers[fd]->buffer,filebuffers[fd]->pointer)!=(ssize_t)filebuffers[fd]->pointer)
-       return(-1);
+	if (!filebuffers[fd]->reading)
+		if (write
+		    (fd, filebuffers[fd]->buffer,
+		     filebuffers[fd]->pointer) !=
+		    (ssize_t) filebuffers[fd]->pointer)
+			return (-1);
 
- close(fd);
+	close(fd);
 
- free(filebuffers[fd]);
+	free(filebuffers[fd]);
 
- filebuffers[fd]=NULL;
+	filebuffers[fd] = NULL;
 
- return(-1);
+	return (-1);
 }
 
 
@@ -701,19 +749,20 @@ int CloseFileBuffered(int fd)
 
 int OpenFile(const char *filename)
 {
- int fd;
+	int fd;
 
- /* Open the file */
+	/* Open the file */
 
- fd=open(filename,O_RDONLY);
+	fd = open(filename, O_RDONLY);
 
- if(fd<0)
-   {
-    fprintf(stderr,"Cannot open file '%s' for reading [%s].\n",filename,strerror(errno));
-    exit(EXIT_FAILURE);
-   }
+	if (fd < 0) {
+		fprintf(stderr,
+			"Cannot open file '%s' for reading [%s].\n",
+			filename, strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
- return(fd);
+	return (fd);
 }
 
 
@@ -725,7 +774,7 @@ int OpenFile(const char *filename)
 
 void CloseFile(int fd)
 {
- close(fd);
+	close(fd);
 }
 
 
@@ -739,9 +788,9 @@ void CloseFile(int fd)
 
 int DeleteFile(const char *filename)
 {
- unlink(filename);
+	unlink(filename);
 
- return(0);
+	return (0);
 }
 
 
@@ -755,11 +804,11 @@ int DeleteFile(const char *filename)
   const char *newfilename The new name of the file after renaming.
   ++++++++++++++++++++++++++++++++++++++*/
 
-int RenameFile(const char *oldfilename,const char *newfilename)
+int RenameFile(const char *oldfilename, const char *newfilename)
 {
- rename(oldfilename,newfilename);
+	rename(oldfilename, newfilename);
 
- return(0);
+	return (0);
 }
 
 
@@ -771,24 +820,29 @@ int RenameFile(const char *oldfilename,const char *newfilename)
   int read_write A flag set to 1 for reading, -1 for writing and 0 for unbuffered.
   ++++++++++++++++++++++++++++++++++++++*/
 
-static void CreateFileBuffer(int fd,int read_write)
+static void CreateFileBuffer(int fd, int read_write)
 {
- if(nfilebuffers<=fd)
-   {
-    int i;
+	if (nfilebuffers <= fd) {
+		int i;
 
-    filebuffers=(struct filebuffer**)realloc((void*)filebuffers,(fd+1)*sizeof(struct filebuffer*));
+		filebuffers =
+		    (struct filebuffer **) realloc((void *) filebuffers,
+						   (fd +
+						    1) *
+						   sizeof(struct filebuffer
+							  *));
 
-    for(i=nfilebuffers;i<=fd;i++)
-       filebuffers[i]=NULL;
+		for (i = nfilebuffers; i <= fd; i++)
+			filebuffers[i] = NULL;
 
-    nfilebuffers=fd+1;
-   }
+		nfilebuffers = fd + 1;
+	}
 
- if(read_write)
-   {
-    filebuffers[fd]=(struct filebuffer*)calloc(sizeof(struct filebuffer),1);
+	if (read_write) {
+		filebuffers[fd] =
+		    (struct filebuffer *) calloc(sizeof(struct filebuffer),
+						 1);
 
-    filebuffers[fd]->reading=(read_write==1);
-   }
+		filebuffers[fd]->reading = (read_write == 1);
+	}
 }

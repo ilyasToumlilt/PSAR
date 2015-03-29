@@ -2,7 +2,7 @@
  Type definitions for eXtended types.
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2008-2014 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 
 
 #ifndef TYPESX_H
-#define TYPESX_H    /*+ To stop multiple inclusions. +*/
+#define TYPESX_H		/*+ To stop multiple inclusions. + */
 
 
 #include <inttypes.h>
@@ -75,30 +75,28 @@ typedef uint32_t relation_t;
 
 
 /*+ A printf formatting string for a node_t type (this should match the node_t definition above). +*/
-#define Pnode_t PRIu32          /* PRIu32 and PRIu64 are defined in intypes.h */
+#define Pnode_t PRIu32		/* PRIu32 and PRIu64 are defined in intypes.h */
 
 /*+ A printf formatting string for a way_t type (this should match the way_t definition above). +*/
-#define Pway_t PRIu32           /* PRIu32 and PRIu64 are defined in intypes.h */
+#define Pway_t PRIu32		/* PRIu32 and PRIu64 are defined in intypes.h */
 
 /*+ A printf formatting string for a relation_t type (this should match the relation_t definition above). +*/
-#define Prelation_t PRIu32      /* PRIu32 and PRIu64 are defined in intypes.h */
+#define Prelation_t PRIu32	/* PRIu32 and PRIu64 are defined in intypes.h */
 
 
 /* Enumerated types */
 
 /*+ Turn restrictions. +*/
-typedef enum _TurnRestriction
- {
-  TurnRestrict_None              =0,
-  TurnRestrict_no_right_turn,
-  TurnRestrict_no_left_turn,
-  TurnRestrict_no_u_turn,
-  TurnRestrict_no_straight_on,
-  TurnRestrict_only_right_turn,
-  TurnRestrict_only_left_turn,
-  TurnRestrict_only_straight_on
- }
- TurnRestriction;
+typedef enum _TurnRestriction {
+	TurnRestrict_None = 0,
+	TurnRestrict_no_right_turn,
+	TurnRestrict_no_left_turn,
+	TurnRestrict_no_u_turn,
+	TurnRestrict_no_straight_on,
+	TurnRestrict_only_right_turn,
+	TurnRestrict_only_left_turn,
+	TurnRestrict_only_straight_on
+} TurnRestriction;
 
 
 /* Data structures */
@@ -122,4 +120,4 @@ typedef struct _TurnRelX TurnRelX;
 typedef struct _RelationsX RelationsX;
 
 
-#endif /* TYPESX_H */
+#endif				/* TYPESX_H */

@@ -2,7 +2,7 @@
  Functions to maintain an in-RAM cache of on-disk data for slim mode.
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2013-2014 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #if SLIM
 
 #ifndef CACHE_H
-#define CACHE_H    /*+ To stop multiple inclusions. +*/
+#define CACHE_H			/*+ To stop multiple inclusions. + */
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -33,8 +33,8 @@
 
 /* Macros for constants */
 
-#define CACHEWIDTH 8192         /*+ The width of the cache. +*/
-#define CACHEDEPTH   16         /*+ The depth of the cache. +*/
+#define CACHEWIDTH 8192		/*+ The width of the cache. + */
+#define CACHEDEPTH   16		/*+ The depth of the cache. + */
 
 
 /* Macro for structure forward declaration */
@@ -165,16 +165,14 @@ static inline void Invalidate##type##Cache(type##Cache *cache) \
 
 /*+ Cache data structure forward declarations (for planetsplitter). +*/
 CACHE_STRUCTURE_FWD(NodeX)
-CACHE_STRUCTURE_FWD(SegmentX)
-CACHE_STRUCTURE_FWD(WayX)
+    CACHE_STRUCTURE_FWD(SegmentX)
+    CACHE_STRUCTURE_FWD(WayX)
 
 /*+ Cache data structure forward declarations (for router). +*/
-CACHE_STRUCTURE_FWD(Node)
-CACHE_STRUCTURE_FWD(Segment)
-CACHE_STRUCTURE_FWD(Way)
-CACHE_STRUCTURE_FWD(TurnRelation)
+    CACHE_STRUCTURE_FWD(Node)
+    CACHE_STRUCTURE_FWD(Segment)
+    CACHE_STRUCTURE_FWD(Way)
+    CACHE_STRUCTURE_FWD(TurnRelation)
 
-
-#endif /* CACHE_H */
-
-#endif  /* SLIM */
+#endif				/* CACHE_H */
+#endif				/* SLIM */

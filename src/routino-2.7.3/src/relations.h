@@ -2,7 +2,7 @@
  A header file for the relations.
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2008-2013 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 
 
 #ifndef RELATIONS_H
-#define RELATIONS_H    /*+ To stop multiple inclusions. +*/
+#define RELATIONS_H		/*+ To stop multiple inclusions. + */
 
 #include <stdint.h>
 #include <sys/types.h>
@@ -37,49 +37,45 @@
 
 
 /*+ A structure containing a single relation. +*/
-struct _TurnRelation
-{
- index_t      from;             /*+ The segment that the path comes from. +*/
- index_t      via;              /*+ The node that the path goes via. +*/
- index_t      to;               /*+ The segment that the path goes to. +*/
+struct _TurnRelation {
+	index_t from;		/*+ The segment that the path comes from. + */
+	index_t via;		/*+ The node that the path goes via. + */
+	index_t to;		/*+ The segment that the path goes to. + */
 
- transports_t except;           /*+ The types of transports that that this relation does not apply to. +*/
+	transports_t except;	/*+ The types of transports that that this relation does not apply to. + */
 };
 
 
 /*+ A structure containing the header from the file. +*/
-typedef struct _RelationsFile
-{
- index_t       trnumber;        /*+ The number of turn relations in total. +*/
-}
- RelationsFile;
+typedef struct _RelationsFile {
+	index_t trnumber;	/*+ The number of turn relations in total. + */
+} RelationsFile;
 
 
 /*+ A structure containing a set of relations (and pointers to mmap file). +*/
-struct _Relations
-{
- RelationsFile file;            /*+ The header data from the file. +*/
+struct _Relations {
+	RelationsFile file;	/*+ The header data from the file. + */
 
 #if !SLIM
 
- void         *data;            /*+ The memory mapped data. +*/
+	void *data;		/*+ The memory mapped data. + */
 
- TurnRelation *turnrelations;   /*+ An array of nodes. +*/
+	TurnRelation *turnrelations;	/*+ An array of nodes. + */
 
 #else
 
- int           fd;              /*+ The file descriptor for the file. +*/
+	int fd;			/*+ The file descriptor for the file. + */
 
- off_t         troffset;        /*+ The offset of the turn relations in the file. +*/
+	off_t troffset;		/*+ The offset of the turn relations in the file. + */
 
- TurnRelation  cached[2];       /*+ Two cached relations read from the file in slim mode. +*/
+	TurnRelation cached[2];	/*+ Two cached relations read from the file in slim mode. + */
 
- TurnRelationCache *cache;      /*+ A RAM cache of turn relations read from the file. +*/
+	TurnRelationCache *cache;	/*+ A RAM cache of turn relations read from the file. + */
 
 #endif
 
- index_t       via_start;       /*+ The first via node in the file. +*/
- index_t       via_end;         /*+ The last via node in the file. +*/
+	index_t via_start;	/*+ The first via node in the file. + */
+	index_t via_end;	/*+ The last via node in the file. + */
 };
 
 
@@ -87,15 +83,17 @@ struct _Relations
 
 Relations *LoadRelationList(const char *filename);
 
-void DestroyRelationList(Relations *relations);
+void DestroyRelationList(Relations * relations);
 
-index_t FindFirstTurnRelation1(Relations *relations,index_t via);
-index_t FindNextTurnRelation1(Relations *relations,index_t current);
+index_t FindFirstTurnRelation1(Relations * relations, index_t via);
+index_t FindNextTurnRelation1(Relations * relations, index_t current);
 
-index_t FindFirstTurnRelation2(Relations *relations,index_t via,index_t from);
-index_t FindNextTurnRelation2(Relations *relations,index_t current);
+index_t FindFirstTurnRelation2(Relations * relations, index_t via,
+			       index_t from);
+index_t FindNextTurnRelation2(Relations * relations, index_t current);
 
-int IsTurnAllowed(Relations *relations,index_t index,index_t via,index_t from,index_t to,transports_t transport);
+int IsTurnAllowed(Relations * relations, index_t index, index_t via,
+		  index_t from, index_t to, transports_t transport);
 
 
 /* Macros and inline functions */
@@ -109,21 +107,22 @@ int IsTurnAllowed(Relations *relations,index_t index,index_t via,index_t from,in
 
 /* Prototypes */
 
-static inline TurnRelation *LookupTurnRelation(Relations *relations,index_t index,int position);
+static inline TurnRelation *LookupTurnRelation(Relations * relations,
+					       index_t index,
+					       int position);
 
 CACHE_NEWCACHE_PROTO(TurnRelation)
-CACHE_DELETECACHE_PROTO(TurnRelation)
-CACHE_FETCHCACHE_PROTO(TurnRelation)
-CACHE_INVALIDATECACHE_PROTO(TurnRelation)
+    CACHE_DELETECACHE_PROTO(TurnRelation)
+    CACHE_FETCHCACHE_PROTO(TurnRelation)
+    CACHE_INVALIDATECACHE_PROTO(TurnRelation)
 
 
 /* Inline functions */
-
-CACHE_STRUCTURE(TurnRelation)
-CACHE_NEWCACHE(TurnRelation)
-CACHE_DELETECACHE(TurnRelation)
-CACHE_FETCHCACHE(TurnRelation)
-CACHE_INVALIDATECACHE(TurnRelation)
+    CACHE_STRUCTURE(TurnRelation)
+    CACHE_NEWCACHE(TurnRelation)
+    CACHE_DELETECACHE(TurnRelation)
+    CACHE_FETCHCACHE(TurnRelation)
+    CACHE_INVALIDATECACHE(TurnRelation)
 
 
 /*++++++++++++++++++++++++++++++++++++++
@@ -137,15 +136,17 @@ CACHE_INVALIDATECACHE(TurnRelation)
 
   int position The position in the cache to store this result.
   ++++++++++++++++++++++++++++++++++++++*/
-
-static inline TurnRelation *LookupTurnRelation(Relations *relations,index_t index,int position)
+static inline TurnRelation *LookupTurnRelation(Relations * relations,
+					       index_t index, int position)
 {
- relations->cached[position-1]=*FetchCachedTurnRelation(relations->cache,index,relations->fd,relations->troffset);
+	relations->cached[position - 1] =
+	    *FetchCachedTurnRelation(relations->cache, index,
+				     relations->fd, relations->troffset);
 
- return(&relations->cached[position-1]);
+	return (&relations->cached[position - 1]);
 }
 
 #endif
 
 
-#endif /* RELATIONS_H */
+#endif				/* RELATIONS_H */

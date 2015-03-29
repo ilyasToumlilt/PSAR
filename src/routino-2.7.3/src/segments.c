@@ -2,7 +2,7 @@
  Segment data type functions.
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2008-2014 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -43,36 +43,37 @@
 
 Segments *LoadSegmentList(const char *filename)
 {
- Segments *segments;
+	Segments *segments;
 
- segments=(Segments*)malloc(sizeof(Segments));
+	segments = (Segments *) malloc(sizeof(Segments));
 
 #if !SLIM
 
- segments->data=MapFile(filename);
+	segments->data = MapFile(filename);
 
- /* Copy the SegmentsFile structure from the loaded data */
+	/* Copy the SegmentsFile structure from the loaded data */
 
- segments->file=*((SegmentsFile*)segments->data);
+	segments->file = *((SegmentsFile *) segments->data);
 
- /* Set the pointers in the Segments structure. */
+	/* Set the pointers in the Segments structure. */
 
- segments->segments=(Segment*)(segments->data+sizeof(SegmentsFile));
+	segments->segments =
+	    (Segment *) (segments->data + sizeof(SegmentsFile));
 
 #else
 
- segments->fd=SlimMapFile(filename);
+	segments->fd = SlimMapFile(filename);
 
- /* Copy the SegmentsFile header structure from the loaded data */
+	/* Copy the SegmentsFile header structure from the loaded data */
 
- SlimFetch(segments->fd,&segments->file,sizeof(SegmentsFile),0);
+	SlimFetch(segments->fd, &segments->file, sizeof(SegmentsFile), 0);
 
- segments->cache=NewSegmentCache();
- log_malloc(segments->cache,sizeof(*segments->cache));
+	segments->cache = NewSegmentCache();
+	log_malloc(segments->cache, sizeof(*segments->cache));
 
 #endif
 
- return(segments);
+	return (segments);
 }
 
 
@@ -82,22 +83,22 @@ Segments *LoadSegmentList(const char *filename)
   Segments *segments The segment list to destroy.
   ++++++++++++++++++++++++++++++++++++++*/
 
-void DestroySegmentList(Segments *segments)
+void DestroySegmentList(Segments * segments)
 {
 #if !SLIM
 
- segments->data=UnmapFile(segments->data);
+	segments->data = UnmapFile(segments->data);
 
 #else
 
- segments->fd=SlimUnmapFile(segments->fd);
+	segments->fd = SlimUnmapFile(segments->fd);
 
- log_free(segments->cache);
- DeleteSegmentCache(segments->cache);
+	log_free(segments->cache);
+	DeleteSegmentCache(segments->cache);
 
 #endif
 
- free(segments);
+	free(segments);
 }
 
 
@@ -119,77 +120,78 @@ void DestroySegmentList(Segments *segments)
   Profile *profile The profile of the mode of transport (or NULL).
   ++++++++++++++++++++++++++++++++++++++*/
 
-index_t FindClosestSegmentHeading(Nodes *nodes,Segments *segments,Ways *ways,index_t node1,double heading,Profile *profile)
+index_t FindClosestSegmentHeading(Nodes * nodes, Segments * segments,
+				  Ways * ways, index_t node1,
+				  double heading, Profile * profile)
 {
- Segment *segmentp;
- index_t best_seg=NO_SEGMENT;
- double best_difference=360;
+	Segment *segmentp;
+	index_t best_seg = NO_SEGMENT;
+	double best_difference = 360;
 
- if(IsFakeNode(node1))
-    segmentp=FirstFakeSegment(node1);
- else
-   {
-    Node *nodep=LookupNode(nodes,node1,3);
+	if (IsFakeNode(node1))
+		segmentp = FirstFakeSegment(node1);
+	else {
+		Node *nodep = LookupNode(nodes, node1, 3);
 
-    segmentp=FirstSegment(segments,nodep,1);
-   }
+		segmentp = FirstSegment(segments, nodep, 1);
+	}
 
- while(segmentp)
-   {
-    Way *wayp;
-    index_t node2,seg2;
-    double bearing,difference;
+	while (segmentp) {
+		Way *wayp;
+		index_t node2, seg2;
+		double bearing, difference;
 
-    node2=OtherNode(segmentp,node1);  /* need this here because we use node2 at the end of the loop */
+		node2 = OtherNode(segmentp, node1);	/* need this here because we use node2 at the end of the loop */
 
-    if(!IsNormalSegment(segmentp))
-       goto endloop;
+		if (!IsNormalSegment(segmentp))
+			goto endloop;
 
-    if(IsFakeNode(node1) || IsFakeNode(node2))
-       seg2=IndexFakeSegment(segmentp);
-    else
-       seg2=IndexSegment(segments,segmentp);
+		if (IsFakeNode(node1) || IsFakeNode(node2))
+			seg2 = IndexFakeSegment(segmentp);
+		else
+			seg2 = IndexSegment(segments, segmentp);
 
-    wayp=LookupWay(ways,segmentp->way,1);
+		wayp = LookupWay(ways, segmentp->way, 1);
 
-    if(!(wayp->allow&profile->allow))
-       goto endloop;
+		if (!(wayp->allow & profile->allow))
+			goto endloop;
 
-    if(profile->oneway && IsOnewayFrom(segmentp,node1))
-      {
-       if(profile->allow!=Transports_Bicycle)
-          goto endloop;
+		if (profile->oneway && IsOnewayFrom(segmentp, node1)) {
+			if (profile->allow != Transports_Bicycle)
+				goto endloop;
 
-       if(!(wayp->type&Highway_CycleBothWays))
-          goto endloop;
-      }
+			if (!(wayp->type & Highway_CycleBothWays))
+				goto endloop;
+		}
 
-    bearing=BearingAngle(nodes,segmentp,node1);
+		bearing = BearingAngle(nodes, segmentp, node1);
 
-    difference=(heading-bearing);
+		difference = (heading - bearing);
 
-    if(difference<-180) difference+=360;
-    if(difference> 180) difference-=360;
+		if (difference < -180)
+			difference += 360;
+		if (difference > 180)
+			difference -= 360;
 
-    if(difference<0) difference=-difference;
+		if (difference < 0)
+			difference = -difference;
 
-    if(difference<best_difference)
-      {
-       best_difference=difference;
-       best_seg=seg2;
-      }
+		if (difference < best_difference) {
+			best_difference = difference;
+			best_seg = seg2;
+		}
 
-   endloop:
+	      endloop:
 
-    if(IsFakeNode(node1))
-       segmentp=NextFakeSegment(segmentp,node1);
-    else if(IsFakeNode(node2))
-       segmentp=NULL; /* cannot call NextSegment() with a fake segment */
-    else
-       segmentp=NextSegment(segments,segmentp,node1);
-   }
+		if (IsFakeNode(node1))
+			segmentp = NextFakeSegment(segmentp, node1);
+		else if (IsFakeNode(node2))
+			segmentp = NULL;	/* cannot call NextSegment() with a fake segment */
+		else
+			segmentp = NextSegment(segments, segmentp, node1);
+	}
 
- return(best_seg);
+	return (best_seg);
 }
 
 
@@ -207,27 +209,28 @@ index_t FindClosestSegmentHeading(Nodes *nodes,Segments *segments,Ways *ways,ind
   double lon2 The longitude of the second location.
   ++++++++++++++++++++++++++++++++++++++*/
 
-distance_t Distance(double lat1,double lon1,double lat2,double lon2)
+distance_t Distance(double lat1, double lon1, double lat2, double lon2)
 {
- double dlon = lon1 - lon2;
- double dlat = lat1 - lat2;
+	double dlon = lon1 - lon2;
+	double dlat = lat1 - lat2;
 
- double a1,a2,a,sa,c,d;
+	double a1, a2, a, sa, c, d;
 
- if(dlon==0 && dlat==0)
-   return 0;
+	if (dlon == 0 && dlat == 0)
+		return 0;
 
- a1 = sin (dlat / 2);
- a2 = sin (dlon / 2);
- a = a1 * a1 + cos (lat1) * cos (lat2) * a2 * a2;
- sa = sqrt (a);
- if (sa <= 1.0)
-   {c = 2 * asin (sa);}
- else
-   {c = 2 * asin (1.0);}
- d = 6378.137 * c;
+	a1 = sin(dlat / 2);
+	a2 = sin(dlon / 2);
+	a = a1 * a1 + cos(lat1) * cos(lat2) * a2 * a2;
+	sa = sqrt(a);
+	if (sa <= 1.0) {
+		c = 2 * asin(sa);
+	} else {
+		c = 2 * asin(1.0);
+	}
+	d = 6378.137 * c;
 
- return km_to_distance(d);
+	return km_to_distance(d);
 }
 
 
@@ -241,22 +244,22 @@ distance_t Distance(double lat1,double lon1,double lat2,double lon2)
   distance_t distance The distance between the locations.
   ++++++++++++++++++++++++++++++++++++++*/
 
-double DeltaLat(double lon,distance_t distance)
+double DeltaLat(double lon, distance_t distance)
 {
- double dlat;
+	double dlat;
 
- double c,d;
+	double c, d;
 
- if(distance==0)
-   return 0;
+	if (distance == 0)
+		return 0;
 
- d = distance_to_km(distance);
+	d = distance_to_km(distance);
 
- c = d / 6378.137;
+	c = d / 6378.137;
 
- dlat = c;
+	dlat = c;
 
- return dlat;
+	return dlat;
 }
 
 
@@ -270,26 +273,26 @@ double DeltaLat(double lon,distance_t distance)
   distance_t distance The distance between the locations.
   ++++++++++++++++++++++++++++++++++++++*/
 
-double DeltaLon(double lat,distance_t distance)
+double DeltaLon(double lat, distance_t distance)
 {
- double dlon;
+	double dlon;
 
- double a2,sa,c,d;
+	double a2, sa, c, d;
 
- if(distance==0)
-   return 0;
+	if (distance == 0)
+		return 0;
 
- d = distance_to_km(distance);
+	d = distance_to_km(distance);
 
- c = d / 6378.137;
+	c = d / 6378.137;
 
- sa = sin(c/2);
+	sa = sin(c / 2);
 
- a2 = sa / cos(lat);
+	a2 = sa / cos(lat);
 
- dlon = 2*asin(a2);
+	dlon = 2 * asin(a2);
 
- return dlon;
+	return dlon;
 }
 
 
@@ -305,28 +308,30 @@ double DeltaLon(double lat,distance_t distance)
   Profile *profile The profile of the transport being used.
   ++++++++++++++++++++++++++++++++++++++*/
 
-duration_t Duration(Segment *segmentp,Way *wayp,Profile *profile)
+duration_t Duration(Segment * segmentp, Way * wayp, Profile * profile)
 {
- speed_t    speed1=wayp->speed;
- speed_t    speed2=profile->speed[HIGHWAY(wayp->type)];
- distance_t distance=DISTANCE(segmentp->distance);
+	speed_t speed1 = wayp->speed;
+	speed_t speed2 = profile->speed[HIGHWAY(wayp->type)];
+	distance_t distance = DISTANCE(segmentp->distance);
 
- if(speed1==0)
-   {
-    if(speed2==0)
-       return(hours_to_duration(10));
-    else
-       return distance_speed_to_duration(distance,speed2);
-   }
- else /* if(speed1!=0) */
-   {
-    if(speed2==0)
-       return distance_speed_to_duration(distance,speed1);
-    else if(speed1<=speed2)
-       return distance_speed_to_duration(distance,speed1);
-    else
-       return distance_speed_to_duration(distance,speed2);
-   }
+	if (speed1 == 0) {
+		if (speed2 == 0)
+			return (hours_to_duration(10));
+		else
+			return distance_speed_to_duration(distance,
+							  speed2);
+	} else {		/* if(speed1!=0) */
+
+		if (speed2 == 0)
+			return distance_speed_to_duration(distance,
+							  speed1);
+		else if (speed1 <= speed2)
+			return distance_speed_to_duration(distance,
+							  speed1);
+		else
+			return distance_speed_to_duration(distance,
+							  speed2);
+	}
 }
 
 
@@ -347,42 +352,45 @@ duration_t Duration(Segment *segmentp,Way *wayp,Profile *profile)
   Angles are calculated using flat Cartesian lat/long grid approximation (after scaling longitude due to latitude).
   ++++++++++++++++++++++++++++++++++++++*/
 
-double TurnAngle(Nodes *nodes,Segment *segment1p,Segment *segment2p,index_t node)
+double TurnAngle(Nodes * nodes, Segment * segment1p, Segment * segment2p,
+		 index_t node)
 {
- double lat1,latm,lat2;
- double lon1,lonm,lon2;
- double angle1,angle2,angle;
- index_t node1,node2;
+	double lat1, latm, lat2;
+	double lon1, lonm, lon2;
+	double angle1, angle2, angle;
+	index_t node1, node2;
 
- node1=OtherNode(segment1p,node);
- node2=OtherNode(segment2p,node);
+	node1 = OtherNode(segment1p, node);
+	node2 = OtherNode(segment2p, node);
 
- if(IsFakeNode(node1))
-    GetFakeLatLong(node1,&lat1,&lon1);
- else
-    GetLatLong(nodes,node1,NULL,&lat1,&lon1);
+	if (IsFakeNode(node1))
+		GetFakeLatLong(node1, &lat1, &lon1);
+	else
+		GetLatLong(nodes, node1, NULL, &lat1, &lon1);
 
- if(IsFakeNode(node))
-    GetFakeLatLong(node,&latm,&lonm);
- else
-    GetLatLong(nodes,node,NULL,&latm,&lonm);
+	if (IsFakeNode(node))
+		GetFakeLatLong(node, &latm, &lonm);
+	else
+		GetLatLong(nodes, node, NULL, &latm, &lonm);
 
- if(IsFakeNode(node2))
-    GetFakeLatLong(node2,&lat2,&lon2);
- else
-    GetLatLong(nodes,node2,NULL,&lat2,&lon2);
+	if (IsFakeNode(node2))
+		GetFakeLatLong(node2, &lat2, &lon2);
+	else
+		GetLatLong(nodes, node2, NULL, &lat2, &lon2);
 
- angle1=atan2((lonm-lon1)*cos(latm),(latm-lat1));
- angle2=atan2((lon2-lonm)*cos(latm),(lat2-latm));
+	angle1 = atan2((lonm - lon1) * cos(latm), (latm - lat1));
+	angle2 = atan2((lon2 - lonm) * cos(latm), (lat2 - latm));
 
- angle=angle2-angle1;
+	angle = angle2 - angle1;
 
- angle=radians_to_degrees(angle);
+	angle = radians_to_degrees(angle);
 
- if(angle<-180) angle+=360;
- if(angle> 180) angle-=360;
+	if (angle < -180)
+		angle += 360;
+	if (angle > 180)
+		angle -= 360;
 
- return(angle);
+	return (angle);
 }
 
 
@@ -400,34 +408,36 @@ double TurnAngle(Nodes *nodes,Segment *segment1p,Segment *segment2p,index_t node
   Angles are calculated using flat Cartesian lat/long grid approximation (after scaling longitude due to latitude).
   ++++++++++++++++++++++++++++++++++++++*/
 
-double BearingAngle(Nodes *nodes,Segment *segmentp,index_t node)
+double BearingAngle(Nodes * nodes, Segment * segmentp, index_t node)
 {
- double lat1,lat2;
- double lon1,lon2;
- double angle;
- index_t node1,node2;
+	double lat1, lat2;
+	double lon1, lon2;
+	double angle;
+	index_t node1, node2;
 
- node1=node;
- node2=OtherNode(segmentp,node);
+	node1 = node;
+	node2 = OtherNode(segmentp, node);
 
- if(IsFakeNode(node1))
-    GetFakeLatLong(node1,&lat1,&lon1);
- else
-    GetLatLong(nodes,node1,NULL,&lat1,&lon1);
+	if (IsFakeNode(node1))
+		GetFakeLatLong(node1, &lat1, &lon1);
+	else
+		GetLatLong(nodes, node1, NULL, &lat1, &lon1);
 
- if(IsFakeNode(node2))
-    GetFakeLatLong(node2,&lat2,&lon2);
- else
-    GetLatLong(nodes,node2,NULL,&lat2,&lon2);
+	if (IsFakeNode(node2))
+		GetFakeLatLong(node2, &lat2, &lon2);
+	else
+		GetLatLong(nodes, node2, NULL, &lat2, &lon2);
 
- angle=atan2((lat2-lat1),(lon2-lon1)*cos(lat1));
+	angle = atan2((lat2 - lat1), (lon2 - lon1) * cos(lat1));
 
- angle=radians_to_degrees(angle);
+	angle = radians_to_degrees(angle);
 
- angle=270-angle;
+	angle = 270 - angle;
 
- if(angle<  0) angle+=360;
- if(angle>360) angle-=360;
+	if (angle < 0)
+		angle += 360;
+	if (angle > 360)
+		angle -= 360;
 
- return(angle);
+	return (angle);
 }

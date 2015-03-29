@@ -2,7 +2,7 @@
  Type definitions
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2008-2014 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 
 
 #ifndef TYPES_H
-#define TYPES_H    /*+ To stop multiple inclusions. +*/
+#define TYPES_H			/*+ To stop multiple inclusions. + */
 
 #include <inttypes.h>
 #include <stdint.h>
@@ -139,17 +139,17 @@ typedef uint16_t waypoint_t;
 typedef uint32_t index_t;
 
 /*+ A printf formatting string for an index_t type (this should match the index_t definition above). +*/
-#define Pindex_t PRIu32         /* PRIu32 and PRIu64 are defined in intypes.h */
+#define Pindex_t PRIu32		/* PRIu32 and PRIu64 are defined in intypes.h */
 
 
 /*+ A node latitude or longitude (range: +/-pi*LAT_LONG_SCALE = +/-3.14*1024*65536 = ~29 bits). +*/
-typedef int32_t  latlong_t;
+typedef int32_t latlong_t;
 
 /*+ A node latitude or longitude bin number (range: +/-pi*LAT_LONG_SCALE/LAT_LONG_BIN = +/-3.14*1024 = ~13 bits). +*/
-typedef int16_t  ll_bin_t;
+typedef int16_t ll_bin_t;
 
 /*+ A node latitude and longitude bin number (range: +/-(pi*LAT_LONG_SCALE/LAT_LONG_BIN)^2 = +/-(3.14*1024)^2 = ~26 bits). +*/
-typedef int32_t  ll_bin2_t;
+typedef int32_t ll_bin2_t;
 
 /*+ A node latitude or longitude offset (range: 0 -> LAT_LONG_BIN-1 = 0 -> 65535 = 16 bits). +*/
 typedef uint16_t ll_off_t;
@@ -219,32 +219,30 @@ typedef float score_t;
 typedef uint8_t highway_t;
 
 /*+ The different types of a highway. +*/
-typedef enum _Highway
- {
-  Highway_None         =  0,
+typedef enum _Highway {
+	Highway_None = 0,
 
-  Highway_Motorway     =  1,
-  Highway_Trunk        =  2,
-  Highway_Primary      =  3,
-  Highway_Secondary    =  4,
-  Highway_Tertiary     =  5,
-  Highway_Unclassified =  6,
-  Highway_Residential  =  7,
-  Highway_Service      =  8,
-  Highway_Track        =  9,
-  Highway_Cycleway     = 10,
-  Highway_Path         = 11,
-  Highway_Steps        = 12,
-  Highway_Ferry        = 13,
+	Highway_Motorway = 1,
+	Highway_Trunk = 2,
+	Highway_Primary = 3,
+	Highway_Secondary = 4,
+	Highway_Tertiary = 5,
+	Highway_Unclassified = 6,
+	Highway_Residential = 7,
+	Highway_Service = 8,
+	Highway_Track = 9,
+	Highway_Cycleway = 10,
+	Highway_Path = 11,
+	Highway_Steps = 12,
+	Highway_Ferry = 13,
 
-  Highway_Count        = 14,       /* One more than the number of highway types. */
+	Highway_Count = 14,	/* One more than the number of highway types. */
 
-  Highway_CycleBothWays =  16,
-  Highway_OneWay        =  32,
-  Highway_Roundabout    =  64,
-  Highway_Area          = 128
- }
- Highway;
+	Highway_CycleBothWays = 16,
+	Highway_OneWay = 32,
+	Highway_Roundabout = 64,
+	Highway_Area = 128
+} Highway;
 
 #define HIGHWAY(xx) ((xx)&0x0f)
 
@@ -254,49 +252,45 @@ typedef uint16_t highways_t;
 #define HIGHWAYS(xx)  (1<<(HIGHWAY(xx)-1))
 
 /*+ The different types of a highway as a bitmask. +*/
-typedef enum _Highways
- {
-  Highways_None         = 0,
+typedef enum _Highways {
+	Highways_None = 0,
 
-  Highways_Motorway     = HIGHWAYS(Highway_Motorway    ),
-  Highways_Trunk        = HIGHWAYS(Highway_Trunk       ),
-  Highways_Primary      = HIGHWAYS(Highway_Primary     ),
-  Highways_Secondary    = HIGHWAYS(Highway_Secondary   ),
-  Highways_Tertiary     = HIGHWAYS(Highway_Tertiary    ),
-  Highways_Unclassified = HIGHWAYS(Highway_Unclassified),
-  Highways_Residential  = HIGHWAYS(Highway_Residential ),
-  Highways_Service      = HIGHWAYS(Highway_Service     ),
-  Highways_Track        = HIGHWAYS(Highway_Track       ),
-  Highways_Cycleway     = HIGHWAYS(Highway_Cycleway    ),
-  Highways_Path         = HIGHWAYS(Highway_Path        ),
-  Highways_Steps        = HIGHWAYS(Highway_Steps       ),
-  Highways_Ferry        = HIGHWAYS(Highway_Ferry       )
- }
- Highways;
+	Highways_Motorway = HIGHWAYS(Highway_Motorway),
+	Highways_Trunk = HIGHWAYS(Highway_Trunk),
+	Highways_Primary = HIGHWAYS(Highway_Primary),
+	Highways_Secondary = HIGHWAYS(Highway_Secondary),
+	Highways_Tertiary = HIGHWAYS(Highway_Tertiary),
+	Highways_Unclassified = HIGHWAYS(Highway_Unclassified),
+	Highways_Residential = HIGHWAYS(Highway_Residential),
+	Highways_Service = HIGHWAYS(Highway_Service),
+	Highways_Track = HIGHWAYS(Highway_Track),
+	Highways_Cycleway = HIGHWAYS(Highway_Cycleway),
+	Highways_Path = HIGHWAYS(Highway_Path),
+	Highways_Steps = HIGHWAYS(Highway_Steps),
+	Highways_Ferry = HIGHWAYS(Highway_Ferry)
+} Highways;
 
 
 /*+ The type of a transport. +*/
 typedef uint8_t transport_t;
 
 /*+ The different types of transport. +*/
-typedef enum _Transport
- {
-  Transport_None       =  0,
+typedef enum _Transport {
+	Transport_None = 0,
 
-  Transport_Foot       =  1,
-  Transport_Horse      =  2,
-  Transport_Wheelchair =  3,
-  Transport_Bicycle    =  4,
-  Transport_Moped      =  5,
-  Transport_Motorcycle =  6,
-  Transport_Motorcar   =  7,
-  Transport_Goods      =  8,
-  Transport_HGV        =  9,
-  Transport_PSV        = 10,
+	Transport_Foot = 1,
+	Transport_Horse = 2,
+	Transport_Wheelchair = 3,
+	Transport_Bicycle = 4,
+	Transport_Moped = 5,
+	Transport_Motorcycle = 6,
+	Transport_Motorcar = 7,
+	Transport_Goods = 8,
+	Transport_HGV = 9,
+	Transport_PSV = 10,
 
-  Transport_Count      = 11     /*+ One more than the number of transport types. +*/
- }
- Transport;
+	Transport_Count = 11	/*+ One more than the number of transport types. + */
+} Transport;
 
 
 /*+ A bitmask of multiple transport types. +*/
@@ -305,44 +299,40 @@ typedef uint16_t transports_t;
 #define TRANSPORTS(xx)  (1<<((xx)-1))
 
 /*+ The different types of transport as a bitmask. +*/
-typedef enum _Transports
- {
-  Transports_None       = 0,
+typedef enum _Transports {
+	Transports_None = 0,
 
-  Transports_Foot       = TRANSPORTS(Transport_Foot      ),
-  Transports_Horse      = TRANSPORTS(Transport_Horse     ),
-  Transports_Wheelchair = TRANSPORTS(Transport_Wheelchair),
-  Transports_Bicycle    = TRANSPORTS(Transport_Bicycle   ),
-  Transports_Moped      = TRANSPORTS(Transport_Moped     ),
-  Transports_Motorcycle = TRANSPORTS(Transport_Motorcycle),
-  Transports_Motorcar   = TRANSPORTS(Transport_Motorcar  ),
-  Transports_Goods      = TRANSPORTS(Transport_Goods     ),
-  Transports_HGV        = TRANSPORTS(Transport_HGV       ),
-  Transports_PSV        = TRANSPORTS(Transport_PSV       ),
+	Transports_Foot = TRANSPORTS(Transport_Foot),
+	Transports_Horse = TRANSPORTS(Transport_Horse),
+	Transports_Wheelchair = TRANSPORTS(Transport_Wheelchair),
+	Transports_Bicycle = TRANSPORTS(Transport_Bicycle),
+	Transports_Moped = TRANSPORTS(Transport_Moped),
+	Transports_Motorcycle = TRANSPORTS(Transport_Motorcycle),
+	Transports_Motorcar = TRANSPORTS(Transport_Motorcar),
+	Transports_Goods = TRANSPORTS(Transport_Goods),
+	Transports_HGV = TRANSPORTS(Transport_HGV),
+	Transports_PSV = TRANSPORTS(Transport_PSV),
 
-  Transports_ALL        = TRANSPORTS(Transport_Count     )-1
- }
- Transports;
+	Transports_ALL = TRANSPORTS(Transport_Count) - 1
+} Transports;
 
 
 /*+ The type of a property. +*/
 typedef uint8_t property_t;
 
 /*+ The different types of property. +*/
-typedef enum _Property
- {
-  Property_None         = 0,
+typedef enum _Property {
+	Property_None = 0,
 
-  Property_Paved        = 1,
-  Property_Multilane    = 2,
-  Property_Bridge       = 3,
-  Property_Tunnel       = 4,
-  Property_FootRoute    = 5,
-  Property_BicycleRoute = 6,
+	Property_Paved = 1,
+	Property_Multilane = 2,
+	Property_Bridge = 3,
+	Property_Tunnel = 4,
+	Property_FootRoute = 5,
+	Property_BicycleRoute = 6,
 
-  Property_Count        = 7       /* One more than the number of property types. */
- }
- Property;
+	Property_Count = 7	/* One more than the number of property types. */
+} Property;
 
 
 /*+ A bitmask of multiple properties. +*/
@@ -351,20 +341,18 @@ typedef uint8_t properties_t;
 #define PROPERTIES(xx)  (1<<((xx)-1))
 
 /*+ The different properties as a bitmask. +*/
-typedef enum _Properties
- {
-  Properties_None         = 0,
+typedef enum _Properties {
+	Properties_None = 0,
 
-  Properties_Paved        = PROPERTIES(Property_Paved        ),
-  Properties_Multilane    = PROPERTIES(Property_Multilane    ),
-  Properties_Bridge       = PROPERTIES(Property_Bridge       ),
-  Properties_Tunnel       = PROPERTIES(Property_Tunnel       ),
-  Properties_FootRoute    = PROPERTIES(Property_FootRoute    ),
-  Properties_BicycleRoute = PROPERTIES(Property_BicycleRoute ),
+	Properties_Paved = PROPERTIES(Property_Paved),
+	Properties_Multilane = PROPERTIES(Property_Multilane),
+	Properties_Bridge = PROPERTIES(Property_Bridge),
+	Properties_Tunnel = PROPERTIES(Property_Tunnel),
+	Properties_FootRoute = PROPERTIES(Property_FootRoute),
+	Properties_BicycleRoute = PROPERTIES(Property_BicycleRoute),
 
-  Properties_ALL          = PROPERTIES(Property_Count        )-1
- }
- Properties;
+	Properties_ALL = PROPERTIES(Property_Count) - 1
+} Properties;
 
 
 /*+ The speed limit of a way, measured in km/hour. +*/
@@ -385,35 +373,70 @@ typedef uint8_t length_t;
 
 /*+ Conversion of km/hr to speed_t - simple inline function with error checking. +*/
 inline static speed_t kph_to_speed(double xxx);
-inline static speed_t kph_to_speed(double xxx) { if(xxx>255) return(255); if(xxx<0) return(0); return((speed_t)xxx); }
+inline static speed_t kph_to_speed(double xxx)
+{
+	if (xxx > 255)
+		return (255);
+	if (xxx < 0)
+		return (0);
+	return ((speed_t) xxx);
+}
 
 /*+ Conversion of speed_t to km/hr. +*/
 #define speed_to_kph(xxx)      (int)(xxx)
 
 /*+ Conversion of tonnes to weight_t - simple inline function with error checking. +*/
 inline static weight_t tonnes_to_weight(double xxx);
-inline static weight_t tonnes_to_weight(double xxx) { if(xxx>51) return(255); if(xxx<0) return(0); return((weight_t)(xxx*5)); }
+inline static weight_t tonnes_to_weight(double xxx)
+{
+	if (xxx > 51)
+		return (255);
+	if (xxx < 0)
+		return (0);
+	return ((weight_t) (xxx * 5));
+}
 
 /*+ Conversion of weight_t to tonnes. +*/
 #define weight_to_tonnes(xxx)  ((double)(xxx)/5.0)
 
 /*+ Conversion of metres to height_t - simple inline function with error checking. +*/
 inline static height_t metres_to_height(double xxx);
-inline static height_t metres_to_height(double xxx) { if(xxx>25.5) return(255); if(xxx<0) return(0); return((height_t)(xxx*10)); }
+inline static height_t metres_to_height(double xxx)
+{
+	if (xxx > 25.5)
+		return (255);
+	if (xxx < 0)
+		return (0);
+	return ((height_t) (xxx * 10));
+}
 
 /*+ Conversion of height_t to metres. +*/
 #define height_to_metres(xxx)  ((double)(xxx)/10.0)
 
 /*+ Conversion of metres to width_t - simple inline function with error checking. +*/
 inline static width_t metres_to_width(double xxx);
-inline static width_t metres_to_width(double xxx) { if(xxx>25.5) return(255); if(xxx<0) return(0); return((width_t)(xxx*10)); }
+inline static width_t metres_to_width(double xxx)
+{
+	if (xxx > 25.5)
+		return (255);
+	if (xxx < 0)
+		return (0);
+	return ((width_t) (xxx * 10));
+}
 
 /*+ Conversion of width_t to metres. +*/
 #define width_to_metres(xxx)   ((double)(xxx)/10.0)
 
 /*+ Conversion of metres to length_t - simple inline function with error checking. +*/
 inline static length_t metres_to_length(double xxx);
-inline static length_t metres_to_length(double xxx) { if(xxx>25.5) return(255); if(xxx<0) return(0); return((length_t)(xxx*10)); }
+inline static length_t metres_to_length(double xxx)
+{
+	if (xxx > 25.5)
+		return (255);
+	if (xxx < 0)
+		return (0);
+	return ((length_t) (xxx * 10));
+}
 
 /*+ Conversion of length_t to metres. +*/
 #define length_to_metres(xxx)  ((double)(xxx)/10.0)
@@ -457,4 +480,4 @@ const char *TransportList(void);
 const char *PropertyList(void);
 
 
-#endif /* TYPES_H */
+#endif				/* TYPES_H */

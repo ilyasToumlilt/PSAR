@@ -4,7 +4,7 @@
  A header file for the segments.
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2008-2014 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 
 
 #ifndef SEGMENTS_H
-#define SEGMENTS_H    /*+ To stop multiple inclusions. +*/
+#define SEGMENTS_H		/*+ To stop multiple inclusions. + */
 
 #include <stdint.h>
 
@@ -38,48 +38,44 @@
 
 
 /*+ A structure containing a single segment. +*/
-struct _Segment
-{
- index_t    node1;              /*+ The index of the starting node. +*/
- index_t    node2;              /*+ The index of the finishing node. +*/
+struct _Segment {
+	index_t node1;		/*+ The index of the starting node. + */
+	index_t node2;		/*+ The index of the finishing node. + */
 
- index_t    next2;              /*+ The index of the next segment sharing node2. +*/
+	index_t next2;		/*+ The index of the next segment sharing node2. + */
 
- index_t    way;                /*+ The index of the way associated with the segment. +*/
+	index_t way;		/*+ The index of the way associated with the segment. + */
 
- distance_t distance;           /*+ The distance between the nodes. +*/
+	distance_t distance;	/*+ The distance between the nodes. + */
 };
 
 
 /*+ A structure containing the header from the file. +*/
-typedef struct _SegmentsFile
-{
- index_t   number;              /*+ The number of segments in total. +*/
- index_t   snumber;             /*+ The number of super-segments. +*/
- index_t   nnumber;             /*+ The number of normal segments. +*/
-}
- SegmentsFile;
+typedef struct _SegmentsFile {
+	index_t number;		/*+ The number of segments in total. + */
+	index_t snumber;	/*+ The number of super-segments. + */
+	index_t nnumber;	/*+ The number of normal segments. + */
+} SegmentsFile;
 
 
 /*+ A structure containing a set of segments (and pointers to mmap file). +*/
-struct _Segments
-{
- SegmentsFile file;             /*+ The header data from the file. +*/
+struct _Segments {
+	SegmentsFile file;	/*+ The header data from the file. + */
 
 #if !SLIM
 
- void        *data;             /*+ The memory mapped data. +*/
+	void *data;		/*+ The memory mapped data. + */
 
- Segment     *segments;         /*+ An array of segments. +*/
+	Segment *segments;	/*+ An array of segments. + */
 
 #else
 
- int          fd;               /*+ The file descriptor for the file. +*/
+	int fd;			/*+ The file descriptor for the file. + */
 
- Segment      cached[4];        /*+ Three cached segments read from the file in slim mode. +*/
- index_t      incache[4];       /*+ The indexes of the cached segments. +*/
+	Segment cached[4];	/*+ Three cached segments read from the file in slim mode. + */
+	index_t incache[4];	/*+ The indexes of the cached segments. + */
 
- SegmentCache *cache;           /*+ A RAM cache of segments read from the file. +*/
+	SegmentCache *cache;	/*+ A RAM cache of segments read from the file. + */
 
 #endif
 };
@@ -89,22 +85,26 @@ struct _Segments
 
 Segments *LoadSegmentList(const char *filename);
 
-void DestroySegmentList(Segments *segments);
+void DestroySegmentList(Segments * segments);
 
-index_t FindClosestSegmentHeading(Nodes *nodes,Segments *segments,Ways *ways,index_t node1,double heading,Profile *profile);
+index_t FindClosestSegmentHeading(Nodes * nodes, Segments * segments,
+				  Ways * ways, index_t node1,
+				  double heading, Profile * profile);
 
-distance_t Distance(double lat1,double lon1,double lat2,double lon2);
+distance_t Distance(double lat1, double lon1, double lat2, double lon2);
 
-double DeltaLat(double lon,distance_t distance);
-double DeltaLon(double lat,distance_t distance);
+double DeltaLat(double lon, distance_t distance);
+double DeltaLon(double lat, distance_t distance);
 
-duration_t Duration(Segment *segmentp,Way *wayp,Profile *profile);
+duration_t Duration(Segment * segmentp, Way * wayp, Profile * profile);
 
-double TurnAngle(Nodes *nodes,Segment *segment1p,Segment *segment2p,index_t node);
-double BearingAngle(Nodes *nodes,Segment *segmentp,index_t node);
+double TurnAngle(Nodes * nodes, Segment * segment1p, Segment * segment2p,
+		 index_t node);
+double BearingAngle(Nodes * nodes, Segment * segmentp, index_t node);
 
 
-static inline Segment *NextSegment(Segments *segments,Segment *segmentp,index_t node);
+static inline Segment *NextSegment(Segments * segments, Segment * segmentp,
+				   index_t node);
 
 
 /* Macros and inline functions */
@@ -149,47 +149,48 @@ static inline Segment *NextSegment(Segments *segments,Segment *segmentp,index_t 
   index_t node The wanted node.
   ++++++++++++++++++++++++++++++++++++++*/
 
-static inline Segment *NextSegment(Segments *segments,Segment *segmentp,index_t node)
+static inline Segment *NextSegment(Segments * segments, Segment * segmentp,
+				   index_t node)
 {
- if(segmentp->node1==node)
-   {
-    segmentp++;
+	if (segmentp->node1 == node) {
+		segmentp++;
 
-    if(IndexSegment(segments,segmentp)>=segments->file.number || segmentp->node1!=node)
-       return(NULL);
-    else
-       return(segmentp);
-   }
- else
-   {
-    if(segmentp->next2==NO_SEGMENT)
-       return(NULL);
-    else
-       return(LookupSegment(segments,segmentp->next2,1));
-   }
+		if (IndexSegment(segments, segmentp) >=
+		    segments->file.number || segmentp->node1 != node)
+			return (NULL);
+		else
+			return (segmentp);
+	} else {
+		if (segmentp->next2 == NO_SEGMENT)
+			return (NULL);
+		else
+			return (LookupSegment
+				(segments, segmentp->next2, 1));
+	}
 }
 
 #else
 
 /* Prototypes */
 
-static inline Segment *LookupSegment(Segments *segments,index_t index,int position);
+static inline Segment *LookupSegment(Segments * segments, index_t index,
+				     int position);
 
-static inline index_t IndexSegment(Segments *segments,Segment *segmentp);
+static inline index_t IndexSegment(Segments * segments,
+				   Segment * segmentp);
 
 CACHE_NEWCACHE_PROTO(Segment)
-CACHE_DELETECACHE_PROTO(Segment)
-CACHE_FETCHCACHE_PROTO(Segment)
-CACHE_INVALIDATECACHE_PROTO(Segment)
+    CACHE_DELETECACHE_PROTO(Segment)
+    CACHE_FETCHCACHE_PROTO(Segment)
+    CACHE_INVALIDATECACHE_PROTO(Segment)
 
 
 /* Inline functions */
-
-CACHE_STRUCTURE(Segment)
-CACHE_NEWCACHE(Segment)
-CACHE_DELETECACHE(Segment)
-CACHE_FETCHCACHE(Segment)
-CACHE_INVALIDATECACHE(Segment)
+    CACHE_STRUCTURE(Segment)
+    CACHE_NEWCACHE(Segment)
+    CACHE_DELETECACHE(Segment)
+    CACHE_FETCHCACHE(Segment)
+    CACHE_INVALIDATECACHE(Segment)
 
 
 /*++++++++++++++++++++++++++++++++++++++
@@ -203,14 +204,16 @@ CACHE_INVALIDATECACHE(Segment)
 
   int position The position in the cache to store the value.
   ++++++++++++++++++++++++++++++++++++++*/
-
-static inline Segment *LookupSegment(Segments *segments,index_t index,int position)
+static inline Segment *LookupSegment(Segments * segments, index_t index,
+				     int position)
 {
- segments->cached[position-1]=*FetchCachedSegment(segments->cache,index,segments->fd,sizeof(SegmentsFile));
+	segments->cached[position - 1] =
+	    *FetchCachedSegment(segments->cache, index, segments->fd,
+				sizeof(SegmentsFile));
 
- segments->incache[position-1]=index;
+	segments->incache[position - 1] = index;
 
- return(&segments->cached[position-1]);
+	return (&segments->cached[position - 1]);
 }
 
 
@@ -224,11 +227,11 @@ static inline Segment *LookupSegment(Segments *segments,index_t index,int positi
   Segment *segmentp The segment whose index is to be found.
   ++++++++++++++++++++++++++++++++++++++*/
 
-static inline index_t IndexSegment(Segments *segments,Segment *segmentp)
+static inline index_t IndexSegment(Segments * segments, Segment * segmentp)
 {
- int position1=segmentp-&segments->cached[0];
+	int position1 = segmentp - &segments->cached[0];
 
- return(segments->incache[position1]);
+	return (segments->incache[position1]);
 }
 
 
@@ -244,36 +247,35 @@ static inline index_t IndexSegment(Segments *segments,Segment *segmentp)
   index_t node The wanted node.
   ++++++++++++++++++++++++++++++++++++++*/
 
-static inline Segment *NextSegment(Segments *segments,Segment *segmentp,index_t node)
+static inline Segment *NextSegment(Segments * segments, Segment * segmentp,
+				   index_t node)
 {
- int position=segmentp-&segments->cached[-1];
+	int position = segmentp - &segments->cached[-1];
 
- if(segmentp->node1==node)
-   {
-    index_t index=IndexSegment(segments,segmentp);
+	if (segmentp->node1 == node) {
+		index_t index = IndexSegment(segments, segmentp);
 
-    index++;
+		index++;
 
-    if(index>=segments->file.number)
-       return(NULL);
+		if (index >= segments->file.number)
+			return (NULL);
 
-    segmentp=LookupSegment(segments,index,position);
+		segmentp = LookupSegment(segments, index, position);
 
-    if(segmentp->node1!=node)
-       return(NULL);
-    else
-       return(segmentp);
-   }
- else
-   {
-    if(segmentp->next2==NO_SEGMENT)
-       return(NULL);
-    else
-       return(LookupSegment(segments,segmentp->next2,position));
-   }
+		if (segmentp->node1 != node)
+			return (NULL);
+		else
+			return (segmentp);
+	} else {
+		if (segmentp->next2 == NO_SEGMENT)
+			return (NULL);
+		else
+			return (LookupSegment
+				(segments, segmentp->next2, position));
+	}
 }
 
 #endif
 
 
-#endif /* SEGMENTS_H */
+#endif				/* SEGMENTS_H */

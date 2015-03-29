@@ -2,7 +2,7 @@
  Load the translations from a file and the functions for handling them.
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2010-2012 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 
 
 #ifndef TRANSLATIONS_H
-#define TRANSLATIONS_H    /*+ To stop multiple inclusions. +*/
+#define TRANSLATIONS_H		/*+ To stop multiple inclusions. + */
 
 #include "types.h"
 
@@ -70,7 +70,7 @@ extern char *translate_gpx_finish;
 
 /* Functions in translations.c */
 
-int ParseXMLTranslations(const char *filename,const char *language);
+int ParseXMLTranslations(const char *filename, const char *language);
 
 
-#endif /* TRANSLATIONS_H */
+#endif				/* TRANSLATIONS_H */

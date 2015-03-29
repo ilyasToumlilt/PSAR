@@ -2,7 +2,7 @@
  Header file for miscellaneous function prototypes
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2008-2013 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 
 
 #ifndef FUNCTIONS_H
-#define FUNCTIONS_H    /*+ To stop multiple inclusions. +*/
+#define FUNCTIONS_H		/*+ To stop multiple inclusions. + */
 
 #include "types.h"
 
@@ -31,24 +31,40 @@
 
 /* Functions in optimiser.c */
 
-Results *FindNormalRoute(Nodes *nodes,Segments *segments,Ways *ways,Relations *relations,Profile *profile,index_t start_node,index_t prev_segment,index_t finish_node);
+Results *FindNormalRoute(Nodes * nodes, Segments * segments, Ways * ways,
+			 Relations * relations, Profile * profile,
+			 index_t start_node, index_t prev_segment,
+			 index_t finish_node);
 
-Results *FindMiddleRoute(Nodes *supernodes,Segments *supersegments,Ways *superways,Relations *relations,Profile *profile,Results *begin,Results *end);
+Results *FindMiddleRoute(Nodes * supernodes, Segments * supersegments,
+			 Ways * superways, Relations * relations,
+			 Profile * profile, Results * begin,
+			 Results * end);
 
-Results *FindStartRoutes(Nodes *nodes,Segments *segments,Ways *ways,Relations *relations,Profile *profile,index_t start_node,index_t prev_segment,index_t finish_node);
+Results *FindStartRoutes(Nodes * nodes, Segments * segments, Ways * ways,
+			 Relations * relations, Profile * profile,
+			 index_t start_node, index_t prev_segment,
+			 index_t finish_node);
 
-Results *ExtendStartRoutes(Nodes *nodes,Segments *segments,Ways *ways,Relations *relations,Profile *profile,Results *begin,index_t finish_node);
+Results *ExtendStartRoutes(Nodes * nodes, Segments * segments, Ways * ways,
+			   Relations * relations, Profile * profile,
+			   Results * begin, index_t finish_node);
 
-Results *FindFinishRoutes(Nodes *nodes,Segments *segments,Ways *ways,Relations *relations,Profile *profile,index_t finish_node);
+Results *FindFinishRoutes(Nodes * nodes, Segments * segments, Ways * ways,
+			  Relations * relations, Profile * profile,
+			  index_t finish_node);
 
-Results *CombineRoutes(Nodes *nodes,Segments *segments,Ways *ways,Relations *relations,Profile *profile,Results *begin,Results *middle);
+Results *CombineRoutes(Nodes * nodes, Segments * segments, Ways * ways,
+		       Relations * relations, Profile * profile,
+		       Results * begin, Results * middle);
 
-void FixForwardRoute(Results *results,Result *finish_result);
+void FixForwardRoute(Results * results, Result * finish_result);
 
 
 /* Functions in output.c */
 
-void PrintRoute(Results **results,int nresults,Nodes *nodes,Segments *segments,Ways *ways,Profile *profile);
+void PrintRoute(Results ** results, int nresults, Nodes * nodes,
+		Segments * segments, Ways * ways, Profile * profile);
 
 
-#endif /* FUNCTIONS_H */
+#endif				/* FUNCTIONS_H */

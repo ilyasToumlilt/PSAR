@@ -2,7 +2,7 @@
  The data types for the tagging rules.
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2010-2013 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
  ***************************************/
 
 #ifndef TAGGING_H
-#define TAGGING_H    /*+ To stop multiple inclusions. +*/
+#define TAGGING_H		/*+ To stop multiple inclusions. + */
 
 #include <stdint.h>
 
@@ -31,36 +31,31 @@ typedef struct _TaggingRuleList TaggingRuleList;
 
 
 /*+ A structure to contain the tagging rule/action. +*/
-typedef struct _TaggingRule
-{
- int action;                    /*+ A flag to indicate the type of action. +*/
+typedef struct _TaggingRule {
+	int action;		/*+ A flag to indicate the type of action. + */
 
- char *k;                       /*+ The tag key (or NULL). +*/
- char *v;                       /*+ The tag value (or NULL). +*/
- char *message;                 /*+ The message string for logerror (or NULL). +*/
+	char *k;		/*+ The tag key (or NULL). + */
+	char *v;		/*+ The tag value (or NULL). + */
+	char *message;		/*+ The message string for logerror (or NULL). + */
 
- TaggingRuleList *rulelist;     /*+ The sub-rules belonging to this rule. +*/
-}
- TaggingRule;
+	TaggingRuleList *rulelist;	/*+ The sub-rules belonging to this rule. + */
+} TaggingRule;
 
 
 /*+ A structure to contain the list of rules and associated information. +*/
-struct _TaggingRuleList
-{
- TaggingRule *rules;            /*+ The array of rules. +*/
- int          nrules;           /*+ The number of rules. +*/
+struct _TaggingRuleList {
+	TaggingRule *rules;	/*+ The array of rules. + */
+	int nrules;		/*+ The number of rules. + */
 };
 
 
 /*+ A structure to hold a list of tags to be processed. +*/
-typedef struct _TagList
-{
- int ntags;                     /*+ The number of tags. +*/
+typedef struct _TagList {
+	int ntags;		/*+ The number of tags. + */
 
- char **k;                      /*+ The list of tag keys. +*/
- char **v;                      /*+ The list of tag values. +*/
-}
- TagList;
+	char **k;		/*+ The list of tag keys. + */
+	char **v;		/*+ The list of tag values. + */
+} TagList;
 
 
 /* Functions in tagging.c */
@@ -69,17 +64,17 @@ int ParseXMLTaggingRules(const char *filename);
 void DeleteXMLTaggingRules(void);
 
 TagList *NewTagList(void);
-void DeleteTagList(TagList *tags);
+void DeleteTagList(TagList * tags);
 
-void AppendTag(TagList *tags,const char *k,const char *v);
-void ModifyTag(TagList *tags,const char *k,const char *v);
-void DeleteTag(TagList *tags,const char *k);
+void AppendTag(TagList * tags, const char *k, const char *v);
+void ModifyTag(TagList * tags, const char *k, const char *v);
+void DeleteTag(TagList * tags, const char *k);
 
-char *StringifyTag(TagList *tags);
+char *StringifyTag(TagList * tags);
 
-TagList *ApplyNodeTaggingRules(TagList *tags,int64_t id);
-TagList *ApplyWayTaggingRules(TagList *tags,int64_t id);
-TagList *ApplyRelationTaggingRules(TagList *tags,int64_t id);
+TagList *ApplyNodeTaggingRules(TagList * tags, int64_t id);
+TagList *ApplyWayTaggingRules(TagList * tags, int64_t id);
+TagList *ApplyRelationTaggingRules(TagList * tags, int64_t id);
 
 
-#endif /* TAGGING_H */
+#endif				/* TAGGING_H */

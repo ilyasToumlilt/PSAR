@@ -2,7 +2,7 @@
  Relation data type functions.
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2008-2014 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -39,51 +39,54 @@
 
 Relations *LoadRelationList(const char *filename)
 {
- Relations *relations;
+	Relations *relations;
 
- relations=(Relations*)malloc(sizeof(Relations));
+	relations = (Relations *) malloc(sizeof(Relations));
 
 #if !SLIM
 
- relations->data=MapFile(filename);
+	relations->data = MapFile(filename);
 
- /* Copy the RelationsFile header structure from the loaded data */
+	/* Copy the RelationsFile header structure from the loaded data */
 
- relations->file=*((RelationsFile*)relations->data);
+	relations->file = *((RelationsFile *) relations->data);
 
- /* Set the pointers in the Relations structure. */
+	/* Set the pointers in the Relations structure. */
 
- relations->turnrelations=(TurnRelation*)(relations->data+sizeof(RelationsFile));
+	relations->turnrelations =
+	    (TurnRelation *) (relations->data + sizeof(RelationsFile));
 
 #else
 
- relations->fd=SlimMapFile(filename);
+	relations->fd = SlimMapFile(filename);
 
- /* Copy the RelationsFile header structure from the loaded data */
+	/* Copy the RelationsFile header structure from the loaded data */
 
- SlimFetch(relations->fd,&relations->file,sizeof(RelationsFile),0);
+	SlimFetch(relations->fd, &relations->file, sizeof(RelationsFile),
+		  0);
 
- relations->troffset=sizeof(RelationsFile);
+	relations->troffset = sizeof(RelationsFile);
 
- relations->cache=NewTurnRelationCache();
- log_malloc(relations->cache,sizeof(*relations->cache));
+	relations->cache = NewTurnRelationCache();
+	log_malloc(relations->cache, sizeof(*relations->cache));
 
 #endif
 
- if(relations->file.trnumber>0)
-   {
-    TurnRelation *relation;
+	if (relations->file.trnumber > 0) {
+		TurnRelation *relation;
 
-    relation=LookupTurnRelation(relations,0,1);
+		relation = LookupTurnRelation(relations, 0, 1);
 
-    relations->via_start =relation->via;
+		relations->via_start = relation->via;
 
-    relation=LookupTurnRelation(relations,relations->file.trnumber-1,1);
+		relation =
+		    LookupTurnRelation(relations,
+				       relations->file.trnumber - 1, 1);
 
-    relations->via_end =relation->via;
-   }
+		relations->via_end = relation->via;
+	}
 
- return(relations);
+	return (relations);
 }
 
 
@@ -93,22 +96,22 @@ Relations *LoadRelationList(const char *filename)
   Relations *relations The relation list to destroy.
   ++++++++++++++++++++++++++++++++++++++*/
 
-void DestroyRelationList(Relations *relations)
+void DestroyRelationList(Relations * relations)
 {
 #if !SLIM
 
- relations->data=UnmapFile(relations->data);
+	relations->data = UnmapFile(relations->data);
 
 #else
 
- relations->fd=SlimUnmapFile(relations->fd);
+	relations->fd = SlimUnmapFile(relations->fd);
 
- log_free(relations->cache);
- DeleteTurnRelationCache(relations->cache);
+	log_free(relations->cache);
+	DeleteTurnRelationCache(relations->cache);
 
 #endif
 
- free(relations);
+	free(relations);
 }
 
 
@@ -122,73 +125,69 @@ void DestroyRelationList(Relations *relations)
   index_t via The node that the route is going via.
   ++++++++++++++++++++++++++++++++++++++*/
 
-index_t FindFirstTurnRelation1(Relations *relations,index_t via)
+index_t FindFirstTurnRelation1(Relations * relations, index_t via)
 {
- TurnRelation *relation;
- index_t start=0;
- index_t end=relations->file.trnumber-1;
- index_t mid;
- index_t match=NO_RELATION;
+	TurnRelation *relation;
+	index_t start = 0;
+	index_t end = relations->file.trnumber - 1;
+	index_t mid;
+	index_t match = NO_RELATION;
 
- /* Binary search - search key any exact match is required.
-  *
-  *  # <- start  |  Check mid and move start or end if it doesn't match
-  *  #           |
-  *  #           |  Since an exact match is wanted we can set end=mid-1
-  *  # <- mid    |  or start=mid+1 because we know that mid doesn't match.
-  *  #           |
-  *  #           |  Eventually either end=start or end=start+1 and one of
-  *  # <- end    |  start or end matches (but may not be the first).
-  */
+	/* Binary search - search key any exact match is required.
+	 *
+	 *  # <- start  |  Check mid and move start or end if it doesn't match
+	 *  #           |
+	 *  #           |  Since an exact match is wanted we can set end=mid-1
+	 *  # <- mid    |  or start=mid+1 because we know that mid doesn't match.
+	 *  #           |
+	 *  #           |  Eventually either end=start or end=start+1 and one of
+	 *  # <- end    |  start or end matches (but may not be the first).
+	 */
 
- do
-   {
-    mid=(start+end)/2;              /* Choose mid point */
+	do {
+		mid = (start + end) / 2;	/* Choose mid point */
 
-    relation=LookupTurnRelation(relations,mid,1);
+		relation = LookupTurnRelation(relations, mid, 1);
 
-    if(relation->via<via)           /* Mid point is too low for 'via' */
-       start=mid+1;
-    else if(relation->via>via)      /* Mid point is too high for 'via' */
-       end=mid?(mid-1):mid;
-    else                            /* Mid point is correct for 'from' */
-      {
-       match=mid;
-       break;
-      }
-   }
- while((end-start)>1);
+		if (relation->via < via)	/* Mid point is too low for 'via' */
+			start = mid + 1;
+		else if (relation->via > via)	/* Mid point is too high for 'via' */
+			end = mid ? (mid - 1) : mid;
+		else {		/* Mid point is correct for 'from' */
 
- if(match==NO_RELATION)             /* Check if start matches */
-   {
-    relation=LookupTurnRelation(relations,start,1);
+			match = mid;
+			break;
+		}
+	}
+	while ((end - start) > 1);
 
-    if(relation->via==via)
-       match=start;
-   }
+	if (match == NO_RELATION) {	/* Check if start matches */
+		relation = LookupTurnRelation(relations, start, 1);
 
- if(match==NO_RELATION)             /* Check if end matches */
-   {
-    relation=LookupTurnRelation(relations,end,1);
+		if (relation->via == via)
+			match = start;
+	}
 
-    if(relation->via==via)
-       match=end;
-   }
+	if (match == NO_RELATION) {	/* Check if end matches */
+		relation = LookupTurnRelation(relations, end, 1);
 
- if(match==NO_RELATION)
-    return(match);
+		if (relation->via == via)
+			match = end;
+	}
 
- while(match>0)                     /* Search backwards for the first match */
-   {
-    relation=LookupTurnRelation(relations,match-1,1);
+	if (match == NO_RELATION)
+		return (match);
 
-    if(relation->via==via)
-       match--;
-    else
-       break;
-   }
+	while (match > 0) {	/* Search backwards for the first match */
+		relation = LookupTurnRelation(relations, match - 1, 1);
 
- return(match);
+		if (relation->via == via)
+			match--;
+		else
+			break;
+	}
+
+	return (match);
 }
 
 
@@ -202,26 +201,26 @@ index_t FindFirstTurnRelation1(Relations *relations,index_t via)
   index_t current The current index of a relation that matches.
   ++++++++++++++++++++++++++++++++++++++*/
 
-index_t FindNextTurnRelation1(Relations *relations,index_t current)
+index_t FindNextTurnRelation1(Relations * relations, index_t current)
 {
- TurnRelation *relation;
- index_t via;
+	TurnRelation *relation;
+	index_t via;
 
- relation=LookupTurnRelation(relations,current,1);
+	relation = LookupTurnRelation(relations, current, 1);
 
- via=relation->via;
+	via = relation->via;
 
- current++;
+	current++;
 
- if(current==relations->file.trnumber)
-    return(NO_RELATION);
+	if (current == relations->file.trnumber)
+		return (NO_RELATION);
 
- relation=LookupTurnRelation(relations,current,1);
+	relation = LookupTurnRelation(relations, current, 1);
 
- if(relation->via==via)
-    return(current);
- else
-    return(NO_RELATION);
+	if (relation->via == via)
+		return (current);
+	else
+		return (NO_RELATION);
 }
 
 
@@ -237,83 +236,80 @@ index_t FindNextTurnRelation1(Relations *relations,index_t current)
   index_t from The segment that the route is coming from.
   ++++++++++++++++++++++++++++++++++++++*/
 
-index_t FindFirstTurnRelation2(Relations *relations,index_t via,index_t from)
+index_t FindFirstTurnRelation2(Relations * relations, index_t via,
+			       index_t from)
 {
- TurnRelation *relation;
- index_t start=0;
- index_t end=relations->file.trnumber-1;
- index_t mid;
- index_t match=NO_RELATION;
+	TurnRelation *relation;
+	index_t start = 0;
+	index_t end = relations->file.trnumber - 1;
+	index_t mid;
+	index_t match = NO_RELATION;
 
- if(IsFakeSegment(from))
-    from=IndexRealSegment(from);
+	if (IsFakeSegment(from))
+		from = IndexRealSegment(from);
 
- /* Binary search - search key first match is required.
-  *
-  *  # <- start  |  Check mid and move start or end if it doesn't match
-  *  #           |
-  *  #           |  Since an exact match is wanted we can set end=mid-1
-  *  # <- mid    |  or start=mid+1 because we know that mid doesn't match.
-  *  #           |
-  *  #           |  Eventually either end=start or end=start+1 and one of
-  *  # <- end    |  start or end matches (but may not be the first).
-  */
+	/* Binary search - search key first match is required.
+	 *
+	 *  # <- start  |  Check mid and move start or end if it doesn't match
+	 *  #           |
+	 *  #           |  Since an exact match is wanted we can set end=mid-1
+	 *  # <- mid    |  or start=mid+1 because we know that mid doesn't match.
+	 *  #           |
+	 *  #           |  Eventually either end=start or end=start+1 and one of
+	 *  # <- end    |  start or end matches (but may not be the first).
+	 */
 
- do
-   {
-    mid=(start+end)/2;              /* Choose mid point */
+	do {
+		mid = (start + end) / 2;	/* Choose mid point */
 
-    relation=LookupTurnRelation(relations,mid,1);
+		relation = LookupTurnRelation(relations, mid, 1);
 
-    if(relation->via<via)           /* Mid point is too low for 'via' */
-       start=mid+1;
-    else if(relation->via>via)      /* Mid point is too high for 'via' */
-       end=mid?(mid-1):mid;
-    else                            /* Mid point is correct for 'via' */
-      {
-       if(relation->from<from)      /* Mid point is too low for 'from' */
-          start=mid+1;
-       else if(relation->from>from) /* Mid point is too high for 'from' */
-          end=mid?(mid-1):mid;
-       else                         /* Mid point is correct for 'from' */
-         {
-          match=mid;
-          break;
-         }
-      }
-   }
- while((end-start)>1);
+		if (relation->via < via)	/* Mid point is too low for 'via' */
+			start = mid + 1;
+		else if (relation->via > via)	/* Mid point is too high for 'via' */
+			end = mid ? (mid - 1) : mid;
+		else {		/* Mid point is correct for 'via' */
 
- if(match==NO_RELATION)             /* Check if start matches */
-   {
-    relation=LookupTurnRelation(relations,start,1);
+			if (relation->from < from)	/* Mid point is too low for 'from' */
+				start = mid + 1;
+			else if (relation->from > from)	/* Mid point is too high for 'from' */
+				end = mid ? (mid - 1) : mid;
+			else {	/* Mid point is correct for 'from' */
 
-    if(relation->via==via && relation->from==from)
-       match=start;
-   }
+				match = mid;
+				break;
+			}
+		}
+	}
+	while ((end - start) > 1);
 
- if(match==NO_RELATION)             /* Check if end matches */
-   {
-    relation=LookupTurnRelation(relations,end,1);
+	if (match == NO_RELATION) {	/* Check if start matches */
+		relation = LookupTurnRelation(relations, start, 1);
 
-    if(relation->via==via && relation->from==from)
-       match=end;
-   }
+		if (relation->via == via && relation->from == from)
+			match = start;
+	}
 
- if(match==NO_RELATION)
-    return(match);
+	if (match == NO_RELATION) {	/* Check if end matches */
+		relation = LookupTurnRelation(relations, end, 1);
 
- while(match>0)                     /* Search backwards for the first match */
-   {
-    relation=LookupTurnRelation(relations,match-1,1);
+		if (relation->via == via && relation->from == from)
+			match = end;
+	}
 
-    if(relation->via==via && relation->from==from)
-       match--;
-    else
-       break;
-   }
+	if (match == NO_RELATION)
+		return (match);
 
- return(match);
+	while (match > 0) {	/* Search backwards for the first match */
+		relation = LookupTurnRelation(relations, match - 1, 1);
+
+		if (relation->via == via && relation->from == from)
+			match--;
+		else
+			break;
+	}
+
+	return (match);
 }
 
 
@@ -327,27 +323,27 @@ index_t FindFirstTurnRelation2(Relations *relations,index_t via,index_t from)
   index_t current The current index of a relation that matches.
   ++++++++++++++++++++++++++++++++++++++*/
 
-index_t FindNextTurnRelation2(Relations *relations,index_t current)
+index_t FindNextTurnRelation2(Relations * relations, index_t current)
 {
- TurnRelation *relation;
- index_t via,from;
+	TurnRelation *relation;
+	index_t via, from;
 
- relation=LookupTurnRelation(relations,current,1);
+	relation = LookupTurnRelation(relations, current, 1);
 
- via=relation->via;
- from=relation->from;
+	via = relation->via;
+	from = relation->from;
 
- current++;
+	current++;
 
- if(current==relations->file.trnumber)
-    return(NO_RELATION);
+	if (current == relations->file.trnumber)
+		return (NO_RELATION);
 
- relation=LookupTurnRelation(relations,current,1);
+	relation = LookupTurnRelation(relations, current, 1);
 
- if(relation->via==via && relation->from==from)
-    return(current);
- else
-    return(NO_RELATION);
+	if (relation->via == via && relation->from == from)
+		return (current);
+	else
+		return (NO_RELATION);
 }
 
 
@@ -369,33 +365,34 @@ index_t FindNextTurnRelation2(Relations *relations,index_t current)
   transports_t transport The type of transport that is being routed.
   ++++++++++++++++++++++++++++++++++++++*/
 
-int IsTurnAllowed(Relations *relations,index_t index,index_t via,index_t from,index_t to,transports_t transport)
+int IsTurnAllowed(Relations * relations, index_t index, index_t via,
+		  index_t from, index_t to, transports_t transport)
 {
- if(IsFakeSegment(from))
-    from=IndexRealSegment(from);
+	if (IsFakeSegment(from))
+		from = IndexRealSegment(from);
 
- if(IsFakeSegment(to))
-    to=IndexRealSegment(to);
+	if (IsFakeSegment(to))
+		to = IndexRealSegment(to);
 
- while(index<relations->file.trnumber)
-   {
-    TurnRelation *relation=LookupTurnRelation(relations,index,1);
+	while (index < relations->file.trnumber) {
+		TurnRelation *relation =
+		    LookupTurnRelation(relations, index, 1);
 
-    if(relation->via!=via)
-       return(1);
+		if (relation->via != via)
+			return (1);
 
-    if(relation->from!=from)
-       return(1);
+		if (relation->from != from)
+			return (1);
 
-    if(relation->to>to)
-       return(1);
+		if (relation->to > to)
+			return (1);
 
-    if(relation->to==to)
-       if(!(relation->except & transport))
-          return(0);
+		if (relation->to == to)
+			if (!(relation->except & transport))
+				return (0);
 
-    index++;
-   }
+		index++;
+	}
 
- return(1);
+	return (1);
 }

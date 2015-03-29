@@ -2,7 +2,7 @@
  Header file for logging function prototypes
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2008-2014 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 
 
 #ifndef LOGGING_H
-#define LOGGING_H    /*+ To stop multiple inclusions. +*/
+#define LOGGING_H		/*+ To stop multiple inclusions. + */
 
 #include <stdio.h>
 #include <sys/time.h>
@@ -32,15 +32,13 @@
 /* Data structures */
 
 /*+ A structure containing a single object as written by the logerror_*() functions. +*/
-typedef struct _ErrorLogObject
-{
- char      type;             /*+ The type of the object. +*/
+typedef struct _ErrorLogObject {
+	char type;		/*+ The type of the object. + */
 
- uint64_t  id;               /*+ The id of the object. +*/
+	uint64_t id;		/*+ The id of the object. + */
 
- uint32_t  offset;           /*+ The offset of the error message from the beginning of the text file. +*/
-}
- ErrorLogObject;
+	uint32_t offset;	/*+ The offset of the error message from the beginning of the text file. + */
+} ErrorLogObject;
 
 
 /* Variables */
@@ -58,13 +56,19 @@ void printf_program_end(void);
 
 #ifdef __GNUC__
 
-void printf_first(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
-void printf_middle(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
-void printf_last(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
+void printf_first(const char *format, ...)
+    __attribute__ ((format(printf, 1, 2)));
+void printf_middle(const char *format, ...)
+    __attribute__ ((format(printf, 1, 2)));
+void printf_last(const char *format, ...)
+    __attribute__ ((format(printf, 1, 2)));
 
-void fprintf_first(FILE *file,const char *format, ...) __attribute__ ((format (printf, 2, 3)));
-void fprintf_middle(FILE *file,const char *format, ...) __attribute__ ((format (printf, 2, 3)));
-void fprintf_last(FILE *file,const char *format, ...) __attribute__ ((format (printf, 2, 3)));
+void fprintf_first(FILE * file, const char *format, ...)
+    __attribute__ ((format(printf, 2, 3)));
+void fprintf_middle(FILE * file, const char *format, ...)
+    __attribute__ ((format(printf, 2, 3)));
+void fprintf_last(FILE * file, const char *format, ...)
+    __attribute__ ((format(printf, 2, 3)));
 
 #else
 
@@ -72,13 +76,13 @@ void printf_first(const char *format, ...);
 void printf_middle(const char *format, ...);
 void printf_last(const char *format, ...);
 
-void fprintf_first(FILE *file,const char *format, ...);
-void fprintf_middle(FILE *file,const char *format, ...);
-void fprintf_last(FILE *file,const char *format, ...);
+void fprintf_first(FILE * file, const char *format, ...);
+void fprintf_middle(FILE * file, const char *format, ...);
+void fprintf_last(FILE * file, const char *format, ...);
 
 #endif
 
-void log_malloc(void *address,size_t size);
+void log_malloc(void *address, size_t size);
 void log_free(void *address);
 
 void log_mmap(size_t size);
@@ -87,12 +91,13 @@ void log_munmap(size_t size);
 
 /* Error logging functions in logerror.c */
 
-void open_errorlog(const char *filename,int append,int bin);
+void open_errorlog(const char *filename, int append, int bin);
 void close_errorlog(void);
 
 #ifdef __GNUC__
 
-void logerror(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
+void logerror(const char *format, ...)
+    __attribute__ ((format(printf, 1, 2)));
 
 #else
 
@@ -100,8 +105,8 @@ void logerror(const char *format, ...);
 
 #endif
 
-node_t     logerror_node    (node_t     id);
-way_t      logerror_way     (way_t      id);
+node_t logerror_node(node_t id);
+way_t logerror_way(way_t id);
 relation_t logerror_relation(relation_t id);
 
 
@@ -109,7 +114,7 @@ relation_t logerror_relation(relation_t id);
 
 #define logassert(xx,yy) do { if(!(xx)) _logassert(yy,__FILE__,__LINE__); } while(0)
 
-void _logassert(const char *message,const char *file,int line);
+void _logassert(const char *message, const char *file, int line);
 
 
-#endif /* LOGGING_H */
+#endif				/* LOGGING_H */

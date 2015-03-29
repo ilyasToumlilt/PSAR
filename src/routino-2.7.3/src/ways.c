@@ -2,7 +2,7 @@
  Way data type functions.
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2008-2014 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -37,39 +37,42 @@
 
 Ways *LoadWayList(const char *filename)
 {
- Ways *ways;
+	Ways *ways;
 
- ways=(Ways*)malloc(sizeof(Ways));
+	ways = (Ways *) malloc(sizeof(Ways));
 
 #if !SLIM
 
- ways->data=MapFile(filename);
+	ways->data = MapFile(filename);
 
- /* Copy the WaysFile structure from the loaded data */
+	/* Copy the WaysFile structure from the loaded data */
 
- ways->file=*((WaysFile*)ways->data);
+	ways->file = *((WaysFile *) ways->data);
 
- /* Set the pointers in the Ways structure. */
+	/* Set the pointers in the Ways structure. */
 
- ways->ways =(Way *)(ways->data+sizeof(WaysFile));
- ways->names=(char*)(ways->data+sizeof(WaysFile)+ways->file.number*sizeof(Way));
+	ways->ways = (Way *) (ways->data + sizeof(WaysFile));
+	ways->names =
+	    (char *) (ways->data + sizeof(WaysFile) +
+		      ways->file.number * sizeof(Way));
 
 #else
 
- ways->fd=SlimMapFile(filename);
+	ways->fd = SlimMapFile(filename);
 
- /* Copy the WaysFile header structure from the loaded data */
+	/* Copy the WaysFile header structure from the loaded data */
 
- SlimFetch(ways->fd,&ways->file,sizeof(WaysFile),0);
+	SlimFetch(ways->fd, &ways->file, sizeof(WaysFile), 0);
 
- ways->namesoffset=sizeof(WaysFile)+ways->file.number*sizeof(Way);
+	ways->namesoffset =
+	    sizeof(WaysFile) + ways->file.number * sizeof(Way);
 
- ways->cache=NewWayCache();
- log_malloc(ways->cache,sizeof(*ways->cache));
+	ways->cache = NewWayCache();
+	log_malloc(ways->cache, sizeof(*ways->cache));
 
 #endif
 
- return(ways);
+	return (ways);
 }
 
 
@@ -79,22 +82,22 @@ Ways *LoadWayList(const char *filename)
   Ways *ways The way list to destroy.
   ++++++++++++++++++++++++++++++++++++++*/
 
-void DestroyWayList(Ways *ways)
+void DestroyWayList(Ways * ways)
 {
 #if !SLIM
 
- ways->data=UnmapFile(ways->data);
+	ways->data = UnmapFile(ways->data);
 
 #else
 
- ways->fd=SlimUnmapFile(ways->fd);
+	ways->fd = SlimUnmapFile(ways->fd);
 
- log_free(ways->cache);
- DeleteWayCache(ways->cache);
+	log_free(ways->cache);
+	DeleteWayCache(ways->cache);
 
 #endif
 
- free(ways);
+	free(ways);
 }
 
 
@@ -109,34 +112,34 @@ void DestroyWayList(Ways *ways)
   Way *way2p The second way.
   ++++++++++++++++++++++++++++++++++++++*/
 
-int WaysCompare(Way *way1p,Way *way2p)
+int WaysCompare(Way * way1p, Way * way2p)
 {
- if(way1p==way2p)
-    return(0);
+	if (way1p == way2p)
+		return (0);
 
- if(way1p->type!=way2p->type)
-    return((int)way1p->type - (int)way2p->type);
+	if (way1p->type != way2p->type)
+		return ((int) way1p->type - (int) way2p->type);
 
- if(way1p->allow!=way2p->allow)
-    return((int)way1p->allow - (int)way2p->allow);
+	if (way1p->allow != way2p->allow)
+		return ((int) way1p->allow - (int) way2p->allow);
 
- if(way1p->props!=way2p->props)
-    return((int)way1p->props - (int)way2p->props);
+	if (way1p->props != way2p->props)
+		return ((int) way1p->props - (int) way2p->props);
 
- if(way1p->speed!=way2p->speed)
-    return((int)way1p->speed - (int)way2p->speed);
+	if (way1p->speed != way2p->speed)
+		return ((int) way1p->speed - (int) way2p->speed);
 
- if(way1p->weight!=way2p->weight)
-    return((int)way1p->weight - (int)way2p->weight);
+	if (way1p->weight != way2p->weight)
+		return ((int) way1p->weight - (int) way2p->weight);
 
- if(way1p->height!=way2p->height)
-    return((int)way1p->height - (int)way2p->height);
+	if (way1p->height != way2p->height)
+		return ((int) way1p->height - (int) way2p->height);
 
- if(way1p->width!=way2p->width)
-    return((int)way1p->width - (int)way2p->width);
+	if (way1p->width != way2p->width)
+		return ((int) way1p->width - (int) way2p->width);
 
- if(way1p->length!=way2p->length)
-    return((int)way1p->length - (int)way2p->length);
+	if (way1p->length != way2p->length)
+		return ((int) way1p->length - (int) way2p->length);
 
- return(0);
+	return (0);
 }

@@ -2,7 +2,7 @@
  A header file for the nodes.
 
  Part of the Routino routing software.
- ******************/ /******************
+		      ******************//******************
  This file Copyright 2008-2014 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 
 
 #ifndef NODES_H
-#define NODES_H    /*+ To stop multiple inclusions. +*/
+#define NODES_H			/*+ To stop multiple inclusions. + */
 
 #include <stdint.h>
 #include <sys/types.h>
@@ -37,57 +37,53 @@
 
 
 /*+ A structure containing a single node. +*/
-struct _Node
-{
- index_t      firstseg;         /*+ The index of the first segment. +*/
+struct _Node {
+	index_t firstseg;	/*+ The index of the first segment. + */
 
- ll_off_t     latoffset;        /*+ The node latitude offset within its bin. +*/
- ll_off_t     lonoffset;        /*+ The node longitude offset within its bin. +*/
+	ll_off_t latoffset;	/*+ The node latitude offset within its bin. + */
+	ll_off_t lonoffset;	/*+ The node longitude offset within its bin. + */
 
- transports_t allow;            /*+ The types of transport that are allowed through the node. +*/
- nodeflags_t  flags;            /*+ Flags containing extra information (e.g. super-node, turn restriction). +*/
+	transports_t allow;	/*+ The types of transport that are allowed through the node. + */
+	nodeflags_t flags;	/*+ Flags containing extra information (e.g. super-node, turn restriction). + */
 };
 
 
 /*+ A structure containing the header from the file. +*/
-typedef struct _NodesFile
-{
- index_t  number;               /*+ The number of nodes in total. +*/
- index_t  snumber;              /*+ The number of super-nodes. +*/
+typedef struct _NodesFile {
+	index_t number;		/*+ The number of nodes in total. + */
+	index_t snumber;	/*+ The number of super-nodes. + */
 
- ll_bin_t latbins;              /*+ The number of bins containing latitude. +*/
- ll_bin_t lonbins;              /*+ The number of bins containing longitude. +*/
+	ll_bin_t latbins;	/*+ The number of bins containing latitude. + */
+	ll_bin_t lonbins;	/*+ The number of bins containing longitude. + */
 
- ll_bin_t latzero;              /*+ The bin number of the furthest south bin. +*/
- ll_bin_t lonzero;              /*+ The bin number of the furthest west bin. +*/
-}
- NodesFile;
+	ll_bin_t latzero;	/*+ The bin number of the furthest south bin. + */
+	ll_bin_t lonzero;	/*+ The bin number of the furthest west bin. + */
+} NodesFile;
 
 
 /*+ A structure containing a set of nodes. +*/
-struct _Nodes
-{
- NodesFile file;                /*+ The header data from the file. +*/
+struct _Nodes {
+	NodesFile file;		/*+ The header data from the file. + */
 
 #if !SLIM
 
- void     *data;                /*+ The memory mapped data in the file. +*/
+	void *data;		/*+ The memory mapped data in the file. + */
 
- index_t  *offsets;             /*+ A pointer to the array of offsets in the file. +*/
+	index_t *offsets;	/*+ A pointer to the array of offsets in the file. + */
 
- Node     *nodes;               /*+ A pointer to the array of nodes in the file. +*/
+	Node *nodes;		/*+ A pointer to the array of nodes in the file. + */
 
 #else
 
- int       fd;                  /*+ The file descriptor for the file. +*/
+	int fd;			/*+ The file descriptor for the file. + */
 
- index_t  *offsets;             /*+ An allocated array with a copy of the file offsets. +*/
+	index_t *offsets;	/*+ An allocated array with a copy of the file offsets. + */
 
- off_t     nodesoffset;         /*+ The offset of the nodes within the file. +*/
+	off_t nodesoffset;	/*+ The offset of the nodes within the file. + */
 
- Node      cached[6];           /*+ Some cached nodes read from the file in slim mode. +*/
+	Node cached[6];		/*+ Some cached nodes read from the file in slim mode. + */
 
- NodeCache *cache;              /*+ A RAM cache of nodes read from the file. +*/
+	NodeCache *cache;	/*+ A RAM cache of nodes read from the file. + */
 
 #endif
 };
@@ -97,16 +93,22 @@ struct _Nodes
 
 Nodes *LoadNodeList(const char *filename);
 
-void DestroyNodeList(Nodes *nodes);
+void DestroyNodeList(Nodes * nodes);
 
-index_t FindClosestNode(Nodes *nodes,Segments *segments,Ways *ways,double latitude,double longitude,
-                        distance_t distance,Profile *profile,distance_t *bestdist);
+index_t FindClosestNode(Nodes * nodes, Segments * segments, Ways * ways,
+			double latitude, double longitude,
+			distance_t distance, Profile * profile,
+			distance_t * bestdist);
 
-index_t FindClosestSegment(Nodes *nodes,Segments *segments,Ways *ways,double latitude,double longitude,
-                           distance_t distance,Profile *profile, distance_t *bestdist,
-                           index_t *bestnode1,index_t *bestnode2,distance_t *bestdist1,distance_t *bestdist2);
+index_t FindClosestSegment(Nodes * nodes, Segments * segments, Ways * ways,
+			   double latitude, double longitude,
+			   distance_t distance, Profile * profile,
+			   distance_t * bestdist, index_t * bestnode1,
+			   index_t * bestnode2, distance_t * bestdist1,
+			   distance_t * bestdist2);
 
-void GetLatLong(Nodes *nodes,index_t index,Node *nodep,double *latitude,double *longitude);
+void GetLatLong(Nodes * nodes, index_t index, Node * nodep,
+		double *latitude, double *longitude);
 
 
 /* Macros and inline functions */
@@ -133,21 +135,20 @@ void GetLatLong(Nodes *nodes,index_t index,Node *nodep,double *latitude,double *
 
 /* Prototypes */
 
-static inline Node *LookupNode(Nodes *nodes,index_t index,int position);
+static inline Node *LookupNode(Nodes * nodes, index_t index, int position);
 
 CACHE_NEWCACHE_PROTO(Node)
-CACHE_DELETECACHE_PROTO(Node)
-CACHE_FETCHCACHE_PROTO(Node)
-CACHE_INVALIDATECACHE_PROTO(Node)
+    CACHE_DELETECACHE_PROTO(Node)
+    CACHE_FETCHCACHE_PROTO(Node)
+    CACHE_INVALIDATECACHE_PROTO(Node)
 
 
 /* Inline functions */
-
-CACHE_STRUCTURE(Node)
-CACHE_NEWCACHE(Node)
-CACHE_DELETECACHE(Node)
-CACHE_FETCHCACHE(Node)
-CACHE_INVALIDATECACHE(Node)
+    CACHE_STRUCTURE(Node)
+    CACHE_NEWCACHE(Node)
+    CACHE_DELETECACHE(Node)
+    CACHE_FETCHCACHE(Node)
+    CACHE_INVALIDATECACHE(Node)
 
 
 /*++++++++++++++++++++++++++++++++++++++
@@ -161,15 +162,16 @@ CACHE_INVALIDATECACHE(Node)
 
   int position The position in the cache to store the value.
   ++++++++++++++++++++++++++++++++++++++*/
-
-static inline Node *LookupNode(Nodes *nodes,index_t index,int position)
+static inline Node *LookupNode(Nodes * nodes, index_t index, int position)
 {
- nodes->cached[position-1]=*FetchCachedNode(nodes->cache,index,nodes->fd,nodes->nodesoffset);
+	nodes->cached[position - 1] =
+	    *FetchCachedNode(nodes->cache, index, nodes->fd,
+			     nodes->nodesoffset);
 
- return(&nodes->cached[position-1]);
+	return (&nodes->cached[position - 1]);
 }
 
 #endif
 
 
-#endif /* NODES_H */
+#endif				/* NODES_H */
