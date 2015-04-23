@@ -419,6 +419,10 @@ void PrintRoute(Results ** results, int nresults, Nodes * nodes,
 	/* Loop through all the sections of the route and print them */
 
 	do {
+	  if(results[point] == NULL){
+	    point++;
+	    continue;
+	  }
 		int first = 1;
 		int next_point = point;
 		distance_t junc_distance = 0;
