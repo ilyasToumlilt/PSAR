@@ -453,7 +453,7 @@ int main(int argc, char **argv)
 	/* Loop through all pairs of waypoints */
 	for (waypoint = first_waypoint; waypoint != last_waypoint;
 	     waypoint += inc_dec_waypoint) {
-	  //printf("Filling params for waypoint %d\n", waypoint);
+	  /* Filling params for waypoint */
 	  params[count].first = (waypoint == first_waypoint);
 	  params[count].point_used = point_used;
 	  params[count].waypoint = waypoint;
@@ -738,7 +738,6 @@ void* Route2Waypoints(void *context)
 
   while(1){
     pthread_mutex_lock(&count_mutex);
-    printf("\ntook mutex, count=%d; end_waypoint=%d\n", count, end_waypoint);
     if(count<end_waypoint){
       pthread_mutex_unlock(&count_mutex);
       pthread_exit(NULL);
