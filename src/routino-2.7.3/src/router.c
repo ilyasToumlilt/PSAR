@@ -37,7 +37,7 @@
 /*+ The maximum distance from the specified point to search for a node or segment (in km). +*/
 #define MAXSEARCH  1
 /*+ The number of threads that will calculate each portion between 2 waypoints. +*/
-#define NTHREADS 4
+//#define NTHREADS 4
 
 /* Global variables */
 /*+ The option not to print any progress information. +*/
@@ -49,8 +49,8 @@ int option_html = 0, option_gpx_track = 0, option_gpx_route =
 /*+ The option to calculate the quickest route insted of the shortest. +*/
 int option_quickest = 0;
 /*+ Control counter and mutex for waypoint multithreading. +*/
-//pthread_mutex_t results_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_t tid[NTHREADS];
+int NTHREADS = 2;
+pthread_t *tid;
 pthread_mutex_t count_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t finish_mutex= PTHREAD_MUTEX_INITIALIZER;
 int count = 0;
@@ -182,7 +182,10 @@ int main(int argc, char **argv)
 			transport = TransportType(&argv[arg][12]);
 			if (transport == Transport_None)
 				print_usage(0, argv[arg], NULL);
-		} else
+		} 
+		else if (!strncmp(argv[arg], "--threads=", 10))
+		 	NTHREADS = atoi(&argv[arg][10]);
+		else
 			continue;
 		argv[arg] = NULL;
 	}
@@ -194,6 +197,12 @@ int main(int argc, char **argv)
 			"Error: The '--output-stdout' option requires exactly one other output option (but not '--output-none').\n");
 		exit(EXIT_FAILURE);
 	}
+	if (NTHREADS < 2) {
+	  fprintf(stderr, "Error: The '--threads' option requires a value stricly superior to 1.\n");
+	  exit(EXIT_FAILURE);
+	}
+	else
+	  tid = malloc((NTHREADS-1)*sizeof(pthread_t));
 	/* Load in the profiles */
 	if (transport == Transport_None)
 		transport = Transport_Motorcar;
@@ -482,10 +491,10 @@ int main(int argc, char **argv)
 	}
 	int i;
 	count--;
-	finish_count = NTHREADS;
+	finish_count = NTHREADS-1;
 	end_waypoint = first_waypoint;
 	pthread_mutex_lock(&finish_mutex);
-	for(i=0; i<NTHREADS; i++){
+	for(i=0; i<NTHREADS-1; i++){
 	  if(pthread_create(tid+i, NULL, Route2Waypoints, NULL))
 	    exit(2);
 	}
@@ -931,6 +940,9 @@ static void print_usage(int detail, const char *argerr, const char *err)
 			"--profile=<name>        Select the loaded profile with this name.\n"
 			"--transport=<transport> Select the transport to use (selects the profile\n"
 			"                        named after the transport if '--profile' is not used.)\n"
+			"\n"
+			"--threads=<n>           Use n threads to calculate the route. Must be stricly\n"
+			"                        superior to 1.\n"
 			"\n"
 			"--shortest              Find the shortest route between the waypoints.\n"
 			"--quickest              Find the quickest route between the waypoints.\n"
