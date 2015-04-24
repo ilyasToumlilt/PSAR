@@ -52,7 +52,9 @@ int option_quickest = 0;
 //pthread_mutex_t results_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_t tid[NTHREADS];
 pthread_mutex_t count_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t finish_mutex= PTHREAD_MUTEX_INITIALIZER;
 int count = 0;
+int finish_count = 0;
 waypoint_t end_waypoint;
 
 /* pthread parameters structure */
@@ -480,7 +482,9 @@ int main(int argc, char **argv)
 	}
 	int i;
 	count--;
+	finish_count = NTHREADS;
 	end_waypoint = first_waypoint;
+	pthread_mutex_lock(&finish_mutex);
 	for(i=0; i<NTHREADS; i++){
 	  if(pthread_create(tid+i, NULL, Route2Waypoints, NULL))
 	    exit(2);
@@ -526,10 +530,7 @@ int main(int argc, char **argv)
 				   first_waypoint);
 		nresults++;
 	}
-	for(i=0; i<NTHREADS; i++){
-	  if(pthread_join(tid[i], NULL) != NULL)
-	    exit(2);
-	}
+	pthread_mutex_lock(&finish_mutex);
 	if (!option_quiet) {
 		printf("Routed OK\n");
 		fflush(stdout);
@@ -739,6 +740,9 @@ void* Route2Waypoints(void *context)
   while(1){
     pthread_mutex_lock(&count_mutex);
     if(count<end_waypoint){
+      finish_count--;
+      if(finish_count == 0)
+	pthread_mutex_unlock(&finish_mutex);
       pthread_mutex_unlock(&count_mutex);
       pthread_exit(NULL);
     }
