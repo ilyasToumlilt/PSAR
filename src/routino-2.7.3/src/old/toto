@@ -1,0 +1,175 @@
+Loading Files:Loaded Files: nodes, segments, ways & relations
+Finding Closest Point: Waypoint 1Found Closest Point: Waypoint 1  
+Waypoint 1 is segment 15260408 (node 12159042 -> 12159125): 2.788109 50.275336 = 0.018 km
+Finding Closest Point: Waypoint 2Found Closest Point: Waypoint 2  
+Waypoint 2 is node 10569091: 2.294330 49.897731 = 0.000 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 7  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 3  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 45203
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 483
+Finding Closest Point: Waypoint 3Found Closest Point: Waypoint 3  
+Waypoint 3 is segment 11269432 (node 8988570 -> 8988591): 1.833763 50.105704 = 0.000 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 5  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 14146
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 313
+Finding Closest Point: Waypoint 4Found Closest Point: Waypoint 4  
+Waypoint 4 is segment 6621329 (node 5220811 -> 5220925): 0.123553 49.507205 = 0.009 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 6  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 52602
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 792
+Finding Closest Point: Waypoint 5Found Closest Point: Waypoint 5  
+Waypoint 5 is segment 6614374 (node 5215181 -> 5215195): 0.165831 49.005521 = 0.062 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 17 
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 38290
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 618
+Finding Closest Point: Waypoint 6Found Closest Point: Waypoint 6  
+Waypoint 6 is segment 3259497 (node 2541458 -> 2541470): -1.194660 48.352557 = 0.012 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 4  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 184042
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 1175
+Finding Closest Point: Waypoint 7Found Closest Point: Waypoint 7  
+Waypoint 7 is segment 2181121 (node 1703557 -> 1703561): -1.677710 48.116379 = 0.000 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 4  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 8928
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 340
+Finding Closest Point: Waypoint 8Found Closest Point: Waypoint 8  
+Waypoint 8 is segment 973413 (node 768829 -> 768887): -2.988167 48.202356 = 0.015 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 8  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 97962
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 576
+Finding Closest Point: Waypoint 9Found Closest Point: Waypoint 9  
+Waypoint 9 is segment 1089435 (node 860701 -> 860703): -2.761162 47.658356 = 0.012 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 3  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 4  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 22929
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 564
+Finding Closest Point: Waypoint 10Found Closest Point: Waypoint 10  
+Waypoint 10 is segment 1169970 (node 923119 -> 923151): -2.641040 47.837654 = 0.000 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 6  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 17976
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 309
+Finding Closest Point: Waypoint 11Found Closest Point: Waypoint 11  
+Waypoint 11 is segment 5226126 (node 4105634 -> 4105726): -0.370269 43.294471 = 0.005 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 3  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 1131401
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 2856
+Finding Closest Point: Waypoint 12Found Closest Point: Waypoint 12  
+Waypoint 12 is node 4991073: 0.077640 43.232440 = 0.020 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 4  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 2  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 18306
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 381
+Finding Closest Point: Waypoint 13Found Closest Point: Waypoint 13  
+Waypoint 13 is segment 4145777 (node 3253575 -> 3253586): -0.745031 42.977755 = 0.043 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 5  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 123198
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 1201
+Finding Closest Point: Waypoint 14Found Closest Point: Waypoint 14  
+Waypoint 14 is segment 5226126 (node 4105634 -> 4105726): -0.370081 43.294462 = 0.016 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 3  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 10914
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 906
+Finding Closest Point: Waypoint 15Found Closest Point: Waypoint 15  
+Waypoint 15 is segment 5800694 (node 4560227 -> 4560259): -0.115176 42.890060 = 0.000 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 4  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 7  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 49219
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 822
+Finding Closest Point: Waypoint 16Found Closest Point: Waypoint 16  
+Waypoint 16 is segment 7156147 (node 5650083 -> 5650114): 0.385348 43.125687 = 0.009 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 3  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 32070
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 906
+Finding Closest Point: Waypoint 17Found Closest Point: Waypoint 17  
+Waypoint 17 is segment 10799202 (node 8602562 -> 8602569): 1.687451 42.729302 = 0.005 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 139
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 138226
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 1500
+Finding Closest Point: Waypoint 18Found Closest Point: Waypoint 18  
+Waypoint 18 is segment 9565947 (node 7620228 -> 7620235): 1.331175 43.461777 = 0.026 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 8  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 7  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 24534
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 914
+Finding Closest Point: Waypoint 19Found Closest Point: Waypoint 19  
+Waypoint 19 is node 11491523: 2.576150 44.349226 = 0.035 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 2  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 190875
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 1279
+Finding Closest Point: Waypoint 20Found Closest Point: Waypoint 20  
+Waypoint 20 is node 14044586: 3.499260 44.517776 = 0.000 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 4  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 4  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 46919
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 1095
+Finding Closest Point: Waypoint 21Found Closest Point: Waypoint 21  
+Waypoint 21 is segment 21433840 (node 17151911 -> 17151914): 4.888131 44.933500 = 0.000 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 3  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 7  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 92306
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 2254
+Finding Closest Point: Waypoint 22Found Closest Point: Waypoint 22  
+Waypoint 22 is node 17538716: 5.050895 45.040804 = 0.002 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 3  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 13815
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 205
+Finding Closest Point: Waypoint 23Found Closest Point: Waypoint 23  
+Waypoint 23 is node 19891587: 6.092486 44.557240 = 0.082 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 5  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 3  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 217942
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 1535
+Finding Closest Point: Waypoint 24Found Closest Point: Waypoint 24  
+Waypoint 24 is node 20331688: 6.245837 44.091519 = 0.062 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 3  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 40 
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 6 - Fail
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 4  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 26571
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 701
+Finding Closest Point: Waypoint 25Found Closest Point: Waypoint 25  
+Waypoint 25 is node 21181725: 6.603764 44.369621 = 0.051 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 34 
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 5  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 23 - Fail
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 36 
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 15083
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 1111
+Finding Closest Point: Waypoint 26Found Closest Point: Waypoint 26  
+Waypoint 26 is segment 25605048 (node 20596631 -> 20596682): 6.346219 45.275694 = 0.012 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 15 
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 6  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 46291
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 2558
+Finding Closest Point: Waypoint 27Found Closest Point: Waypoint 27  
+Waypoint 27 is segment 25315947 (node 20350185 -> 20350249): 6.257425 45.255287 = 0.015 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 3  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 11 
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 2213
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 310
+Finding Closest Point: Waypoint 28Found Closest Point: Waypoint 28  
+Waypoint 28 is segment 26307797 (node 21207369 -> 21207429): 6.652440 45.187798 = 0.000 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 2  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 9  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 1508
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 519
+Finding Closest Point: Waypoint 29Found Closest Point: Waypoint 29  
+Waypoint 29 is segment 24769951 (node 19902560 -> 19902656): 6.069300 45.092651 = 0.000 km
+Finding Start Route: Nodes checked = 0Found Start Route: Nodes checked = 3  
+Finding Finish Route: Nodes checked = 0Found Finish Route: Nodes checked = 7  
+Finding Middle Route: Super-Nodes checked = 0Found Middle Route: Super-Nodes checked = 20623
+Finding Combined Route: Nodes = 0Found Combined Route: Nodes = 15 - Fail
