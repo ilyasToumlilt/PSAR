@@ -126,8 +126,8 @@ done;
     exit 1;
 }
 
-CMDLINE="$ROUTERPATH --transport=$TRANSPORT --dir=$MEMDIR --profiles=$XMLDIR/profiles.xml --translations=$XMLDIR/translations.xml "
-MTCMDLINE="$MTROUTERPATH --threads=$NBTHREADS --transport=$TRANSPORT --dir=$MEMDIR --profiles=$XMLDIR/profiles.xml --translations=$XMLDIR/translations.xml "
+CMDLINE="$ROUTERPATH --quiet --output-none --transport=$TRANSPORT --dir=$MEMDIR --profiles=$XMLDIR/profiles.xml --translations=$XMLDIR/translations.xml "
+MTCMDLINE="$MTROUTERPATH --quiet --output-none --threads=$NBTHREADS --transport=$TRANSPORT --dir=$MEMDIR --profiles=$XMLDIR/profiles.xml --translations=$XMLDIR/translations.xml "
 
 {
     read lat lon 
@@ -155,8 +155,6 @@ MTCMDLINE="$MTROUTERPATH --threads=$NBTHREADS --transport=$TRANSPORT --dir=$MEMD
 	mtroutertime=$(((end-start)/1000000));
 	
 	echo "$index $routertime $mtroutertime">>$OUTPUTFILE;
-#	env echo -e "\n\n$MTCMDLINE\n\n"
-#	env echo -e "\n\n$CMDLINE\n\n
 	env echo -e -n "\b\b\b\b$(((index*100)/total))%";
 
 	index=$((index+1))
