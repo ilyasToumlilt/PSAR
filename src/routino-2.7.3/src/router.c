@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <pthread.h>
+#include <sys/time.h>
 #include "types.h"
 #include "nodes.h"
 #include "segments.h"
@@ -118,6 +119,7 @@ int main(int argc, char **argv)
 	waypoint_t start_waypoint, finish_waypoint = NO_WAYPOINT;
 	waypoint_t first_waypoint = NWAYPOINTS, last_waypoint =
 	    1, inc_dec_waypoint, waypoint;
+	struct timeval start_tv, end_tv;
 #if !DEBUG
 	printf_program_start();
 #endif
@@ -459,7 +461,8 @@ int main(int argc, char **argv)
 	  last_waypoint++;
 	  inc_dec_waypoint = 1;
 	}
-	/* Init done array */
+
+	gettimeofday(&start_tv, NULL);
 	/* Loop through all pairs of waypoints */
 	for (waypoint = first_waypoint; waypoint != last_waypoint;
 	     waypoint += inc_dec_waypoint) {
@@ -539,8 +542,13 @@ int main(int argc, char **argv)
 		nresults++;
 	}
 	pthread_mutex_lock(&finish_mutex);
+	gettimeofday(&end_tv, NULL);
+	long int passed_utime = (end_tv.tv_sec*1000000+end_tv.tv_usec)
+	  - (start_tv.tv_sec*1000000+start_tv.tv_usec);
 	if (!option_quiet) {
-		printf("Routed OK\n");
+	  printf("Routed OK in %ld.%06ld s\n",
+		 (long int) (passed_utime/1000000),
+		 (long int) (passed_utime%1000000));
 		fflush(stdout);
 	}
 	/* Print out the combined route */
