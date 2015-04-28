@@ -36,8 +36,6 @@
 #define DEBUG 0
 /*+ The maximum distance from the specified point to search for a node or segment (in km). +*/
 #define MAXSEARCH  1
-/*+ The number of threads that will calculate each portion between 2 waypoints. +*/
-//#define NTHREADS 4
 
 /* Global variables */
 /*+ The option not to print any progress information. +*/
@@ -48,8 +46,9 @@ int option_html = 0, option_gpx_track = 0, option_gpx_route =
     0, option_stdout = 0;
 /*+ The option to calculate the quickest route insted of the shortest. +*/
 int option_quickest = 0;
-/*+ Control counter and mutex for waypoint multithreading. +*/
+/*+ The number of threads that will calculate each portion between 2 waypoints. +*/
 int NTHREADS = 2;
+/*+ Control counter and mutex for waypoint multithreading. +*/
 pthread_t *tid;
 pthread_mutex_t count_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t finish_mutex= PTHREAD_MUTEX_INITIALIZER;
