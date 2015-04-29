@@ -1,1 +1,13 @@
-P2 empty file
+\section{Les applications}
+
+L'un des principaux but du projet était de porter une application respectant certaines contraintes sur la carte présentée précedemment. En effet, la première contrainte était que le programme devait être capable de générer un trafic mémoire important sur le bus pendant une période de temps assez courte (environ une seconde). L'autre contrainte qu'il fallait respecter était que l'application devait pouvoir se trouver dans n'importe quelle voiture. Ce sont ces deux raisons qui nous ont amené à choisir une application de calcul de plus court chemin basée sur des cartes OpenStreetMap. Il existe deux raisons qui font que nous avons choisi ces cartes. D'une part elles sont libre d'utilisation et d'autre part ce sont les cartes gratuites les plus exhaustives. 
+
+\subsection{Selection de l'application}
+
+L'application que nous avons décidé de porter sur la carte a été choisie selon un certain nombre de critères. 
+
+Tout d'abord, il fallait que celle-ci ne soit pas écrite en Java (comme c'est le cas pour de nombreuses applications utilisant les cartes OpenStreetMap) car le profiling mémoire aurait été dans ce cas plus difficile à effectuer à cause de la JVM. En effet, cette dernière effectue des optimisation au niveau de la mémoire qui nous aurait empêché de quantifier les besoins réels de l'application en terme de bande passante sur le bus. De plus, la quantité de mémoire disponible sur la carte étant relativement restreinte (1 Gio), nous ne pouvions pas nous permettre d'utiliser un language à ramasse-miettes comme Java sachant que les cartes OpenStreetMap sont elles aussi très gourmande en mémoire.
+
+Ensuite, un autre critère de séléction pour l'application fût le nombre de dépendances de la partie du programme s'occupant du calcul du plus court chemin. En effet, bien que ce ne soit pas gênant d'un point de vue des performances ou des accès mémoire, les dépendances rendent le portage de l'application plus complexe. Il était donc utile, dans la limite du possible, de trouver un programme avec un petit nombre de dépendences.
+
+Enfin, le dernier critère de selection
