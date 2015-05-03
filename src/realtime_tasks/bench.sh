@@ -123,7 +123,7 @@ do
 
     echo "Starting ${c%% *} running alone."
 
-    $($c)
+    `$c`
 
     file=$(ls *.json)
     testnames[$testnb]=${file%.json}
@@ -211,35 +211,38 @@ done;
 	[[ "$c" == "
 " || "$c" =~ ^# ]] && continue;
 	
-	$($c)
+	`$c`
     done;
 
     duration=0
     memr=0
     memw=0
-    i=0
     for file in $(ls *.json)
     do
+	d=0
+	mr=0
+	mw=0
+	i=0
 	timevalues=$(grep "time" $file | cut -f6 -d' ' | cut -f1 -d'}')
 	memrvalues=$(grep "core\" : 0" $file | cut -d' ' -f5)
 	memwvalues=$(grep "core\" : 0" $file | cut -d' ' -f7)
 	for v in $timevalues
 	do
-	    duration=$((duration+v))
+	    d=$((d+v))
 	    i=$((i+1))
 	done;
 	for v in $memrvalues
 	do
-	    memr=$((memr+v))
+	    mr=$((mr+v))
 	done;
 	for v in $memwvalues
 	do
-	    memw=$((memw+v))
+	    mw=$((mw+v))
 	done;
+	duration=$((duration+(d/i)))
+	memr=$((memr+(mr/i)))
+	memw=$((memw+(mw/i)))
     done;
-    duration=$((duration/i))
-    memr=$((memr/i))
-    memw=$((memw/i))
     alonet[$testnb]=$duration
     aloner[$testnb]=$memr
     alonew[$testnb]=$memw
@@ -271,36 +274,39 @@ done;
 	# if not a command (empty line/comment), next command
 	[[ "$c" == "
 " || "$c" =~ ^# ]] && continue;
-	$($c)
+	`$c`
     done;
     kill -9 $pid1 $pid2 $pid3
 
     duration=0
     memr=0
     memw=0
-    i=0
     for file in $(ls *.json)
     do
+	d=0
+	mr=0
+	mw=0
+	i=0
 	timevalues=$(grep "time" $file | cut -f6 -d' ' | cut -f1 -d'}')
 	memrvalues=$(grep "core\" : 0" $file | cut -d' ' -f5)
 	memwvalues=$(grep "core\" : 0" $file | cut -d' ' -f7)
 	for v in $timevalues
 	do
-	    duration=$((duration+v))
+	    d=$((d+v))
 	    i=$((i+1))
 	done;
 	for v in $memrvalues
 	do
-	    memr=$((memr+v))
+	    mr=$((mr+v))
 	done;
 	for v in $memwvalues
 	do
-	    memw=$((memw+v))
+	    mw=$((mw+v))
 	done;
+	duration=$((duration+(d/i)))
+	memr=$((memr+(mr/i)))
+	memw=$((memw+(mw/i)))
     done;
-    duration=$((duration/i))
-    memr=$((memr/i))
-    memw=$((memw/i))
     monot[$testnb]=$duration
     monor[$testnb]=$memr
     monow[$testnb]=$memw
@@ -323,36 +329,39 @@ done;
 	# if not a command (empty line/comment), next command
 	[[ "$c" == "
 " || "$c" =~ ^# ]] && continue;
-	$($c)
+	`$c`
     done;
     kill -9 $pid
 
     duration=0
     memr=0
     memw=0
-    i=0
     for file in $(ls *.json)
     do
+	d=0
+	mr=0
+	mw=0
+	i=0
 	timevalues=$(grep "time" $file | cut -f6 -d' ' | cut -f1 -d'}')
 	memrvalues=$(grep "core\" : 0" $file | cut -d' ' -f5)
 	memwvalues=$(grep "core\" : 0" $file | cut -d' ' -f7)
 	for v in $timevalues
 	do
-	    duration=$((duration+v))
+	    d=$((d+v))
 	    i=$((i+1))
 	done;
 	for v in $memrvalues
 	do
-	    memr=$((memr+v))
+	    mr=$((mr+v))
 	done;
 	for v in $memwvalues
 	do
-	    memw=$((memw+v))
+	    mw=$((mw+v))
 	done;
+	duration=$((duration+(d/i)))
+	memr=$((memr+(mr/i)))
+	memw=$((memw+(mw/i)))
     done;
-    duration=$((duration/i))
-    memr=$((memr/i))
-    memw=$((memw/i))
     multit[$testnb]=$duration
     multir[$testnb]=$memr
     multiw[$testnb]=$memw
