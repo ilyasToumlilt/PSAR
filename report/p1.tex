@@ -1,2 +1,71 @@
-\section{La carte}
-P1 empty file
+\section{La carte SABRE Lite}
+
+\subsection{Caractéristiques techniques}
+
+\subsubsection{Architecture interne}
+La carte SABRE Lite\cite{_i.mx_2014} embarque un processeur i.MX 6, basé sur le processeur ARM
+Cortex A9 MPCore. Il s'agit d'un processeur quad-core cadencée à 1 GHz, 
+disposant de caches L1 de 32 Ko ainsi que d'un cache L2 de 1 Mo partagé pour les
+quatre coeurs. La carte dispose également de 1 Go de mémoire vive (DDR3). Le
+contrôleur mémoire contient plusieurs compteurs permettant la mesure de 
+l'activité mémoire qui seront utilisés dans la phase de profilage détaillée dans
+la suite de ce rapport. Une puce de mémoire flash SPI de 2 Mo contenant un code
+de boot est aussi présente.
+
+\subsubsection{Stockage}
+Le système ne dispose pas de stockage de masse interne intégré mais de ports
+permettant l'ajout de périphériques de stockage :
+\begin{itemize}
+  \item un port SATA pour connecter un disque dur ou un SSD,
+  \item deux ports USB 2.0,
+  \item un port microUSB 2.0 supportant la norme OTG, afin de permettre au 
+    périphérique de commander les échanges vers la carte,
+  \item un port SD et un port microSD.
+\end{itemize}
+
+\subsubsection{Autres connectiques}
+La carte dispose également d'un port Ethernet pour se connecter au réseau, ainsi
+que d'un port UART, permettant une liaison série avec un ordinateur. Cette
+liaison série sera notamment utilisée lors de la configuration de la carte. La
+carte embarque également les ports suivants :
+\begin{itemize}
+  \item HDMI
+  \item microphone et casque
+  \item GPIO/I2C
+  \item PCIe
+  \item LVDS (Low-Voltage Differential Signaling)
+  \item camera
+\end{itemize}
+
+\subsection{Image système}
+Afin de rendre la carte utilisable, il est bien entendu nécessaire d'y installer
+un système d'exploitation. Il est possible de booter la carte de deux manières:
+\begin{itemize}
+  \item via le port microUSB OTG,
+  \item via la mémoire flash interne
+\end{itemize}
+Le mode de boot est contrôlé par un interrupteur sur la carte. Dans notre cas,
+nous allons utiliser le code de boot préchargé dans la mémoire flash interne
+pour ensuite charger l'image présente sur une carte microSD et démarrer sur
+cette dernière.
+
+\subsubsection{Construction de l'image}
+Afin de construire l'image système pour la carte SABRE Lite, nous allons
+utiliser la suite d'outils du projet Yocto. Il s'agit d'un projet géré par la
+Linux Foundation et plusieurs grandes entreprises du monde de l'embarqué (Intel,
+ Texas Instruments, Huawei, ...). Cette suite permet notamment la construction
+d'images personnalisées pour systèmes embarqués. La construction se fait par
+couches (\texttt{layers}), chacune représentant un ensemble logique de recettes
+(\texttt{recipes}). Une recette est une suite d'instructions détaillant des 
+étapes de construction (dépendance à d'autres recettes, origine des sources,
+paquets à installer, ...).\cite{hallinan_create_2015}
+\paragraph{} Après avoir concocté les couches et les recettes nécessaires à la
+construction de l'image système (l'ajout d'un client \texttt{ssh} à une image
+minimale dans notre cas), l'outil \texttt{bitbake}\cite{purdie_bitbake_????}
+de la suite Yocto exécute toutes les recettes. Ce dernier construit entièrement
+l'image pour le système ciblé, notamment en téléchargeant les sources de tous
+les paquets et en les recompilant un à un. Des partitions (image kernel
+\texttt{uImage}, rootfs), ainsi qu'une image pour carte SD contenant ces
+dernières, sont alors générées. Une simple copie via un outil tel que
+\texttt{dd} sur une carte microSD permet d'utiliser cette image système sur la
+carte SABRE Lite.
