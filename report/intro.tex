@@ -1,2 +1,17 @@
 \section{Introduction}
-Introduction file
+
+Dans la plupart des domaines des systèmes embarqués, comme l'industrie du transport, il est nécessaire d'exécuter les applications à différents niveaux de criticité. Certaines applications demandent beaucoup de contraintes temps-réel, alors que d'autres se contentent d'accès ordonnancé aux ressources ( CPU, Mémoire ).\\
+\\
+Ce sujet s'intègre dans le cadre d'une collaboration avec Renault portant sur l'exécution de tâches à criticité mixte sur un multi-coeur.\\
+Le but de ce PSAR est de porter une application sur une carte industrielle.\\
+La carte en question est une Freescale SABRE Lite Board, qui nous offre suffisamment de puissance CPU pour exécuter plusieurs applications. Elle embarque un système multi-cœur ( Linux 3.0.35 ) , où dans notre approche, un coeur exécute l'application temps réel, tandis que les trois autres exécutent notre application.\\
+\\
+Le premier objectif de ce PSAR étant donc de trouver une application satisfaisant les contraintes de notre approche, à savoir, la génération de flux de traffic de données important sur le bus, et l'exécution en multi-coeur.\\
+Le choix c'est donc porté sur une application de mapping, GPS.\\
+\\
+Une deuxième étape consiste à porter notre application sur la carte, après configuration de cette dernière, ce qui posera donc à nouveau des contraintes de compatibilité et de nombre de dépendances, et rajoutera encore un nouveau critère de sélection d'application : le moins de dépendances, pour moins de complexité de portage.\\
+\\
+Une fois l'application portée, on en fera le profil mémoire, à l'aide d'un outil développé dans l'équipe. Cet outil détermine le profil d'utilisation de la bande passante mémoire par une application temps réel, et nous permettra d'étudier  l'impact de notre application sur la tâche temps réel s'exécutant sur le coeur dédié.\\
+\\
+
+\clearpage
