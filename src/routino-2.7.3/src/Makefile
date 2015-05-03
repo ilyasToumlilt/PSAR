@@ -41,7 +41,7 @@ SUBDIRS=$(foreach f,$(SUBFILES),$(dir $f))
 C=$(wildcard *.c)
 D=$(wildcard .deps/*.d)
 
-EXE=router
+EXE=router router_multi
 
 ########
 
@@ -52,6 +52,16 @@ all: all-local
 
 all-local: $(EXE)
 
+########
+
+ROUTER_MULTI_OBJ=router_multi.o \
+	   nodes.o segments.o ways.o relations.o types.o fakes.o \
+	   optimiser.o output_multi.o \
+	   files.o logging.o profiles.o xmlparse.o \
+	   results.o queue.o translations.o
+
+router_multi : $(ROUTER_MULTI_OBJ)
+	$(LD) $(ROUTER_MULTI_OBJ) -o $@ $(LDFLAGS)
 ########
 
 ROUTER_OBJ=router.o \
