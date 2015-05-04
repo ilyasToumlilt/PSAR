@@ -9,10 +9,11 @@ quantité de données pouvant transiter sur le bus est limitée. De ce fait, si
 plusieurs tâches s'exécutent en même temps et font beaucoup d'accès sur le bus, 
 il se peut que les performances de la tâche la plus critique diminuent. La 
 solution utilisée par l'industrie actuellement est d'empêcher l'exécution de 
-tâches best-effort quand des tâches temps réels s'exécutent. \\
+tâches \textit{best effort} quand des tâches temps réels s'exécutent. \\
 
 Dans le cadre d'une thèse en collaboration avec Renault, le LIP6 et l'INRIA, 
-Antoine Blin a proposé la solution suivante : les tâches best-effort peuvent 
+Antoine Blin a proposé la solution suivante : les tâches 
+\textit{best effort} peuvent 
 s'exécuter en même temps que les tâches temps réel. Cependant, dès que les 
 tâches peu critiques commencent à géner la tâche temps réel, on les suspend.\\
 
