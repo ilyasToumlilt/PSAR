@@ -19,14 +19,14 @@ puis en concurrence avec trois instances de Routino monothread occupant
 chacune un coeur, et enfin en concurrence avec un Routino multithread utilisant
 trois threads effectuant les calculs. Nous calculons ensuite le surcoût en
 termes de temps d'exécution par rapport à l'exécution seule de la tâche
-temps-réel (Figure \ref{timebench}). Il faut noter que
+temps-réel (Table \ref{timebench}). Il faut noter que
 dans le cas où les tâches temps-réel sont analysées individuellement, les 
 instances de Routinos concurrentes sont lancées en même temps que la tâche 
 temps-réel et stoppées dès la fin de cette dernière. Les mesures sont ainsi
 comparables, puisque chaque tâche aura été confrontée à une partie similaire 
 de l'exécution de Routino.
 
-\begin{figure}
+\begin{table}[h]
 \centering
 \begin{tabular}{l|c|c|c|c|c}
 Tâche & Temps moyen & \multicolumn{2}{c|}{Avec 3 Routinos} & 
@@ -46,7 +46,7 @@ Toutes   & 264.8 & 278.4 & 5.13\%  & 283.8 & 7.16\%\\
 \end{tabular}
 \caption{Temps d'exécution en isolation puis en concurrence (en ms) et surcoût}
 \label{timebench}
-\end{figure}
+\end{table}
 
 \paragraph{}
 On remarque que dans plus de la moitié des cas, le surcoût dépasse les 10\%, ce
@@ -56,3 +56,60 @@ fonctionnement du système. De manière plus concrète, cela signifie que le
 calcul d'itinéraire du GPS pourrait retarder la prise d'information du radar
 de régulation de distance, et causer un danger pour les passagers du véhicule.
 
+\subsection{Analyse de bande passante}
+Nous allons maintenant mesurer la bande passante utilisée lors de ces
+exécutions, en reprenant le même protocole que pour les mesures de temps. Les
+résultats obtenus (Figure \ref{bandwidth}) seront comparées aux
+mesures réalisées par Blin et al. \cite{blin_protecting_2015} et qui ont
+conduit à ce projet (approximations en Table \ref{measures}).
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{include/bandwidth.png}
+\caption{Utilisation moyenne de la bande passante lors des exécutions du
+ MiBench (en Mo/s)}
+\label{bandwidth}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l|c}
+Tâche & Besoins bande passante (Mo/s)\\
+\hline
+susan\_c & 750\\
+susan\_e & 600\\
+fft      & 200\\
+fft\_i   & 250\\
+aes\_e   & 450\\
+aes\_d   & 350\\
+qsort    & 600\\
+patricia & 500\\
+\end{tabular}
+\caption{Profils mémoire des tâches temps-réel}
+\label{measures}
+\end{table}
+
+\paragraph{}
+En nous basant sur les profils mémoire (Table \ref{measures}), les
+mesures d'utilisation de bande passante (Figure \ref{bandwidth}) et sur la
+caractérisation du système réalisée par Blin et al.\cite{blin_protecting_2015},
+nous dressons la table \ref{carac} donnant les surcoûts que nous devrions
+observer, ainsi que les surcoûts observés pour le Routino multithread.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l|c|c}
+Tâche & Caractérisation & Mesures\\
+\hline
+susan\_c & ~20\% & 12.87\%\\
+susan\_e & ~5\%  & 3.85\%\\
+fft      & ~2\%  & 18.64\%\\
+fft\_i   & ~2\%  & 20.75\%\\
+aes\_e   & ~5\%  & 4.31\% \\
+aes\_d   & ~2.5\%& 3.71\%\\
+qsort    & ~20\% & 17.14\%\\
+patricia & ~10\% & 10.87\%\\
+\end{tabular}
+\caption{Surcoûts selon caractérisation du système et surcoûts mesurés}
+\label{carac}
+\end{table}
