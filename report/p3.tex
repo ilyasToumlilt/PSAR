@@ -65,7 +65,7 @@ conduit à ce projet (approximations en Table \ref{measures}).
 
 \begin{figure}
 \centering
-\includegraphics[scale=0.3]{include/bandwidth.png}
+\includegraphics[scale=0.285]{include/bandwidth.png}
 \caption{Utilisation moyenne de la bande passante lors des exécutions du
  MiBench (en Mo/s)}
 \label{bandwidth}
@@ -98,18 +98,29 @@ observer, ainsi que les surcoûts observés pour le Routino multithread.
 
 \begin{table}[H]
 \centering
-\begin{tabular}{l|c|c}
-Tâche & Caractérisation & Mesures\\
+\begin{tabular}{l|c|c||c}
+Tâche & Caractérisation & Mesures & \'Ecart\\
 \hline
-susan\_c & ~20\% & 12.87\%\\
-susan\_e & ~5\%  & 3.85\%\\
-fft      & ~2\%  & 18.64\%\\
-fft\_i   & ~2\%  & 20.75\%\\
-aes\_e   & ~5\%  & 4.31\% \\
-aes\_d   & ~2.5\%& 3.71\%\\
-qsort    & ~20\% & 17.14\%\\
-patricia & ~10\% & 10.87\%\\
+susan\_c & ~20\% & 12.87\% & 7.13\%\\
+susan\_e & ~5\%  & 3.85\%  & 1.15\%\\
+fft      & ~2\%  & 18.64\% & 16.64\%\\
+fft\_i   & ~2\%  & 20.75\% & 18.75\%\\
+aes\_e   & ~5\%  & 4.31\%  & 0.69\%\\
+aes\_d   & ~2.5\%& 3.71\%  & 1.21\%\\
+qsort    & ~20\% & 17.14\% & 2.86\%\\
+patricia & ~10\% & 10.87\% & 0.87\%\\
 \end{tabular}
-\caption{Surcoûts selon caractérisation du système et surcoûts mesurés}
+\caption{Surcoûts selon caractérisation du système et surcoûts mesurés avec
+Routino multithread}
 \label{carac}
 \end{table}
+
+\paragraph{}
+On remarque que dans la majorité des cas, nos mesures sont cohérentes avec la
+caractérisation du système. Seules \texttt{fft} et \texttt{fft\_i} ont des
+écarts conséquents (plus de 15\%). Cela est probablement dû à la courte durée
+de ces tâches. En effet, leur exécution coïncide avec la période où
+Routino charge en mémoire de forts volumes de données (chargement de la carte)
+uniquement. Elles se terminent sûrement avant que Routino ne commence à 
+réellement calculer l'itinéraire. L'impact de la tâche \textit{best effort} est
+donc important sur la tâche temps-réel.
