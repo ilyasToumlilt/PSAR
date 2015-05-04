@@ -7,9 +7,9 @@
 
   \subsection{planetsplitter}
   
-  Le programme planetsplitter permet de convertir les cartes OpenStreetMap en 
-  fichier légers directement compréhensible par le programme qui effectue le 
-  routage. Le programme fonctionne de la façon suivante : \\
+  Le programme \texttt{planetsplitter} permet de convertir les cartes
+OpenStreetMap en fichiers légers directement compréhensibles par le programme
+qui effectue le routage. Le programme fonctionne de la façon suivante :
   
   \begin{lstlisting}
     ./planetsplitter [OPTIONS] [carte]  
@@ -20,20 +20,20 @@
   
   \begin{itemize}
     \renewcommand{\labelitemi}{$\bullet$}
-  \item \texttt{--dir=<directory>} : Dossier ou les fichiers de sortie seront 
+  \item \texttt{--dir=<directory>} : Dossier où les fichiers de sortie seront 
     sauvegardés.
   \item \texttt{--tagging=<filename>} : Permet d'indiquer le chemin menant au 
-    fichier \texttt{profiles.xml}.\\
+    fichier \texttt{profiles.xml}.
   \end{itemize}
 
-  La liste complete des options est disponible sur le site de Routino 
+  La liste complète des options est disponible sur le site de Routino
   \cite{bishop_routino_????}.
   
   \subsection{router / router\_multi}
   
   L'application permettant d'effectuer des calculs de plus court chemin est 
   \texttt{router}. La version parallèle de l'application est 
-  \texttt{router\_multi}. Le programme s'utilise de la façon suivante : \\
+  \texttt{router\_multi}. Le programme s'utilise de la façon suivante : 
 
   \begin{lstlisting}
     ./router [OPTIONS]
@@ -41,13 +41,13 @@
   \end{lstlisting}
   \vspace{1em}
 
-  Voici quelques options importantes utilisable avec les deux programmes : \\
+  Voici quelques options importantes utilisable avec les deux programmes : 
   
   \begin{itemize}
     \renewcommand{\labelitemi}{$\bullet$}
-  \item \texttt{--dir=<directory>} : Dossier ou se situe les fichiers *.mem
+  \item \texttt{--dir=<directory>} : Dossier où se situe les fichiers .mem
     produits par \texttt{planetsplitter}.
-  \item \texttt{--profiles=<file>} : Permet d'indiquer ou se situer le 
+  \item \texttt{--profiles=<file>} : Permet d'indiquer où se situe le 
     fichier \texttt{profiles.xml}.
   \item \texttt{--translations=<file>} : Chemin menant au fichier 
     \texttt{translations.xml}.
@@ -55,58 +55,60 @@
     transport à utiliser. Cette option peut prendre une des valeurs suivantes 
     : foot, horse, wheelchair, bicycle, moped, motorcycle, motorcar.
   \item \texttt{--lonXX, --latXX} : Permet de spécifier les coordonnées des 
-    points composant le trajet. Le nombre minimum de points est 2. \\
+    points composant le trajet. Le nombre minimum de points est 2. 
   \end{itemize}
 
   Un liste plus complète des options de l'application \texttt{router} est
   disponible sur le site de Routino \cite{bishop_routino_????}. En plus des 
   options présentes dans \texttt{router}, \texttt{router\_multi} dispose d'une 
-  option \texttt{--threads=N} permettant d'indiquer le nombre de thread que le 
+  option \texttt{--threads=N} permettant d'indiquer le nombre de threads que le 
   programme peut utiliser.
   
   \section{Scripts}
   \label{ann:scripts}
   
   Cette annexe vise à présenter les différents scripts que nous avons écrit 
-  afin de produire les graphes vus précédemments.
+  afin de produire les graphes vus précédemment.
 
-  \subsection{cpusage}
+  \subsection{cpusage.sh}
   \label{ann:cpusage}
   
   Ce script permet de produire deux fichiers (cpusage.out et threadusage.out)
-  qui servent de base a la production de deux graphes : l'utilisation des 
-  differents coeurs du processeur au cours de l'exécution du routeur parallèle, 
+  qui servent de base à la production de deux graphes : l'utilisation des 
+  différents coeurs du processeur au cours de l'exécution du routeur parallèle, 
   et l'utilisation du processeur par les threads au cours du temps. Il existe un
   certain nombre de variables globales au début du script permettant de definir 
   les chemins des fichiers nécessaire au bon fonctionnemment des scripts. Le 
   programme fonctionne de la façon suivante : on lance le routeur multithreadé 
-  avec un itinéraire assez long. On appelle top en mode batch afin d'avoir les 
+  avec un itinéraire assez long. On appelle \texttt{top} en mode batch afin d'avoir les 
   pourcentages d'utilisation des coeurs du processeur et ceux des threads. 
-  Une fois l'exécution du routeur terminé, on appelle le script 
-  \texttt{parse\_cpusage.pl} qui produit le fichier \texttt{cpusage.out} qui 
+  Une fois l'exécution du routeur terminée, on appelle le script 
+  \texttt{parse\_cpusage.pl} produisant le fichier \texttt{cpusage.out} qui 
   sert de base au graphe de la figure \ref{fig:cpusage}. On appelle ensuite 
   un second script qui produit le fichier \texttt{threadusage.out} qui sert de 
   base à la figure \ref{fig:threadusage}. 
   
-  \subsection{speedup}
+  \subsection{speedup.sh}
   \label{ann:speedup}
 
   Ce script permet de produire le graphe de la figure \ref{fig:speedup}. 
-  Ce programme permet de calculer le gain de la parallèlisation en fonction
+  Ce programme permet de calculer le gain de la parallélisation en fonction
   du nombre de points dans l'itinéraire. Il faut donc fournir à ce script un 
   fichier contenant la liste des points du parcours. Ce fichier doit avoir le 
   format suivant :
   \begin{lstlisting}
-    LATITUDE LONGITUDE
+    LATITUDE1 LONGITUDE1
+    LATITUDE2 LONGITUDE2
+    ...
   \end{lstlisting}
   \vspace{1em}
 
   Le script fonctionne de la manière suivante : on lit le fichier contenant les 
-  coordonnées des points. A chaque fois qu'on lit un point, on exécute les deux 
-  versions du routeur en mesurant leur temps d'exécutions avec le point rajouté 
+  coordonnées des points. \`A chaque fois qu'on lit un point, on exécute les deux 
+  versions du routeur en mesurant leur temps d'exécution avec le point rajouté 
   à l'itinéraire précédent. 
 
-  Le script peut être appelé avec les options suivantes : \\
+  Le script peut être appelé avec les options suivantes : 
   \begin{itemize}
     \renewcommand{\labelitemi}{$\bullet$}
   \item \texttt{--help} : Affiche l'aide.
@@ -120,7 +122,7 @@
   \item \texttt{--routermt=<file>} : Chemin menant au routeur parallèle.
   \item \texttt{--transport=<type>} : Type de transport.
   \item \texttt{--output=<file>} : Fichier de sortie du script.
-  \item \texttt{--threads=<number>} : Nombre de threads utilisé par le routeur
+  \item \texttt{--threads=<number>} : Nombre de threads utilisées par le routeur
     parallèle.
   \end{itemize}
 
@@ -130,17 +132,17 @@
   \begin{itemize}
     \renewcommand{\labelitemi}{$\bullet$}
   \item Durée d'exécution (en isolation et en concurrence) des tâches temps réel
-  \item Surcout du temps d'exéuction lorsqu'exécuté en concurrence.
+  \item Surcoût du temps d'exécution lorsqu'elles sont exécutées en concurrence.
   \item Trafic mémoire (lecture et écriture).
   \end{itemize}
 
-  Des fichiers de données pouvant être traité par gnuplot sont produits. Des
-  scripts de traçage pour gnuplot sont disponibles (extension .plot). 
+  Des fichiers de données pouvant être traités par \texttt{gnuplot} sont produits. Des
+  scripts de traçage pour \texttt{gnuplot} sont disponibles (extension .plot). 
 
   \subsection{bandwidth.sh}
 
-  Ce script prend les sorties du script précédent (bench.sh) et produit un 
-  fichier de donnée pour gnuplot reflétant la bande passante utilisée en 
+  Ce script prend les sorties du script précédent (\texttt{bench.sh}) et produit un 
+  fichier de données pour \texttt{gnuplot} reflétant la bande passante utilisée en 
   moyenne sur le système durant l'exécution des tâches temps réel. 
 
 \end{appendices}
