@@ -3,14 +3,14 @@
 \subsection{Caractéristiques techniques}
 
 \subsubsection{Architecture interne}
-La carte SABRE Lite\cite{_i.mx_2014} embarque un processeur i.MX 6, basé sur le processeur ARM
-Cortex A9 MPCore. Il s'agit d'un processeur quad-core cadencée à 1 GHz, 
-disposant de caches L1 de 32 Ko ainsi que d'un cache L2 de 1 Mo partagé pour les
-quatre coeurs. La carte dispose également de 1 Go de mémoire vive (DDR3). Le
-contrôleur mémoire contient plusieurs compteurs permettant la mesure de 
-l'activité mémoire qui seront utilisés dans la phase de profilage détaillée dans
-la suite de ce rapport. Une puce de mémoire flash SPI de 2 Mo contenant un code
-de boot est aussi présente.
+La carte SABRE Lite\cite{_i.mx_2014} embarque un processeur i.MX 6, basé sur le
+processeur ARM Cortex A9 MPCore. Il s'agit d'un processeur quad-core cadencée à
+1 GHz, disposant de caches L1 de 32 Ko ainsi que d'un cache L2 de 1 Mo partagé
+pour les quatre coeurs. La carte dispose également de 1 Go de mémoire vive
+(DDR3). Le contrôleur mémoire contient plusieurs compteurs permettant la mesure
+de l'activité mémoire qui seront utilisés dans la phase de profilage détaillée
+dans la suite de ce rapport. Une puce de mémoire flash SPI de 2 Mo contenant un
+code de boot est aussi présente.
 
 \subsubsection{Stockage}
 Le système ne dispose pas de stockage de masse interne intégré mais de ports
@@ -100,9 +100,9 @@ Dans notre cas, nous avons seulement :
 \begin{itemize}
 \renewcommand{\labelitemi}{$\bullet$}
 \item sélectionné le port microSD, 
-\item configuré les arguments de boot du kernel Linux (nom et débit de la console,
-  chemin vers le \textit{rootfs}, \texttt{rootwait} pour que le kernel attende
-  la détection de la carte SD),
+\item configuré les arguments de boot du kernel Linux (nom et débit de la
+  console, chemin vers le \textit{rootfs}, \texttt{rootwait} pour que le kernel
+  attende la détection de la carte SD),
 \item chargé l'image kernel (\texttt{uImage}) en mémoire,
 \item et enfin booté à l'adresse de l'image kernel.
 \end{itemize}
