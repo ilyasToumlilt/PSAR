@@ -2,19 +2,19 @@
 
 #Path leading to the directory containing the xml files (translations.xml and
 #profiles.xml)
-XMLDIR=/home/redha/m1/psar/git/PSAR/src/routino-2.7.3/src/xml
+XMLDIR=/home/maxime/Bureau/psar/src/routino-2.7.3/src/xml
 
 #Directory that contains the *.mem files
-MEMDIR=/home/redha/m1/psar/france
+MEMDIR=/home/maxime/Bureau/psar/src/routino-2.7.3/src/
 
 #File containing the list of waypoints you want to use.
 WAYPOINTSFILE="../tourdefrance.wp";
 
 #Path of the non multithreaded router
-ROUTERPATH=/home/redha/m1/psar/routino-2.7.3/src/router
+ROUTERPATH=/home/maxime/Bureau/psar/src/routino-2.7.3/src/router
 
 #Path of the multithreaded router
-MTROUTERPATH=/home/redha/m1/psar/git/PSAR/src/routino-2.7.3/src/router
+MTROUTERPATH=/home/maxime/Bureau/psar/src/routino-2.7.3/src/router_multi
 
 #Type of transport to use
 TRANSPORT="bicycle";
@@ -145,14 +145,12 @@ MTCMDLINE="$MTROUTERPATH --quiet --output-none --threads=$NBTHREADS --transport=
     while [[ ! -z "$lon" && ! -z "$lat" ]]
     do
 	start=$(date +%s%N);
-	$CMDLINE >/dev/null &
-	./cpusage.sh $! > usage.mono.$index
+	$CMDLINE >/dev/null 
 	end=$(date +%s%N);
 	routertime=$(((end-start)/1000000));
 
 	start=$(date +%s%N);
-	$MTCMDLINE >/dev/null &
-	./cpusage.sh $! > usage.multi.$index
+	$MTCMDLINE >/dev/null 
 	end=$(date +%s%N);
 	mtroutertime=$(((end-start)/1000000));
 	
