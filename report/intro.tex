@@ -1,17 +1,27 @@
 \section*{Introduction}
 
-Dans la plupart des domaines des systèmes embarqués, comme l'industrie du transport, il est nécessaire d'exécuter les applications à différents niveaux de criticité. Certaines applications demandent beaucoup de contraintes temps-réel, alors que d'autres se contentent d'accès ordonnancé aux ressources ( CPU, Mémoire ).\\
-\\
-Ce sujet s'intègre dans le cadre d'une collaboration avec Renault portant sur l'exécution de tâches à criticité mixte sur un multi-coeur.\\
-Le but de ce PSAR est de porter une application sur une carte industrielle.\\
-La carte en question est une Freescale SABRE Lite Board, qui nous offre suffisamment de puissance CPU pour exécuter plusieurs applications. Elle embarque un système multi-cœur ( Linux 3.0.35 ) , où dans notre approche, un coeur exécute l'application temps réel, tandis que les trois autres exécutent notre application.\\
-\\
-Le premier objectif de ce PSAR étant donc de trouver une application satisfaisant les contraintes de notre approche, à savoir, la génération de flux de traffic de données important sur le bus, et l'exécution en multi-coeur.\\
-Le choix c'est donc porté sur une application de mapping, GPS.\\
-\\
-Une deuxième étape consiste à porter notre application sur la carte, après configuration de cette dernière, ce qui posera donc à nouveau des contraintes de compatibilité et de nombre de dépendances, et rajoutera encore un nouveau critère de sélection d'application : le moins de dépendances, pour moins de complexité de portage.\\
-\\
-Une fois l'application portée, on en fera le profil mémoire, à l'aide d'un outil développé dans l'équipe. Cet outil détermine le profil d'utilisation de la bande passante mémoire par une application temps réel, et nous permettra d'étudier  l'impact de notre application sur la tâche temps réel s'exécutant sur le coeur dédié.\\
-\\
+Dans le monde de l'automobile, il n'est pas rare que des tâches à criticité 
+mixte aient à s'exécuter sur l'un des processeurs présent dans le système. 
+Cependant, il n'existe pour le moment aucun moyen d'assurer que les tâches les 
+plus critiques (les tâches avec des contraintes temps réel par exemple) puissent
+s'exécuter sans être génées par des tâches moins importantes. En effet, la 
+quantité de données pouvant transiter sur le bus est limité. De ce fait, si 
+plusieurs tâches s'exécutent en même temps et font beaucoup d'accès sur le bus, 
+il se peut que les performances de la tache la plus critique diminuent. La 
+solution utilisée par l'industrie actuellement est d'empecher l'exécution de 
+taches best-effort quand des tâches temps réels s'exécutent. \\
 
-\clearpage
+Dans le cadre d'une thèse en collaboration avec Renault, le LIP6 et l'INRIA, 
+Antoine Blin à proposé la solution suivante. Les tâche best-effort peuvent 
+s'exécuter en même temps que les taches temps réel. Cependant, dès que les 
+tâches peu critiques commencent à géner la tâche temps réel, on les suspend.\\
+
+Les buts de notre projet étaient donc les suivants. Dans un premier temps
+il fallait choisir une application à porter sur une carte embarqué qui nous a 
+été fournie (une carte SABRE Lite). Dans un second temps, une fois ce travail 
+terminé, nous devions effectuer le profilage de cet application. \\
+
+Nous verrons tout d'abord dans ce rapport les specifications de carte, ainsi 
+l'image système utilisé. Ensuite nous aborderons les applications que nous avons
+utilisé dans le cadre de ce projet et enfin nous présenterons le profilage de
+l'appliction que nous avons choisi.
