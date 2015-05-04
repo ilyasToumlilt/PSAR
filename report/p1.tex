@@ -4,7 +4,7 @@
 
 \subsubsection{Architecture interne}
 La carte SABRE Lite\cite{_i.mx_2014} embarque un processeur i.MX 6, basé sur le
-processeur ARM Cortex A9 MPCore. Il s'agit d'un processeur quad-core cadencée à
+processeur ARM Cortex A9 MPCore. Il s'agit d'un processeur quad-core cadencé à
 1 GHz, disposant de caches L1 de 32 Ko ainsi que d'un cache L2 de 1 Mo partagé
 pour les quatre coeurs. La carte dispose également de 1 Go de mémoire vive
 (DDR3). Le contrôleur mémoire contient plusieurs compteurs permettant la mesure
@@ -41,7 +41,7 @@ carte embarque également les ports suivants :
 
 \subsection{Image système}
 Afin de rendre la carte utilisable, il est bien entendu nécessaire d'y installer
-un système d'exploitation. Il est possible de booter la carte de deux manières:
+un système d'exploitation. Il est possible de booter la carte de deux manières :
 \begin{itemize}
 \renewcommand{\labelitemi}{$\bullet$}
 \item via le port microUSB OTG,
@@ -124,6 +124,6 @@ Dans notre cas, nous avons seulement :
 Les différents essais de déploiement d'images que nous avions nous mêmes créées
 ont systématiquement échoué lors du boot, la carte se bloquant lors du boot
 du kernel, après avoir été chargé en mémoire. Faute de temps, nous n'avons pu
-réoudre ce problème et nous sommes donc tournés vers une image déjà créée et
+résoudre ce problème et nous sommes donc tournés vers une image déjà créée et
 fonctionnelle, afin de nous concentrer sur la suite du projet, à savoir le
 portage de l'application ainsi que le profilage sur la carte.

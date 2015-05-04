@@ -11,17 +11,17 @@ de corréler ces deux analyses.
 
 \subsection{Analyse temporelle}
 Afin d'analyser l'impact sur le temps d'exécution de la tâche temps-réel, nous
-avons d'abord considérer chaque application temps-réel individuellement, puis
+avons d'abord considéré chaque application temps-réel individuellement, puis
 l'ensemble des applications comme une unique tâche, afin d'avoir un échantillon
 plus important. Pour ces deux jeux de mesures, nous avons mesuré la durée 
 d'exécution de la tâche temps-réel s'exécutant en isolation sur le système,
 puis en concurrence avec trois instances de Routino monothread occupant
 chacune un coeur, et enfin en concurrence avec un Routino multithread utilisant
 trois threads effectuant les calculs. Nous calculons ensuite le surcoût en
-termes de temps d'exécution par rapport à l'exécution seule de la tâche
+terme de temps d'exécution par rapport à l'exécution seule de la tâche
 temps-réel (Table \ref{timebench}). Il faut noter que
 dans le cas où les tâches temps-réel sont analysées individuellement, les 
-instances de Routinos concurrentes sont lancées en même temps que la tâche 
+instances de Routino concurrentes sont lancées en même temps que la tâche 
 temps-réel et stoppées dès la fin de cette dernière. Les mesures sont ainsi
 comparables, puisque chaque tâche aura été confrontée à une partie similaire 
 de l'exécution de Routino.
@@ -59,7 +59,7 @@ de régulation de distance, et causer un danger pour les passagers du véhicule.
 \subsection{Analyse de bande passante}
 Nous allons maintenant mesurer la bande passante utilisée lors de ces
 exécutions, en reprenant le même protocole que pour les mesures de temps. Les
-résultats obtenus (Figure \ref{bandwidth}) seront comparées aux
+résultats obtenus (Figure \ref{bandwidth}) seront comparés aux
 mesures réalisées par Blin et al. \cite{blin_protecting_2015} et qui ont
 conduit à ce projet (approximations en Table \ref{measures}).
 

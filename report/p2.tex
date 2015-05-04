@@ -1,103 +1,103 @@
 \section{Les applications}
 
 L'un des principaux but du projet était de porter une application respectant 
-certaines contraintes sur la carte présentée précedemment. En effet, la 
+certaines contraintes sur la carte présentée précédemment. En effet, la 
 première contrainte était que le programme devait être capable de générer un 
 trafic mémoire important sur le bus pendant une période de temps assez courte 
 (environ une seconde). L'autre contrainte qu'il fallait respecter était que 
 l'application devait pouvoir se trouver dans n'importe quelle voiture moderne. 
 Ce sont ces deux raisons qui nous ont amené à choisir une application de calcul 
 de plus court chemin basée sur des cartes OpenStreetMap. Il existe deux raisons 
-qui font que nous avons choisi ces cartes. D'une part elles sont libres 
-d'utilisation et d'autre part ce sont les cartes gratuites les plus 
+qui font que nous avons choisi ces cartes. D'une part, elles sont libres 
+d'utilisation et d'autre part, ce sont les cartes gratuites les plus 
 exhaustives. 
 
-\subsection{Selection de l'application}
+\subsection{Sélection de l'application}
 
 L'application que nous avons décidé de porter sur la carte a été choisie selon 
 un certain nombre de critères. \\
 
 Tout d'abord, il fallait que celle-ci ne soit pas écrite en Java (comme c'est 
 le cas pour de nombreuses applications utilisant les cartes OpenStreetMap) car 
-le profiling mémoire aurait été dans ce cas plus difficile à effectuer à cause 
-de la JVM. En effet, cette dernière effectue des optimisation au niveau de la 
+le profilage mémoire aurait été dans ce cas plus difficile à effectuer à cause 
+de la JVM. En effet, cette dernière effectue des optimisations au niveau de la 
 mémoire qui nous aurait empêché de quantifier les besoins réels de 
 l'application en terme de bande passante sur le bus. De plus, la quantité de 
 mémoire disponible sur la carte étant relativement restreinte (1 Gio), nous ne 
 pouvions pas nous permettre d'utiliser un language à ramasse-miettes comme 
-Java sachant que les cartes OpenStreetMap sont elles aussi très gourmande en 
+Java sachant que les cartes OpenStreetMap sont elles aussi très gourmandes en 
 mémoire. \\
 
-Ensuite, un autre critère de séléction pour l'application fût le nombre de 
+Ensuite, un autre critère de sélection pour l'application fut le nombre de 
 dépendances de la partie du programme s'occupant du calcul du plus court 
 chemin. En effet, bien que ce ne soit pas gênant d'un point de vue des 
 performances ou des accès mémoire, les dépendances rendent le portage de 
 l'application plus complexe. Il était donc utile, dans la limite du possible, 
 de trouver un programme avec un petit nombre de dépendences. \\
 
-Enfin, le dernier critère de selection fut le fait que l'application soit 
-multithreadé (ou qu'elle puisse l'être assez simplement). En effet, afin 
+Enfin, le dernier critère de sélection fut le fait que l'application soit 
+multi-threadé (ou qu'elle puisse l'être assez simplement). En effet, afin 
 d'étudier l'impact de l'application sur la tâche temps réel, il faut pouvoir 
 l'exécuter sur les trois coeurs du processeur qui ne sont pas occupés par la
-tache temps réel. Il aurait été possible de lancer trois instances d'un 
-programme contenant un seul thread, mais cela ne nous a pas semblé realiste 
+tâche temps réel. Il aurait été possible de lancer trois instances d'un 
+programme contenant un seul thread, mais cela ne nous a pas semblé réaliste 
 vis-à-vis du scénario que nous considérons. En effet, dans une voiture moderne, 
-l'application GPS n'est pas exécuté trois fois, mais elle contient plusieurs 
+l'application GPS n'est pas exécutée trois fois, mais elle contient plusieurs 
 fils d'exécutions qui effectuent une partie du calcul. \\
 
 En tenant compte des contraintes énoncées précédemment, nous avons trouvé deux
 applications : Open Source Routing Machine (OSRM) et Routino. L'application que
-nous avons porté sur la carte est Routino, pour des raisons qui seront énoncés
+nous avons porté sur la carte est Routino, pour des raisons qui seront énoncées
 plus tard dans le rapport.
 
 \subsection{Open Source Routing Machine}
 
 Un des deux programmes que nous avons examiné de près est Open Source Routing 
-Machine \cite{_open_????}. Cette application est une implémentation 
-très performante d'un moteur de calcul de plus court de chemin en C++. 
-Concrètement, c'est un serveur multithreadé capable de gérer plusieurs calculs 
+Machine \cite{_open_????}. Cette application est une implantation 
+très performante d'un moteur de calcul de plus court chemin en C++. 
+Concrètement, c'est un serveur multi-threadé capable de gérer plusieurs calculs 
 de chemins simultanément. Cependant, plusieurs raisons ont fait que nous 
 n'avons pas choisi de porter cette application sur la carte. \\
 
 Tout d'abord, le nombre de dépendences du programme est assez élevé (environ 
-6 bibliothèques), ce qui rentre en contradiction avec ce qui à été dit 
+6 bibliothèques), ce qui rentre en contradiction avec ce qui a été dit 
 précédemment et de ce fait rendait le portage de l'application inutilement
 compliqué. \\
 
 Ensuite, le programme qui effectue le calcul du plus court chemin est très 
-gourmand en mémoire. En effet, les cartes OpenStreetMap sont assez consequentes 
-($\sim$ 4.6 Gio pour la france compressé en bz2, et 22 Gio pour l'europe). C'est
- la raison pour laquelle toutes les applications possedent un outil permettant 
+gourmand en mémoire. En effet, les cartes OpenStreetMap sont assez conséquentes 
+($\sim$ 4.6 Gio pour la France compressée en bz2, et 22 Gio pour l'Europe). C'est
+ la raison pour laquelle toutes les applications possèdent un outil permettant 
 de convertir ces cartes en un format plus léger et directement compréhensible 
 par le programme qui va effectuer le calcul du plus court chemin. Cependant, 
-dans le cas d'OSRM, cet outil ne produit pas des cartes assez légeres, ce qui 
+dans le cas d'OSRM, cet outil ne produit pas des cartes assez légères, ce qui 
 fait que le programme qui effectue le routage consomme environ 3 Gio de mémoire 
 vive pour la carte de France. On ne peut donc pas utiliser ce programme avec la 
-carte de France sur la carte embarquée, car celle-ci ne contient qu'un Gio de 
-mémoire vive, et on veut que le programme n'entraine pas de swap. L'utilisation 
+carte de France sur le système embarqué, car celui-ci ne contient qu'un Gio de 
+mémoire vive, et on veut que le programme n'entraîne pas de swap. L'utilisation 
 d'une carte plus petite (comme celle de l'Ile-de-France, par exemple) n'aurait 
-pas aidé à regler le problème. En effet, comme le programme est très performant,
+pas aidé à régler le problème. En effet, comme le programme est très performant,
 les temps d'exécutions sur la carte aurait été trop courts par rapport à ceux 
-de la tache temps réel. \\
+de la tâche temps réel. \\
 
 Enfin, la façon dont l'application était parallélisée ne nous convenait pas. En 
 effet, OSRM permet de lancer plusieurs calculs de plus court chemin en même 
-temps mais l'algorithme effectuant ce calcul n'est lui-même pas parallele. 
+temps mais l'algorithme effectuant ce calcul n'est pas lui-même parallèle. 
 La parallélisation de cet algorithme nous a semblé peu pertinente au vu de la 
-complexité de celui-ci et des inconvenients que nous avons vu précédemment.
+complexité de celui-ci et des inconvénients que nous avons vu précédemment.
 
 \subsection{Routino}
 
 L'autre application que nous avons étudié de manière approfondie est Routino 
-\nocite{bishop_routino_????}. C'est l'application que nous avons décidé de
-porter sur la carte afin de pouvoir réaliser le profiling que nous verrons plus
+\cite{bishop_routino_????}. C'est l'application que nous avons décidé de
+porter sur la carte afin de pouvoir réaliser le profilage que nous verrons plus
 tard.
 
 \subsubsection{Présentation de l'application}
 
 Routino est une application écrite en C qui permet de calculer le chemin le 
 plus court (ou le chemin le plus rapide) entre deux points. Cette application 
-n'étant pas multithreadé, nous avons du effectuer le travail de parallélisation,
+n'étant pas multi-threadé, nous avons du effectuer le travail de parallélisation,
 comme nous le verrons plus tard dans le rapport.
 
 \paragraph{Raisons du choix de l'application}
@@ -106,13 +106,13 @@ comme nous le verrons plus tard dans le rapport.
 Il existe plusieurs facteurs qui nous ont poussé à choisir cette application 
 plutôt qu'une autre. \\
 
-D'une part le nombre de dépendences du programme effectuant le routage 
+D'une part, le nombre de dépendences du programme effectuant le routage 
 était nul, ce qui rendait le portage de l'application trivial. En effet, il 
-suffit de changer le compilateur normal par le cross-compilateur de notre choix 
-dans le makefile pour produire un exécutable compatible avec la carte. \\
+suffit de cross-compiler l'application avec un compilateur ARM pour produire
+un exécutable compatible avec la carte. \\
 
-D'autre part l'outil permettant de convertir les données OpenStreetMap en 
-fichiers compréhensible par l'application effectuant le routage est assez 
+D'autre part, l'outil permettant de convertir les données OpenStreetMap en 
+fichiers compréhensibles par l'application effectuant le routage est assez 
 efficace. En effet, pour la carte de France, les fichiers produits font environ 
 860 Mio et peuvent donc rentrer sans problème dans la mémoire de la carte. Cela 
 nous permet de calculer des plus courts chemins sur des distances plus 
@@ -122,10 +122,9 @@ conséquentes et donc d'augmenter le temps d'exécution de l'application. \\
 \subparagraph{}
 
 Avant de pouvoir effectuer des calculs de plus court chemins, il faut dans un 
-premier temps convertir les cartes OpenStreetMap récupérées sur internet en des 
-fichiers compréhensible par l'application de routage. C'est le rôle de 
-l'exécutable nommé \texttt{planetsplitter}, qui produit les quatre fichiers 
-suivant :
+premier temps convertir les cartes OpenStreetMap en des fichiers compréhensibles
+par l'application de routage. C'est le rôle de l'exécutable nommé
+\texttt{planetsplitter}, qui produit les quatre fichiers suivants :
 
 \begin{itemize}
 \item \texttt{nodes.mem} : C'est le fichier qui contient les noeuds du graphe.
@@ -142,7 +141,7 @@ Pour réaliser cette opération, le programme commence par mapper les fichiers
 vus ci-dessus en mémoire. Si on a découpé le trajet en plusieurs morceaux dans
 l'appel à \texttt{router} (par exemple si on indique qu'on veut le chemin le 
 plus rapide de Paris à Nice en passant par Pau), le programme va calculer 
-séquentiellement les chemins les plus rapides bout par bout. Dans notre exemple 
+séquentiellement les chemins les plus rapides bout par bout. Dans notre exemple,
 cela veut dire que l'application va d'abord calculer le chemin le plus rapide de 
 Paris à Pau, puis de Pau à Nice. Cela peut sembler évident, mais il est 
 important d'avoir ceci à l'esprit lorsque l'on abordera la parallélisation de 
@@ -150,13 +149,13 @@ l'application. L'algorithme utilisé par l'application est l'algorithme A*. \\
 
 Le fait que le programme mappe les fichiers produit par \texttt{planetsplitter} 
 peut entrainer des résultats peu fiables lors de la réalisation des benchmarks
- (seulement lors de la premiere execution de Routino). En effet, lorsqu'un 
+ (seulement lors de la premiere exécution de Routino). En effet, lorsqu'un 
 programme mappe des fichiers en mémoire, le système d'exploitation (ici Linux) 
 peut ne pas remplir la mémoire avec ces fichiers, et attendre que l'application 
 accéde aux zones de mémoires concernées avant d'effectuer les entrées/sorties 
 visant à rapatrier les fichiers en mémoire. De ce fait, lors de la première 
 exécution du routeur, les temps d'exécution sont plus grands car les fichiers 
-ne sont pas encore présent en mémoire. Cependant, lors des exécutions suivantes,
+ne sont pas encore présents en mémoire. Cependant, lors des exécutions suivantes,
 les temps sont plus faibles (et stables), car les données sont présentes dans le
  cache du système. Il faut donc s'assurer de bien exécuter Routino une première 
 fois avant de lancer les scripts de benchmarks (voir l'annexe \ref{ann:scripts}
@@ -172,8 +171,8 @@ L'utilisation des programmes \texttt{planetsplitter}, \texttt{router} et
 \subsubsection{Parallélisation}
 \paragraph{Première approche}
 Notre première intention fut de paralléliser l'algorithme effectuant le parcours
-de plus court chemin. Cependant après examen du code, nous sommes arrivés 
-à la conclusion que l'implémentation présente dans le programme n'est pas 
+de plus court chemin. Cependant, après examen du code, nous sommes arrivés 
+à la conclusion que l'implantation présente dans le programme n'est pas 
 parallélisable. En effet, l'algorithme utilise systématiquement les valeurs 
 des itérations précédentes pour effectuer son calcul.\\
 
@@ -231,25 +230,25 @@ et \ref{fig:speedup}).
 
 \subsection{Les tâches temps réel}
 
-Les taches temps réel que nous avons utilisés lors de notre projet sont issues 
+Les tâches temps réel que nous avons utilisé lors de notre projet sont issues 
 de la suite logicielle \texttt{MiBench} \cite{guthaus_mibench:_2001}. Les 
 programmes dont nous nous sommes servis sont les suivants : 
 
 \begin{itemize}
 \renewcommand{\labelitemi}{$\bullet$}
 \item \texttt{qsort} : Cette tâche effectue un quicksort sur le fichier qui lui 
-est donné en entrée. Dans notre cas, le fichier contient un enemble de nombres.
+est donné en entrée. Dans notre cas, le fichier contient un ensemble de nombres.
 \item \texttt{susan} : Cette tâche est un programme de reconnaissance d'images 
 capable de reconnaitre les coins et les bordures. Nous utilisons le programme 
 avec le grand jeu de donnée fourni avec la suite MiBench (une image complexe 
 en noir et blanc).
 \item \texttt{patricia} : Les Patricia tries sont des arbres préfixes obtenus 
 en fusionnant chaque noeuds n'ayant qu'un fils avec celui-ci. Cette structure 
-est particulièrement adaptée pour la recherche d'elements. Ce programme effectue
- des ajouts et des recherches dans des Patricia tries. Le jeu de donnée que nous
- utilisons est un ensemble d'adresses IP ayant effectué des requêtes sur un 
+est particulièrement adaptée pour la recherche d'éléments. Ce programme effectue
+des ajouts et des recherches dans des Patricia tries. Le jeu de données que
+nous utilisons est un ensemble d'adresses IP ayant effectué des requêtes sur un
 serveur web assez fréquenté.
-\item \texttt{aes} : Programme qui effectue un cryptage/décryptage de donnée 
+\item \texttt{aes} : Programme qui effectue un cryptage/décryptage de données 
 avec AES. Le jeu de donnée utilisé en entrée est un texte ASCII trouvé en ligne.
 \item \texttt{fft} : Programme qui effectue une transformée de Fourier rapide (et 
 son inverse). 
