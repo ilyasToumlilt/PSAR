@@ -7,10 +7,8 @@ trafic mémoire important sur le bus pendant une période de temps assez courte
 (environ une seconde). L'autre contrainte qu'il fallait respecter était que 
 l'application devait pouvoir se trouver dans n'importe quelle voiture moderne. 
 Ce sont ces deux raisons qui nous ont amené à choisir une application de calcul 
-de plus court chemin basée sur des cartes OpenStreetMap. Il existe deux raisons 
-qui font que nous avons choisi ces cartes. D'une part, elles sont libres 
-d'utilisation et d'autre part, ce sont les cartes gratuites les plus 
-exhaustives. 
+de plus court chemin basée sur des cartes OpenStreetMap. Ces cartes présentent
+l'avantage d'être libres d'utilisation, gratuites et complètes. 
 
 \subsection{Sélection de l'application}
 
@@ -62,12 +60,11 @@ n'avons pas choisi de porter cette application sur la carte. \\
 Tout d'abord, le nombre de dépendences du programme est assez élevé (environ 
 6 bibliothèques), ce qui rentre en contradiction avec ce qui a été dit 
 précédemment et de ce fait rendait le portage de l'application inutilement
-compliqué. \\
-
+compliqué.\\
 Ensuite, le programme qui effectue le calcul du plus court chemin est très 
-gourmand en mémoire. En effet, les cartes OpenStreetMap sont assez conséquentes 
+gourmand en mémoire. En effet, les cartes OpenStreetMap sont assez volumineuses
 ($\sim$ 4.6 Gio pour la France compressée en bz2, et 22 Gio pour l'Europe). C'est
- la raison pour laquelle toutes les applications possèdent un outil permettant 
+la raison pour laquelle toutes les applications possèdent un outil permettant 
 de convertir ces cartes en un format plus léger et directement compréhensible 
 par le programme qui va effectuer le calcul du plus court chemin. Cependant, 
 dans le cas d'OSRM, cet outil ne produit pas des cartes assez légères, ce qui 
@@ -78,8 +75,7 @@ mémoire vive, et on veut que le programme n'entraîne pas de swap. L'utilisatio
 d'une carte plus petite (comme celle de l'Ile-de-France, par exemple) n'aurait 
 pas aidé à régler le problème. En effet, comme le programme est très performant,
 les temps d'exécutions sur la carte aurait été trop courts par rapport à ceux 
-de la tâche temps réel. \\
-
+de la tâche temps réel.\\
 Enfin, la façon dont l'application était parallélisée ne nous convenait pas. En 
 effet, OSRM permet de lancer plusieurs calculs de plus court chemin en même 
 temps mais l'algorithme effectuant ce calcul n'est pas lui-même parallèle. 
@@ -97,42 +93,36 @@ tard.
 
 Routino est une application écrite en C qui permet de calculer le chemin le 
 plus court (ou le chemin le plus rapide) entre deux points. Cette application 
-n'étant pas multi-threadé, nous avons du effectuer le travail de parallélisation,
-comme nous le verrons plus tard dans le rapport.
+n'étant pas multi-threadée, nous avons du effectuer le travail de
+parallélisation, comme nous le verrons plus tard dans le rapport.
 
 \paragraph{Raisons du choix de l'application}
-\subparagraph{}
-
 Il existe plusieurs facteurs qui nous ont poussé à choisir cette application 
-plutôt qu'une autre. \\
-
-D'une part, le nombre de dépendences du programme effectuant le routage 
-était nul, ce qui rendait le portage de l'application trivial. En effet, il 
-suffit de cross-compiler l'application avec un compilateur ARM pour produire
-un exécutable compatible avec la carte. \\
-
+plutôt qu'une autre. D'une part, le nombre de dépendences du programme
+effectuant le routage était nul, ce qui rendait le portage de l'application
+trivial. En effet, il suffit de cross-compiler l'application avec un compilateur
+ARM pour produire un exécutable compatible avec la carte. \\
 D'autre part, l'outil permettant de convertir les données OpenStreetMap en 
 fichiers compréhensibles par l'application effectuant le routage est assez 
 efficace. En effet, pour la carte de France, les fichiers produits font environ 
 860 Mio et peuvent donc rentrer sans problème dans la mémoire de la carte. Cela 
 nous permet de calculer des plus courts chemins sur des distances plus 
-conséquentes et donc d'augmenter le temps d'exécution de l'application. \\
+conséquentes et donc d'augmenter le temps d'exécution de l'application.
 
 \paragraph{Fonctionnement général de l'application}
-\subparagraph{}
-
 Avant de pouvoir effectuer des calculs de plus court chemins, il faut dans un 
 premier temps convertir les cartes OpenStreetMap en des fichiers compréhensibles
 par l'application de routage. C'est le rôle de l'exécutable nommé
 \texttt{planetsplitter}, qui produit les quatre fichiers suivants :
 
 \begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
 \item \texttt{nodes.mem} : C'est le fichier qui contient les noeuds du graphe.
 \item \texttt{ways.mem} : C'est le fichier qui contient des informations 
 relatives aux arcs du graphe (type de transport autorisé sur l'arc, ...).
 \item \texttt{segments.mem} : C'est le fichier qui contient les arcs du graphe.
 \item \texttt{relations.mem} : Fichier qui contient des informations sur les 
-relations entre les arcs du graphe. \\
+relations entre les arcs du graphe.
 \end{itemize}
 
 Une fois ces fichiers obtenus, on peut appeler le programme \texttt{router} qui 
@@ -148,23 +138,20 @@ important d'avoir ceci à l'esprit lorsque l'on abordera la parallélisation de
 l'application. L'algorithme utilisé par l'application est l'algorithme A*. \\
 
 Le fait que le programme mappe les fichiers produit par \texttt{planetsplitter} 
-peut entrainer des résultats peu fiables lors de la réalisation des benchmarks
- (seulement lors de la premiere exécution de Routino). En effet, lorsqu'un 
+peut entraîner des résultats peu fiables lors de la réalisation des benchmarks
+(seulement lors de la premiere exécution de Routino). En effet, lorsqu'un 
 programme mappe des fichiers en mémoire, le système d'exploitation (ici Linux) 
 peut ne pas remplir la mémoire avec ces fichiers, et attendre que l'application 
-accéde aux zones de mémoires concernées avant d'effectuer les entrées/sorties 
+accède aux zones de mémoires concernées avant d'effectuer les entrées/sorties 
 visant à rapatrier les fichiers en mémoire. De ce fait, lors de la première 
 exécution du routeur, les temps d'exécution sont plus grands car les fichiers 
 ne sont pas encore présents en mémoire. Cependant, lors des exécutions suivantes,
 les temps sont plus faibles (et stables), car les données sont présentes dans le
- cache du système. Il faut donc s'assurer de bien exécuter Routino une première 
+cache du système. Il faut donc s'assurer de bien exécuter Routino une première 
 fois avant de lancer les scripts de benchmarks (voir l'annexe \ref{ann:scripts}
 pour plus d'informations). 
  
-
 \paragraph{Utilisation de l'application}
-\subparagraph{}
-
 L'utilisation des programmes \texttt{planetsplitter}, \texttt{router} et 
 \texttt{router\_multi} est expliquée en détail dans l'annexe \ref{ann:routino}.
 
@@ -172,9 +159,9 @@ L'utilisation des programmes \texttt{planetsplitter}, \texttt{router} et
 \paragraph{Première approche}
 Notre première intention fut de paralléliser l'algorithme effectuant le parcours
 de plus court chemin. Cependant, après examen du code, nous sommes arrivés 
-à la conclusion que l'implantation présente dans le programme n'est pas 
+à la conclusion que l'implantation présente dans le programme est difficilement
 parallélisable. En effet, l'algorithme utilise systématiquement les valeurs 
-des itérations précédentes pour effectuer son calcul.\\
+des itérations précédentes pour effectuer son calcul.
 
 \paragraph{Seconde approche}
 Plutôt que de paralléliser en profondeur l'algorithme, on se fixe l'objectif de
@@ -201,7 +188,7 @@ s'exécutant pour calculer l'itinéraire. Nous proposons l'implantation suivante
 \paragraph{}
 Pour vérifier que la parallélisation était efficace, nous avons mesuré à l'aide
 des scripts \texttt{cpusage.sh}, \texttt{threadusage.pl} et \texttt{speedup.sh}
-(Annexes \ref{ann:cpusage}, \ref{ann:threadusage} et \ref{ann:speedup})
+(Annexes \ref{ann:cpusage} et \ref{ann:speedup})
 respectivement l'utilisation globale des coeurs du processeur, l'utilisation du
 processeur par chaque tâche et le temps d'exécution en comparaison avec la 
 version monothread de Routino (Figures \ref{fig:cpusage}, \ref{fig:threadusage}
@@ -214,17 +201,33 @@ et \ref{fig:speedup}).
 \label{fig:cpusage}
 \end{figure}
 
+\paragraph{}
+Sur la figure \ref{fig:cpusage}, on observe bien que trois coeurs tournent à
+100\% la majorité du temps, et que le quatrième n'est pas utilisé. Cela montre
+que l'application utilise bien trois threads comme prévu, sachant qu'elle tourne
+seule sur la machine. L'activité diminue sur la fin de l'exécution car certaines
+portions de l'itinéraire sont plus courtes à calculer que d'autres.\\
+La figure \ref{fig:threadusage} nous montre l'activité de chaque thread de
+l'application. On constate une forte activité en début d'exécution sur les trois
+threads, chacun calculant des portions d'itinéraire. On remarque la terminaison
+de chacune des tâches tour à tour, n'ayant plus de portion à calculer, ainsi
+que le réveil de la tâche \texttt{main} pour mettre enf orme les résultats.\\
+De plus, on remarque un gain de performances (Figure \ref{fig:speedup}) de la 
+version multi-thread (ci-après appelé Routino MT) par rapport à la version
+monothreadée de Routino.
+
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.285]{include/thread_usage.png}
+\includegraphics[scale=0.27]{include/thread_usage.png}
 \caption{Utilisation CPU par tâche lors de l'exécution de Routino multithread}
 \label{fig:threadusage}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.285]{include/speedup.png}
-\caption{Temps d'exécution}
+\includegraphics[scale=0.27]{include/speedup.png}
+\caption{Temps d'exécution de Routino (en rouge) et de Routino MT (en vert) par
+rapport au nombre de portions}
 \label{fig:speedup}
 \end{figure}
 
