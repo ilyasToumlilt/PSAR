@@ -10,7 +10,7 @@
   Le programme planetsplitter permet de convertir les cartes OpenStreetMap en 
   fichier légers directement compréhensible par le programme qui effectue le 
   routage. Le programme fonctionne de la façon suivante : \\
- 
+  
   \begin{lstlisting}
     ./planetsplitter [OPTIONS] [carte]  
   \end{lstlisting}
@@ -19,10 +19,11 @@
   Voici une petite liste des options importantes :
   
   \begin{itemize}
-    \item \texttt{--dir=<directory>} : Dossier ou les fichiers de sortie seront 
-      sauvegardés.
-    \item \texttt{--tagging=<filename>} : Permet d'indiquer le chemin menant au 
-      fichier \texttt{profiles.xml}.\\
+    \renewcommand{\labelitemi}{$\bullet$}
+  \item \texttt{--dir=<directory>} : Dossier ou les fichiers de sortie seront 
+    sauvegardés.
+  \item \texttt{--tagging=<filename>} : Permet d'indiquer le chemin menant au 
+    fichier \texttt{profiles.xml}.\\
   \end{itemize}
 
   La liste complete des options est disponible sur le site de Routino 
@@ -43,17 +44,18 @@
   Voici quelques options importantes utilisable avec les deux programmes : \\
   
   \begin{itemize}
-    \item \texttt{--dir=<directory>} : Dossier ou se situe les fichiers *.mem
-      produits par \texttt{planetsplitter}.
-    \item \texttt{--profiles=<file>} : Permet d'indiquer ou se situer le 
-      fichier \texttt{profiles.xml}.
-    \item \texttt{--translations=<file>} : Chemin menant au fichier 
-      \texttt{translations.xml}.
-    \item \texttt{--transport=<transport>} : Permet de spécifier le type de 
-      transport à utiliser. Cette option peut prendre une des valeurs suivantes 
-      : foot, horse, wheelchair, bicycle, moped, motorcycle, motorcar.
-    \item \texttt{--lonXX, --latXX} : Permet de spécifier les coordonnées des 
-      points composant le trajet. Le nombre minimum de points est 2. \\
+    \renewcommand{\labelitemi}{$\bullet$}
+  \item \texttt{--dir=<directory>} : Dossier ou se situe les fichiers *.mem
+    produits par \texttt{planetsplitter}.
+  \item \texttt{--profiles=<file>} : Permet d'indiquer ou se situer le 
+    fichier \texttt{profiles.xml}.
+  \item \texttt{--translations=<file>} : Chemin menant au fichier 
+    \texttt{translations.xml}.
+  \item \texttt{--transport=<transport>} : Permet de spécifier le type de 
+    transport à utiliser. Cette option peut prendre une des valeurs suivantes 
+    : foot, horse, wheelchair, bicycle, moped, motorcycle, motorcar.
+  \item \texttt{--lonXX, --latXX} : Permet de spécifier les coordonnées des 
+    points composant le trajet. Le nombre minimum de points est 2. \\
   \end{itemize}
 
   Un liste plus complète des options de l'application \texttt{router} est
@@ -106,22 +108,39 @@
 
   Le script peut être appelé avec les options suivantes : \\
   \begin{itemize}
-    \item \texttt{--help} : Affiche l'aide.
-    \item \texttt{--xmldir=<dir>} : Dossier contenant les fichiers xml.
-    \item \texttt{--memdir<dir>} : Dossier contenant les fichiers produits
-      par \texttt{planetsplitter}.
-    \item \texttt{--waypoints=<file>} : Fichier contenant les coordonnées des 
-      points composant le parcours. Cette option est obligatoire si on ne 
-      modifie pas les variables dans le script.
-    \item \texttt{--router=<file>} : Chemin vers le routeur non parallèle.
-    \item \texttt{--routermt=<file>} : Chemin menant au routeur parallèle.
-    \item \texttt{--transport=<type>} : Type de transport.
-    \item \texttt{--output=<file>} : Fichier de sortie du script.
-    \item \texttt{--threads=<number>} : Nombre de threads utilisé par le routeur
-      parallèle.
+    \renewcommand{\labelitemi}{$\bullet$}
+  \item \texttt{--help} : Affiche l'aide.
+  \item \texttt{--xmldir=<dir>} : Dossier contenant les fichiers xml.
+  \item \texttt{--memdir<dir>} : Dossier contenant les fichiers produits
+    par \texttt{planetsplitter}.
+  \item \texttt{--waypoints=<file>} : Fichier contenant les coordonnées des 
+    points composant le parcours. Cette option est obligatoire si on ne 
+    modifie pas les variables dans le script.
+  \item \texttt{--router=<file>} : Chemin vers le routeur non parallèle.
+  \item \texttt{--routermt=<file>} : Chemin menant au routeur parallèle.
+  \item \texttt{--transport=<type>} : Type de transport.
+  \item \texttt{--output=<file>} : Fichier de sortie du script.
+  \item \texttt{--threads=<number>} : Nombre de threads utilisé par le routeur
+    parallèle.
   \end{itemize}
 
   \subsection{bench.sh}
 
+  Ce script réalise un ensemble de mesures : 
+  \begin{itemize}
+    \renewcommand{\labelitemi}{$\bullet$}
+  \item Durée d'exécution (en isolation et en concurrence) des tâches temps réel
+  \item Surcout du temps d'exéuction lorsqu'exécuté en concurrence.
+  \item Trafic mémoire (lecture et écriture).
+  \end{itemize}
+
+  Des fichiers de données pouvant être traité par gnuplot sont produits. Des
+  scripts de traçage pour gnuplot sont disponibles (extension .plot). 
+
   \subsection{bandwidth.sh}
+
+  Ce script prend les sorties du script précédent (bench.sh) et produit un 
+  fichier de donnée pour gnuplot reflétant la bande passante utilisée en 
+  moyenne sur le système durant l'exécution des tâches temps réel. 
+
 \end{appendices}
