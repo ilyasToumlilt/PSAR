@@ -53,7 +53,7 @@ plus tard dans le rapport.
 \subsection{Open Source Routing Machine}
 
 Un des deux programmes que nous avons examiné de près est Open Source Routing 
-Machine (http://project-osrm.org/). Cette application est une implémentation 
+Machine \cite{_open_????}. Cette application est une implémentation 
 très performante d'un moteur de calcul de plus court de chemin en C++. 
 Concrètement, c'est un serveur multithreadé capable de gérer plusieurs calculs 
 de chemins simultanément. Cependant, plusieurs raisons ont fait que nous 
@@ -77,7 +77,7 @@ carte de France sur la carte embarquée, car celle-ci ne contient qu'un Gio de
 mémoire vive, et on veut que le programme n'entraine pas de swap. L'utilisation 
 d'une carte plus petite (comme celle de l'Ile-de-France, par exemple) n'aurait 
 pas aidé à regler le problème. En effet, comme le programme est très performant,
- les temps d'exécutions sur la carte aurait été trop courts par rapport à ceux 
+les temps d'exécutions sur la carte aurait été trop courts par rapport à ceux 
 de la tache temps réel. \\
 
 Enfin, la façon dont l'application était parallélisée ne nous convenait pas. En 
@@ -89,8 +89,9 @@ complexité de celui-ci et des inconvenients que nous avons vu précédemment.
 \subsection{Routino}
 
 L'autre application que nous avons étudié de manière approfondie est Routino 
-(www.routino.org). C'est l'application que nous avons décidé de porter sur la 
-carte afin de pouvoir réaliser le profiling que nous verrons plus tard.
+\nocite{bishop_routino_????}. C'est l'application que nous avons décidé de
+porter sur la carte afin de pouvoir réaliser le profiling que nous verrons plus
+tard.
 
 \subsubsection{Présentation de l'application}
 
@@ -139,7 +140,7 @@ Une fois ces fichiers obtenus, on peut appeler le programme \texttt{router} qui
 est capable d'effectuer des calculs de plus court chemin entre deux points. 
 Pour réaliser cette opération, le programme commence par mapper les fichiers 
 vus ci-dessus en mémoire. Si on a découpé le trajet en plusieurs morceaux dans
-l'appel à \texttt{routeur} (par exemple si on indique qu'on veut le chemin le 
+l'appel à \texttt{router} (par exemple si on indique qu'on veut le chemin le 
 plus rapide de Paris à Nice en passant par Pau), le programme va calculer 
 séquentiellement les chemins les plus rapides bout par bout. Dans notre exemple 
 cela veut dire que l'application va d'abord calculer le chemin le plus rapide de 
@@ -158,25 +159,80 @@ exécution du routeur, les temps d'exécution sont plus grands car les fichiers
 ne sont pas encore présent en mémoire. Cependant, lors des exécutions suivantes,
 les temps sont plus faibles (et stables), car les données sont présentes dans le
  cache du système. Il faut donc s'assurer de bien exécuter Routino une première 
-fois avant de lancer les scripts de benchmarks (voir l'annexe B pour plus 
-d'informations). 
+fois avant de lancer les scripts de benchmarks (voir l'annexe \ref{ann:scripts}
+pour plus d'informations). 
  
 
 \paragraph{Utilisation de l'application}
 \subparagraph{}
 
 L'utilisation des programmes \texttt{planetsplitter}, \texttt{router} et 
-\texttt{router\_multi} est expliquée en détail dans l'annexe A.
+\texttt{router\_multi} est expliquée en détail dans l'annexe \ref{ann:routino}.
 
 \subsubsection{Parallélisation}
+\paragraph{Première approche}
+******  ON EST MAUVAIS, ON SAIT PAS PARALLELISER *******\\
+
+\paragraph{Seconde approche}
+Plutôt que de paralléliser en profondeur l'algorithme, on se fixe l'objectif de
+paralléliser le calcul des segments passés en paramètre de l'itinéraire. Ainsi,
+si l'on souhaite calculer un itinéraire pour se rendre de Paris à Nice en
+passant par Pau, on calculera en même temps Paris-Pau et Pau-Nice. Cette
+approche permet de rendre multi-tâches l'application rapidement et avec un
+minimum de données partagées entre les tâches, puisque les calculs de portions
+sont indépendants les uns des autres. La version multithread de Routino propose
+donc une option \texttt{--threads} afin de spécifier le nombre de tâches 
+s'exécutant pour calculer l'itinéraire. Nous proposons l'implantation suivante :
+\begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
+\item la tâche principale (\texttt{main}) analyse les options et prépare les
+  données pour le calcul de chaque portion. Elle lance ensuite le nombre de
+  tâches demandées, calcule la dernière portion, puis s'endore en attendant que
+  toutes les portions soient calculées. Elle se réveille ensuite pour rassembler
+  les résultats et produire les fichiers de sortie.
+\item les tâches filles piochent dans la liste des portions à calculer et
+  calculent l'itinéraire associé à la portion. Lorsqu'il n'y a plus de portion
+  à calculer, la tâche meurt. Si elle était la dernière tâche fille, elle
+  débloque la tâche principale avant de mourir.
+\end{itemize}
+\paragraph{}
+Pour vérifier que la parallélisation était efficace, nous avons mesuré à l'aide
+des scripts \texttt{cpusage.sh}, \texttt{threadusage.pl} et \texttt{speedup.sh}
+(Annexes \ref{ann:cpusage}, \ref{ann:threadusage} et \ref{ann:speedup})
+respectivement l'utilisation globale des coeurs du processeur, l'utilisation du
+processeur par chaque tâche et le temps d'exécution en comparaison avec la 
+version monothread de Routino (Figures \ref{fig:cpusage}, \ref{fig:threadusage}
+et \ref{fig:speedup}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.285]{include/cpu_usage.png}
+\caption{Utilisation CPU par coeur lors de l'exécution de Routino multithread}
+\label{fig:cpusage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.285]{include/thread_usage.png}
+\caption{Utilisation CPU par tâche lors de l'exécution de Routino multithread}
+\label{fig:threadusage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.285]{include/speedup.png}
+\caption{Temps d'exécution}
+\label{fig:speedup}
+\end{figure}
 
 \subsection{Les tâches temps réel}
 
 Les taches temps réel que nous avons utilisés lors de notre projet sont issues 
-de la suite logicielle \texttt{MiBench} (wwweb.eecs.umich.edu/mibench/). Les 
+de la suite logicielle \texttt{MiBench} \cite{guthaus_mibench:_2001}. Les 
 programmes dont nous nous sommes servis sont les suivants : 
 
 \begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
 \item \texttt{qsort} : Cette tâche effectue un quicksort sur le fichier qui lui 
 est donné en entrée. Dans notre cas, le fichier contient un enemble de nombres.
 \item \texttt{susan} : Cette tâche est un programme de reconnaissance d'images 
