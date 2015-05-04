@@ -171,7 +171,11 @@ L'utilisation des programmes \texttt{planetsplitter}, \texttt{router} et
 
 \subsubsection{Parallélisation}
 \paragraph{Première approche}
-******  ON EST MAUVAIS, ON SAIT PAS PARALLELISER *******\\
+Notre première intention fut de paralléliser l'algorithme effectuant le parcours
+de plus court chemin. Cependant après examen du code, nous sommes arrivés 
+à la conclusion que l'implémentation présente dans le programme n'est pas 
+parallélisable. En effet, l'algorithme utilise systématiquement les valeurs 
+des itérations précédentes pour effectuer son calcul.\\
 
 \paragraph{Seconde approche}
 Plutôt que de paralléliser en profondeur l'algorithme, on se fixe l'objectif de
