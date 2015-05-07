@@ -6,6 +6,8 @@ set style data histogram
 # Give the bars a plain fill pattern, and draw a solid line around them.
 set style fill solid border
 
+set lmargin 12
+
 set style histogram clustered
 plot for [COL=2:4] 'bandwidth.out' using COL:xticlabels(1) title columnheader
 
@@ -15,7 +17,7 @@ set border 3
 set grid
 
 #set title 'Routino MT - CPU usage per core' font "sans,25"
-#set ylabel 'Bandwidth usage (in MB)' font "sans,25"
-set key spacing 2 font "sans,20"
+set ylabel 'Bandwidth usage (in MB)' font "sans,25"
+set key spacing 3 font "sans,20"
 
 replot
