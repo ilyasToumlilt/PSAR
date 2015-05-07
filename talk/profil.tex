@@ -1,0 +1,93 @@
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Profilage}
+\begin{itemize}
+  \item Impact tâche TR
+    \vspace{1em}
+  \item Temps
+    \vspace{1em}
+  \item Bande passante
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Profilage temporel}
+\framesubtitle{Protocole}
+\begin{itemize}
+  \item Isolation
+    \vspace{1em}
+  \item Avec 3 Routino
+    \vspace{1em}
+  \item Avec Routino MT (3 threads)
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Profilage temporel}
+\framesubtitle{Résultats}
+\begin{center}
+\includegraphics[scale=0.2]{include/overhead.png}
+\end{center}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Profilage bande passante}
+\framesubtitle{Protocole}
+\begin{itemize}
+  \item Isolation
+    \vspace{1em}
+  \item Avec 3 Routino
+    \vspace{1em}
+  \item Avec Routino MT (3 threads)
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Profilage bande passante}
+\framesubtitle{Résultats}
+\begin{center}
+\includegraphics[scale=0.2]{include/bandwidth.png}
+\end{center}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Vérification des résultats}
+\framesubtitle{Profils des tâches temps-réel}
+\begin{center}
+\includegraphics[scale=0.35]{include/profilsTR.pdf}
+\end{center}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Vérification des résultats}
+\framesubtitle{Surcoût en temps d'exécution}
+\begin{center}
+\begin{tabular}{l|c|c||c}
+Tâche & Caractérisation & Mesures & \'Ecart\\
+\hline
+susan\_c & ~20\% & 12.87\% & 7.13\%\\
+susan\_e & ~5\%  & 3.85\%  & 1.15\%\\
+fft      & ~2\%  & 18.64\% & 16.64\%\\
+fft\_i   & ~2\%  & 20.75\% & 18.75\%\\
+aes\_e   & ~5\%  & 4.31\%  & 0.69\%\\
+aes\_d   & ~2.5\%& 3.71\%  & 1.21\%\\
+qsort    & ~20\% & 17.14\% & 2.86\%\\
+patricia & ~10\% & 10.87\% & 0.87\%\\
+\end{tabular}
+\end{center}
+\end{frame}
+
+%---------------------------------------------------------------------------
