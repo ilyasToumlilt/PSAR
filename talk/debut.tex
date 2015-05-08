@@ -1,77 +1,99 @@
 \begin{frame}
-\frametitle{Contexte (2)}
-  \visible<1-3>{
+  \frametitle{Contexte (2)}
+  \visible<1->{
     \only<1>{
       \begin{center}
-        \includegraphics[scale=0.8]{include/tableau_de_bord1.jpg}
+        \includegraphics[scale=0.7]{include/tableau_de_bord1.jpg}
       \end{center}
     }
-    \only<2-3>{
+    \only<2->{
       \begin{center}
-        \includegraphics[scale=0.8]{include/tableau_de_bord2.jpg}
+        \includegraphics[scale=0.7]{include/tableau_de_bord2.jpg}
       \end{center}
     }
   }
-  \visible<3>{
+  \visible<3->{
     \begin{center}
-    \includegraphics[scale=0.25]{include/archi.pdf}
+      \includegraphics[trim=0 0 0 130,clip,scale=0.2]{include/archi.pdf}
     \end{center}
   }
+  \visible<4>{
+    \begin{alertblock}{Problèmes}
+      Gestion du partage des ressources, et notamment du bus.
+    \end{alertblock}
+  }
 \end{frame}
 
 \begin{frame}
-\frametitle{Objectifs}
-\begin{itemize}
-  \item Choix de l'application
+  \frametitle{Objectifs}
+  Dans le cadre de la thèse d'Antoine Blin en cours au Lip6, lse objectifs de
+  ce projet SAR sont multiples :
+  \vspace{1em}
+  \begin{enumerate}
+  \item Choisir une application pour automobile à fort trafic mémoire
     \vspace{1em}
-  \item Parallélisation de l'application
+  \item Porter cette application sur la carte embarquée
     \vspace{1em}
-  \item Profilage
-\end{itemize}
+  \item Paralléliser cette application
+    \vspace{1em}
+  \item \'Etudier l'impact cette application sur une tâche temps-réel
+  \end{enumerate}
 \end{frame}
 
 \begin{frame}
-\frametitle{Choix de l'application}
-\begin{itemize}
-  \item Beaucoup d'accès mémoire
+  \frametitle{Choix de l'application}
+  \framesubtitle{Critères de sélection}
+  \begin{block}{Type d'application}
+    Nous avons choisi de porter une application de calcul d'itinéraires car elles
+    manipulent des graphes de tailles importantes.
+  \end{block}
+  Les autres critères sont :
+  \begin{itemize}
+  \item Langage : pas de \textit{JVM}
     \vspace{1em}
-  \item Trouvable dans une voiture
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Critères de selection}
-\begin{itemize}
-  \item Langage
+  \item Nombre de dépendances faible
     \vspace{1em}
-  \item Nombre de dépendances
-    \vspace{1em}
-  \item Consommation mémoire
+  \item Consommation mémoire contenue : 1 Go de RAM sur la carte
     \vspace{1em}
   \item Parallélisable
-\end{itemize}
+  \end{itemize}
 \end{frame}
 
-
 \begin{frame}
-\frametitle{Open Street Routing Machine}
-Inconvénients :
-\begin{itemize}
-\item Nombre de dépendences élevé
-    \vspace{1em}
-\item Consommation mémoire trop élevée
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Routino}
-\begin{itemize}
-\item Aucune dépendance
-    \vspace{1em}
-\item Peu gourmand en mémoire
-    \vspace{1em}
-\item ... mais pas parallèle
-\end{itemize}
+  \frametitle{Choix de l'application}
+  \framesubtitle{Comparaison des candidats}
+  \begin{block}{}
+    Deux applications, écrites en C, se sont dégagées :
+  \end{block}
+  \begin{tabular}{c|c}
+    \textbf{Open Street Routing Machine} & \textbf{Routino} \\
+    \hline
+    \begin{minipage}{5cm}
+      \vspace{1em}
+      \begin{itemize}
+      \item[$+$] Parallèle (client-serveur)
+        \vspace{1em}
+      \item[$-$] Nombre de dépendances
+        \vspace{1em}
+      \item[$-$] Trop gourmand en mémoire
+      \end{itemize}
+    \end{minipage}
+    &
+    \begin{minipage}{5cm}
+      \vspace{1em}
+      \begin{itemize}
+      \item[$+$] Aucune dépendance
+        \vspace{1em}
+      \item[$+$] Peu gourmand en mémoire
+        \vspace{1em}
+      \item[$-$] Pas parallèle
+      \end{itemize}
+    \end{minipage}
+  \end{tabular}
+  \visible<2>{
+    \begin{exampleblock}{Application choisie}
+      Routino pour sa facilité de portage et son occupation mémoire contenue.
+    \end{exampleblock}
+  }
 \end{frame}
 
