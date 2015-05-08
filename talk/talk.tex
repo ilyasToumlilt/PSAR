@@ -133,14 +133,32 @@ UPMC \\ % Your institution for the title page
 %---------------------------------------------------------
 
 \begin{frame}
-\frametitle{Récapitulatif}
-\begin{itemize}
-  \item Application GPS parallélisée
-    \vspace{1em}
-  \item Profilage temporel et mémoire
-    \vspace{1em}
-  \item Impact sur tâches temps-réel
-\end{itemize}
+\frametitle{Conclusion}
+\begin{enumerate}
+  \visible<1->{
+  \item Réalisations
+    \begin{itemize}
+    \item Sélection d'une application
+    \item Portage et parallélisation de l'application
+    \item \'Etude de la parallélisation
+    \item \'Etude de l'impact sur une tâche temps-réel MiBench
+    \end{itemize}
+  }
+  \visible<2->{
+  \item Travail à court terme
+    \begin{itemize}
+      \item Vérifier si l'overhead diminue avec l'algorithme d'ordonnancement
+        d'Antoine Blin
+      \item Soumettre un patch pour Routino
+    \end{itemize}
+  }
+  \visible<3->{
+    \item Travail à long terme
+      \begin{itemize}
+        \item \'Etendre la parallélisation au trajets sans étapes
+      \end{itemize}
+  }
+\end{enumerate}
 \end{frame}
 
 \end{document}
