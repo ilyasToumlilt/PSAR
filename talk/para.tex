@@ -15,7 +15,7 @@
   \frametitle{Parallélisation de Routino}
 
   \begin{itemize}
-  \item Tour de France : En séquentiel
+  \item Tour de France : en séquentiel
   \end{itemize}
 
   \begin{center}
@@ -30,7 +30,7 @@
   \frametitle{Parallélisation de Routino}
   
   \begin{itemize}
-  \item Tour de France : En Multithread
+  \item Tour de France : en parallèle
   \end{itemize}
 
   \begin{center}
@@ -45,9 +45,9 @@
   \frametitle{Parallélisation de Routino}
 
   \begin{itemize}
-  \item Rendre les portions indépendantes/
+  \item Rendre les portions indépendantes
     \vspace{1em}
-  \item Un minimum de synchronisation
+  \item Minimiser les synchronisations
   \end{itemize}
 
 \end{frame}
@@ -68,16 +68,27 @@
 % --------------------------------------------------
 
 \begin{frame}
-  \frametitle{Evaluation du Multithread}
+  \frametitle{\'Evaluation de la parallélisation}
 
-  \begin{itemize}
-  \item Usage CPU
-  \end{itemize}
-
-  \begin{center}
-    \includegraphics[scale=0.24]{include/cpu_usage.png}
-  \end{center}
-
+  \only<1>{
+    \begin{itemize}
+    \item Utilisation CPU par coeur
+    \end{itemize}
+    
+    \begin{center}
+      \includegraphics[scale=0.24]{include/cpu_usage.png}
+    \end{center}
+  }
+  \only<2>{
+    \begin{itemize}
+    \item Utilisation CPU par tâche
+    \end{itemize}
+    
+    \begin{center}
+      \includegraphics[scale=0.24]{include/thread_usage.png}
+    \end{center}
+  }
+  
 \end{frame}
 
 % --------------------------------------------------
