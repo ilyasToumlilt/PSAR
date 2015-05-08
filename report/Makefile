@@ -8,4 +8,4 @@ biblio: bibliography.bib report.aux
 	pdflatex report.tex
 
 clean:
-	rm -f *.aux *.log *.pdf
+	rm -f *.aux *.log *.pdf *.bbl *.blg *.toc
