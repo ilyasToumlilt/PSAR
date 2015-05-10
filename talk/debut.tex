@@ -51,9 +51,9 @@
   \begin{itemize}
   \item Langage : pas de \textit{JVM}
     \vspace{1em}
-  \item Nombre de dépendances faible
-    \vspace{1em}
   \item Consommation mémoire contenue : 1 Go de RAM sur la carte
+    \vspace{1em}
+  \item Nombre de dépendances faible
     \vspace{1em}
   \item Parallélisable
   \end{itemize}
@@ -63,34 +63,38 @@
   \frametitle{Choix de l'application}
   \framesubtitle{Comparaison des candidats}
   \begin{block}{}
-    Deux applications, écrites en C, se sont dégagées :
+    Deux applications, écrites en C++ et C, se sont dégagées :
   \end{block}
   \begin{tabular}{c|c}
     \textbf{Open Street Routing Machine} & \textbf{Routino} \\
     \hline
-    \begin{minipage}{5cm}
-      \vspace{1em}
-      \begin{itemize}
-      \item[$+$] Parallèle (client-serveur)
+    \visible<2->{
+      \begin{minipage}{5cm}
         \vspace{1em}
-      \item[$-$] Nombre de dépendances
-        \vspace{1em}
-      \item[$-$] Trop gourmand en mémoire
-      \end{itemize}
-    \end{minipage}
+        \begin{itemize}
+        \item[$+$] Parallèle (client-serveur)
+          \vspace{1em}
+        \item[$-$] Nombre de dépendances
+          \vspace{1em}
+        \item[$-$] Trop gourmand en mémoire
+        \end{itemize}
+      \end{minipage}
+    }
     &
-    \begin{minipage}{5cm}
-      \vspace{1em}
-      \begin{itemize}
-      \item[$+$] Aucune dépendance
+    \visible<3->{
+      \begin{minipage}{5cm}
         \vspace{1em}
-      \item[$+$] Peu gourmand en mémoire
-        \vspace{1em}
-      \item[$-$] Pas parallèle
-      \end{itemize}
-    \end{minipage}
+        \begin{itemize}
+        \item[$+$] Aucune dépendance
+          \vspace{1em}
+        \item[$+$] Peu gourmand en mémoire
+          \vspace{1em}
+        \item[$-$] Pas parallèle
+        \end{itemize}
+      \end{minipage}
+    }
   \end{tabular}
-  \visible<2>{
+  \visible<4->{
     \begin{exampleblock}{Application choisie}
       Routino pour sa facilité de portage et son occupation mémoire contenue.
     \end{exampleblock}
