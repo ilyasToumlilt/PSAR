@@ -13,11 +13,21 @@
     }
   }
   \visible<3->{
-    \begin{center}
-      \includegraphics[trim=0 0 0 130,clip,scale=0.2]{include/archi.pdf}
-    \end{center}
+    \only<1-2>{
+      \vspace{3.75cm}
+    }
+    \only<3>{
+      \begin{center}
+        \includegraphics[trim=0 0 0 130,clip,scale=0.2]{include/archi1.pdf}
+      \end{center}
+    }
+    \only<4->{
+      \begin{center}
+        \includegraphics[trim=0 0 0 130,clip,scale=0.2]{include/archi2.pdf}
+      \end{center}
+    }
   }
-  \visible<4>{
+  \visible<5>{
     \begin{alertblock}{Problèmes}
       Gestion du partage des ressources, et notamment du bus.
     \end{alertblock}
