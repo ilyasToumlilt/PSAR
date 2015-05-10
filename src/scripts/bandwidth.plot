@@ -17,7 +17,7 @@ set border 3
 set grid
 
 #set title 'Routino MT - CPU usage per core' font "sans,25"
-set ylabel 'Bandwidth usage (in MB)' font "sans,25"
+set ylabel 'Bandwidth usage (in MB/s)' font "sans,25"
 set key spacing 3 font "sans,20"
 
 replot
